@@ -95,11 +95,13 @@ def test_language_selector_disabled_while_i18n_support_preserved() -> None:
 
     nav = (SITE_DIR / "src" / "components" / "Nav" / "Nav.astro").read_text(encoding="utf-8")
     assert "LanguageSelect" not in nav
+    assert 'href="/#pricing"' in nav
 
     mobile_nav = (
         SITE_DIR / "src" / "components" / "Nav" / "MobileNav" / "MobileNav.astro"
     ).read_text(encoding="utf-8")
     assert "MobileLanguageSelect" not in mobile_nav
+    assert 'href="/#pricing"' in mobile_nav
 
 
 def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
