@@ -10,10 +10,6 @@ const navConfig: navItem[] = [
     link: "/#features",
   },
   {
-    text: "Calendar & CarPlay",
-    link: "/#carplay",
-  },
-  {
     text: "Pricing",
     link: "/#pricing",
   },

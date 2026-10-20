@@ -194,6 +194,12 @@ def test_index_orders_how_it_works_before_feature_highlights_with_marketing_copy
             f"Design/internal copy '{design_jargon}' should be removed from index.astro"
         )
 
+    nav_data = (SITE_DIR / "src" / "config" / "en" / "navData.json.ts").read_text(encoding="utf-8")
+    assert "Calendar & CarPlay" not in nav_data
+    assert "/#carplay" not in nav_data
+    for link in ("/#how-it-works", "/#features", "/#pricing", "/#faq"):
+        assert link in nav_data
+
 
 def test_footer_contains_only_copyright_without_upper_links_or_socials() -> None:
     footer = (SITE_DIR / "src" / "components" / "Footer" / "Footer.astro").read_text(
