@@ -137,7 +137,8 @@ def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
     assert '<span class="pricing-yearly hidden">per year</span>' in pricing_component
     assert "pricing-yearly hidden" in pricing_component
     assert "comingSoon: true" in pricing_component
-    assert "Coming Soon" in pricing_component
+    assert "roadmapNote" not in pricing_component
+    assert 'linkText: "Coming Soon"' in pricing_component
     assert "disabled" in pricing_component
 
 

@@ -18,7 +18,6 @@ interface pricingItem {
   description: string;
   featured?: boolean;
   comingSoon?: boolean;
-  roadmapNote?: string;
   price: {
     free?: boolean;
     monthly: string;
@@ -73,7 +72,6 @@ const pricingData: pricingItem[] = [
     description:
       "Coming soon for desktop planners, cross-platform sync, and cloud low-stress routing.",
     comingSoon: true,
-    roadmapNote: "Coming Soon",
     price: {
       monthly: "3.99",
       yearly: "29.99",
@@ -93,7 +91,6 @@ const pricingData: pricingItem[] = [
     description:
       "Coming soon for couples, busy parents, and shared household logistics.",
     comingSoon: true,
-    roadmapNote: "Coming Soon",
     price: {
       monthly: "6.99",
       yearly: "49.99",
@@ -146,7 +143,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
                   "mt-10 rounded-b-lg hover:-translate-y-2 sm:mt-0": plan.featured === true,
                 },
                 {
-                  "mt-10 rounded-b-lg border border-dashed border-[#B5CCC5] opacity-85 sm:mt-0 dark:border-[#243E47]":
+                  "rounded-lg border border-dashed border-[#B5CCC5] opacity-85 dark:border-[#243E47]":
                     plan.comingSoon === true,
                 },
                 {
@@ -170,14 +167,6 @@ const currLocale = getLocaleFromUrl(Astro.url);
                       Recommended
                     </p>
                   </div>
-                </div>
-              )}
-
-              {plan.comingSoon === true && (
-                <div class="bg-base-300/80 dark:bg-base-800 absolute -top-10 left-0 w-full rounded-t-xl border border-b-0 border-dashed border-[#B5CCC5] dark:border-[#243E47]">
-                  <p class="text-base-800 dark:text-base-200 py-2 text-center text-xs font-bold tracking-wider uppercase">
-                    {plan.roadmapNote ?? "Coming Soon"}
-                  </p>
                 </div>
               )}
 
