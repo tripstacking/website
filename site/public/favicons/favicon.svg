@@ -1,33 +1,69 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 512 512" role="img" aria-label="Trip Stacking Icon Mark">
-    <!-- Background Squircle Badge -->
-    <rect x="24" y="24" width="464" height="464" rx="112" fill="#1A2E35" stroke="#44C0C5" stroke-width="12"/>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --badge-fill: #F7FBF9;
+      --badge-stroke: #1F8388;
+      --grid-stroke: #B5CCC5;
+      --route-stroke: #1A2E35;
+      --pill-ink: #1A2E35;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --badge-fill: #1A2E35;
+        --badge-stroke: #44C0C5;
+        --grid-stroke: #243E47;
+        --route-stroke: #F7FBF9;
+        --pill-ink: #1A2E35;
+      }
+    }
+    .badge {
+      fill: var(--badge-fill);
+      stroke: var(--badge-stroke);
+    }
+    .grid-lines {
+      stroke: var(--grid-stroke);
+    }
+    .route-spine {
+      stroke: var(--route-stroke);
+    }
+    .pill-ink {
+      fill: var(--pill-ink);
+    }
+    .pin-ring {
+      stroke: var(--pill-ink);
+    }
+  </style>
 
-    <!-- Subtle Route Grid Lines -->
-    <path d="M96 148 H416 M96 256 H416 M96 364 H416" stroke="#243E47" stroke-width="3" stroke-dasharray="8 8" opacity="0.55"/>
+  <!-- Background Squircle Badge (adapts to light/dark color-scheme) -->
+  <rect class="badge" x="24" y="24" width="464" height="464" rx="112" stroke-width="14"/>
 
-    <!-- Top Stacked Layer: Beacon Yellow (Stop 1 / Time Window) -->
-    <rect x="104" y="112" width="232" height="68" rx="34" fill="#FFDE59"/>
-    <circle cx="138" cy="146" r="14" fill="#1A2E35"/>
-    <circle cx="138" cy="146" r="6" fill="#FFDE59"/>
-    <rect x="172" y="138" width="132" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+  <!-- Subtle Route Grid Lines -->
+  <path class="grid-lines" d="M96 148 H416 M96 256 H416 M96 364 H416" stroke-width="3" stroke-dasharray="8 8" opacity="0.55"/>
 
-    <!-- Middle Stacked Layer: Flow Green (Stop 2 / Smooth Route Flow) -->
-    <rect x="140" y="222" width="268" height="68" rx="34" fill="#77C57F"/>
-    <circle cx="256" cy="256" r="14" fill="#1A2E35"/>
-    <circle cx="256" cy="256" r="6" fill="#77C57F"/>
-    <rect x="168" y="248" width="60" height="16" rx="8" fill="#1A2E35" opacity="0.75"/>
-    <rect x="290" y="248" width="90" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+  <!-- Top Stacked Layer: Beacon Yellow (Stop 1 / Time Window) -->
+  <rect x="104" y="112" width="232" height="68" rx="34" fill="#FFDE59"/>
+  <circle class="pill-ink" cx="138" cy="146" r="14"/>
+  <circle cx="138" cy="146" r="6" fill="#FFDE59"/>
+  <rect class="pill-ink" x="172" y="138" width="132" height="16" rx="8" opacity="0.85"/>
 
-    <!-- Bottom Stacked Layer: Horizon Teal (Stop 3 / Consolidated Anchor) -->
-    <rect x="104" y="332" width="304" height="68" rx="34" fill="#44C0C5"/>
-    <circle cx="374" cy="366" r="14" fill="#1A2E35"/>
-    <circle cx="374" cy="366" r="6" fill="#44C0C5"/>
-    <rect x="136" y="358" width="206" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+  <!-- Middle Stacked Layer: Flow Green (Stop 2 / Smooth Route Flow) -->
+  <rect x="140" y="222" width="268" height="68" rx="34" fill="#77C57F"/>
+  <circle class="pill-ink" cx="256" cy="256" r="14"/>
+  <circle cx="256" cy="256" r="6" fill="#77C57F"/>
+  <rect class="pill-ink" x="168" y="248" width="60" height="16" rx="8" opacity="0.75"/>
+  <rect class="pill-ink" x="290" y="248" width="90" height="16" rx="8" opacity="0.85"/>
 
-    <!-- Connecting Multi-Stop Route Curve -->
-    <path d="M138 146 C 196 146, 198 256, 256 256 C 314 256, 316 366, 374 366"
-          fill="none" stroke="#F7FBF9" stroke-width="10" stroke-linecap="round"/>
-    <circle cx="138" cy="146" r="9" fill="#FFDE59" stroke="#1A2E35" stroke-width="5"/>
-    <circle cx="256" cy="256" r="9" fill="#77C57F" stroke="#1A2E35" stroke-width="5"/>
-    <circle cx="374" cy="366" r="9" fill="#44C0C5" stroke="#1A2E35" stroke-width="5"/>
+  <!-- Bottom Stacked Layer: Horizon Teal (Stop 3 / Consolidated Anchor) -->
+  <rect x="104" y="332" width="304" height="68" rx="34" fill="#44C0C5"/>
+  <circle class="pill-ink" cx="374" cy="366" r="14"/>
+  <circle cx="374" cy="366" r="6" fill="#44C0C5"/>
+  <rect class="pill-ink" x="136" y="358" width="206" height="16" rx="8" opacity="0.85"/>
+
+  <!-- Connecting Multi-Stop Route Curve -->
+  <path class="route-spine" d="M138 146 C 196 146, 198 256, 256 256 C 314 256, 316 366, 374 366"
+        fill="none" stroke-width="10" stroke-linecap="round"/>
+  <circle class="pin-ring" cx="138" cy="146" r="9" fill="#FFDE59" stroke-width="5"/>
+  <circle class="pin-ring" cx="256" cy="256" r="9" fill="#77C57F" stroke-width="5"/>
+  <circle class="pin-ring" cx="374" cy="366" r="9" fill="#44C0C5" stroke-width="5"/>
 </svg>

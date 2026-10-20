@@ -151,6 +151,21 @@ def test_site_uses_in_app_routing_and_carplay_without_external_maps_export() -> 
         assert "carplay" in lowered, f"{file_path.name} must mention CarPlay"
 
 
+def test_site_favicon_is_tripstacking_svg_with_light_dark_theme_css() -> None:
+    base_head = (SITE_DIR / "src" / "layouts" / "BaseHead.astro").read_text(encoding="utf-8")
+    assert 'href="/brand/favicon.svg"' in base_head
+    assert 'type="image/svg+xml"' in base_head
+    assert 'href="/brand/apple-touch-icon.png"' in base_head
+    assert 'name="color-scheme" content="light dark"' in base_head
+    assert "#603cba" not in base_head.lower()
+
+    favicon_svg = (SITE_DIR / "public" / "brand" / "favicon.svg").read_text(encoding="utf-8")
+    assert "<style>" in favicon_svg
+    assert "prefers-color-scheme: dark" in favicon_svg
+    for hex_color in ("#FFDE59", "#77C57F", "#44C0C5", "#1A2E35", "#F7FBF9"):
+        assert hex_color.lower() in favicon_svg.lower()
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"
