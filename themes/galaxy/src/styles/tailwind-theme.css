@@ -1,0 +1,195 @@
+/**
+ * * Tailwind theme settings
+ * 
+ * These are in a separate file so it can be imported into <style> tags in .astro components
+ */
+@theme {
+  /* cosmic themes theme config */
+  /* primary colors */
+  --color-primary-50: var(--color-violet-50);
+  --color-primary-100: var(--color-violet-100);
+  --color-primary-200: var(--color-violet-200);
+  --color-primary-300: var(--color-violet-300);
+  --color-primary-400: var(--color-violet-400);
+  --color-primary-500: var(--color-violet-500);
+  --color-primary-600: var(--color-violet-600);
+  --color-primary-700: var(--color-violet-700);
+  --color-primary-800: var(--color-violet-800);
+  --color-primary-900: var(--color-violet-900);
+  --color-primary-950: var(--color-violet-950);
+
+  /* base colors */
+  --color-base-50: var(--color-zinc-50);
+  --color-base-100: var(--color-zinc-100);
+  --color-base-200: var(--color-zinc-200);
+  --color-base-300: var(--color-zinc-300);
+  --color-base-400: var(--color-zinc-400);
+  --color-base-500: var(--color-zinc-500);
+  --color-base-600: var(--color-zinc-600);
+  --color-base-700: var(--color-zinc-700);
+  --color-base-800: var(--color-zinc-800);
+  --color-base-900: var(--color-zinc-900);
+  --color-base-950: var(--color-zinc-950);
+
+  /* Breakpoints */
+  --breakpoint-xs: 400px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* font families */
+  --font-mono:
+    "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace";
+
+  /* starwind and cosmic themes animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee2: marquee2 50s linear infinite;
+  --animate-backdrop-fade-in: backdropFadeIn ease-in-out 0.3s forwards;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--starwind-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--starwind-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - 1.5rem));
+    }
+  }
+
+  @keyframes marquee2 {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - 8rem));
+    }
+  }
+
+  @keyframes backdropFadeIn {
+    0% {
+      visibility: hidden;
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 0.7;
+    }
+  }
+
+  /* Trip Stacking 60-30-10 Brand Palette Tokens */
+  --color-primary-50: #EFFAFA;
+  --color-primary-100: #D7F3F4;
+  --color-primary-200: #B2E7EA;
+  --color-primary-300: #7DD6DA;
+  --color-primary-400: #44C0C5;
+  --color-primary-500: #2BA3A8;
+  --color-primary-600: #1F8388;
+  --color-primary-700: #1D696E;
+  --color-primary-800: #1D565B;
+  --color-primary-900: #1C484C;
+  --color-primary-950: #0E2D30;
+
+  --color-secondary-50: #F2FAF3;
+  --color-secondary-100: #E1F4E3;
+  --color-secondary-200: #C4E9C8;
+  --color-secondary-300: #9AD8A1;
+  --color-secondary-400: #77C57F;
+  --color-secondary-500: #4DA856;
+  --color-secondary-600: #3B8A43;
+  --color-secondary-700: #316E37;
+  --color-secondary-800: #2A582F;
+  --color-secondary-900: #234928;
+  --color-secondary-950: #102814;
+
+  --color-accent-50: #FFFBEB;
+  --color-accent-100: #FFF5C6;
+  --color-accent-200: #FFEB88;
+  --color-accent-300: #FFDE59;
+  --color-accent-400: #FFDE59;
+  --color-accent-500: #F5B811;
+  --color-accent-600: #D88E07;
+  --color-accent-700: #B3660A;
+  --color-accent-800: #914F0F;
+  --color-accent-900: #774110;
+  --color-accent-950: #442104;
+
+  --color-base-50: #F7FBF9;
+  --color-base-100: #EBF3F0;
+  --color-base-200: #D6E4DF;
+  --color-base-300: #B5CCC5;
+  --color-base-400: #8AA9A1;
+  --color-base-500: #64857E;
+  --color-base-600: #4D6A64;
+  --color-base-700: #3D5450;
+  --color-base-800: #243E47;
+  --color-base-900: #1A2E35;
+  --color-base-950: #0F1D22;
+
+  --color-gradient-1: #44C0C5;
+  --color-gradient-2: #77C57F;
+  --color-gradient-3: #FFDE59;
+  --color-accent-1: #FFDE59;
+  --color-accent-2: #44C0C5;
+  --color-accent-3: #77C57F;
+  --color-accent-4: #1A2E35;
+  --color-dark-bg: #0F1D22;
+
+}
+
+@theme inline {
+  /* starwind utilities setup */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-outline: var(--outline);
+
+  --radius-xs: calc(var(--radius) - 0.375rem);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --radius-2xl: calc(var(--radius) + 0.5rem);
+  --radius-3xl: calc(var(--radius) + 1rem);
+}

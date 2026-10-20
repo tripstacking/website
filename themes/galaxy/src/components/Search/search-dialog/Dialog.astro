@@ -1,0 +1,11 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div id="docs-search-dialog" class:list={["starwind-search-dialog", className]} {...rest}>
+  <slot />
+</div>
