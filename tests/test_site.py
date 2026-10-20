@@ -166,6 +166,45 @@ def test_site_favicon_is_tripstacking_svg_with_light_dark_theme_css() -> None:
         assert hex_color.lower() in favicon_svg.lower()
 
 
+def test_index_orders_how_it_works_before_feature_highlights_with_marketing_copy() -> None:
+    index_page = (SITE_DIR / "src" / "pages" / "index.astro").read_text(encoding="utf-8")
+    how_it_works_pos = index_page.index('id="how-it-works"')
+    features_pos = index_page.index('id="features"')
+    assert how_it_works_pos < features_pos, (
+        "From Scattered Errands to One Smooth S-Curve (#how-it-works) must come before #features"
+    )
+    assert "From Scattered Errands to One Smooth S-Curve" in index_page
+    assert "Feature Highlights" in index_page
+
+    lowered = index_page.lower()
+    for design_jargon in (
+        "60-30-10 visual system",
+        "nova theme",
+        "valhalla + vroom",
+        "pillar 01",
+        "four pillars",
+    ):
+        assert design_jargon not in lowered, (
+            f"Design/internal copy '{design_jargon}' should be removed from index.astro"
+        )
+
+
+def test_footer_contains_only_copyright_without_upper_links_or_socials() -> None:
+    footer = (SITE_DIR / "src" / "components" / "Footer" / "Footer.astro").read_text(
+        encoding="utf-8"
+    )
+    assert "All rights reserved." in footer
+    for removed in (
+        "FooterLink",
+        "SocialIcon",
+        "Landing Pages",
+        "Sections",
+        "Forms",
+        "twitter.com",
+    ):
+        assert removed not in footer, f"Footer.astro must not include '{removed}'"
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"
