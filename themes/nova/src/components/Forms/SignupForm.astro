@@ -1,0 +1,79 @@
+---
+import Button from "@components/Button/Button.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { Icon } from "astro-icon/components";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<div class="mx-auto max-w-lg">
+  <div class="mb-12 text-center">
+    <h1 class="h2 mb-4 text-5xl md:text-6xl">Create an account</h1>
+    <p class="description text-xl tracking-tight">Free 1 month trial. No credit card required</p>
+  </div>
+  <div
+    class="border-base-200 dark:border-base-800 dark:bg-base-900 mb-6 rounded-2xl border bg-white p-5 sm:p-9"
+  >
+    <form class="-m-2 flex flex-wrap" id="signup__form" name="signup__form">
+      <div class="w-full p-2">
+        <label for="signup__name" class="block" aria-label="Your Name">
+          <input class="form__input w-full" id="signup__name" type="text" placeholder="Your Name" />
+        </label>
+      </div>
+      <div class="w-full p-2">
+        <label for="signup__email" class="block" aria-label="Email Address">
+          <input
+            class="form__input w-full"
+            id="signup__email"
+            type="email"
+            placeholder="Email Address"
+          />
+        </label>
+      </div>
+      <div class="w-full p-2">
+        <label for="signup__password" class="relative block" aria-label="Password">
+          <input
+            class="form__input w-full md:pr-40"
+            id="signup__password"
+            type="password"
+            placeholder="Password"
+          />
+        </label>
+      </div>
+      <div class="w-full p-2">
+        <Button variant="primary" type="submit" class="mb-4 w-full py-4">Create Account</Button>
+        <div class="-m-2.5 mb-4 flex items-center">
+          <div class="flex-1 p-2.5">
+            <div class="bg-base-300 dark:bg-base-700 h-px"></div>
+          </div>
+          <div class="auto p-2.5">
+            <span class="text-base-600 dark:text-base-400 text-xl tracking-tight">or</span>
+          </div>
+          <div class="flex-1 p-2.5">
+            <div class="bg-base-300 dark:bg-base-700 h-px"></div>
+          </div>
+        </div>
+
+        <!-- Google sign in button -->
+        <a
+          class="bg-base-100 hover:bg-base-200 focus:ring-primary-300 flex w-full justify-center rounded-lg px-5 py-4 font-semibold tracking-tight transition duration-200 focus:ring-4 focus:outline-none"
+          href="#"
+        >
+          <Icon name="nova/google" aria-hidden="true" class="mr-3 size-6 shrink-0" />
+          <span class="text-base-900 xs:block hidden">Sign up with Google</span><span
+            class="xs:hidden">Google</span
+          >
+        </a>
+      </div>
+    </form>
+  </div>
+  <p class="text-base-600 dark:text-base-400 text-center font-medium tracking-tight">
+    <span>Already have an account?</span>
+    <a
+      class="text-primary-500 hover:text-primary-600 whitespace-nowrap transition duration-200"
+      href={getLocalizedRoute(currLocale, "/login")}>Sign In</a
+    >
+  </p>
+</div>

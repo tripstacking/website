@@ -1,0 +1,24 @@
+---
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute, getTranslatedData } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<a
+  class="primary-focus flex items-center gap-2.5 align-middle text-xl font-extrabold tracking-tight"
+  href={getLocalizedRoute(currLocale, "/")}
+>
+  <img
+    src="/brand/logo-mark.svg"
+    alt="Trip Stacking Stacked Route Mark"
+    width="40"
+    height="40"
+    class="size-10 shrink-0 rounded-xl shadow-xs"
+  />
+  <span class="flex items-baseline gap-1">
+    <span class="text-[#1A2E35] dark:text-[#F7FBF9]">Trip</span>
+    <span class="text-[#1F8388] dark:text-[#44C0C5]">Stacking</span>
+  </span>
+</a>
