@@ -102,6 +102,37 @@ def test_language_selector_disabled_while_i18n_support_preserved() -> None:
     assert "MobileLanguageSelect" not in mobile_nav
 
 
+def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
+    index_page = (SITE_DIR / "src" / "pages" / "index.astro").read_text(encoding="utf-8")
+    assert "PricingFourCards" in index_page
+    assert "TestimonialsRows" not in index_page
+
+    pricing_component = (
+        SITE_DIR / "src" / "components" / "Pricing" / "PricingFourCards.astro"
+    ).read_text(encoding="utf-8")
+    for required_tier in (
+        "Free",
+        "Local Pro",
+        "Cloud Sync",
+        "Family & Household",
+        "2.99",
+        "19.99",
+        "3.99",
+        "29.99",
+        "6.99",
+        "49.99",
+    ):
+        assert required_tier in pricing_component, (
+            f"PricingFourCards.astro missing '{required_tier}'"
+        )
+
+    lowered = pricing_component.lower()
+    assert "lifetime" not in lowered
+    assert "one-time" not in lowered
+    assert "24.99" not in lowered
+    assert "pricing-yearly hidden" in pricing_component
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"

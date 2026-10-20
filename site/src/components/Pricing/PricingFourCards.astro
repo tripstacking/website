@@ -1,92 +1,141 @@
 ---
 /**
- * * pricing sections with toggle for monthly or yearly payments
- * This is designed for 3 pricing items, but can be modified to support more
+ * * 4-column subscription pricing section with toggle for monthly or yearly billing
  */
 
-import Badge from "@components/Badge/Badge.astro";
 import Button from "@components/Button/Button.astro";
 import { Switch } from "@components/starwind/switch";
 import bestValueImage from "@images/best-value.png";
 import { getLocaleFromUrl } from "@js/localeUtils";
-import { useTranslations } from "@js/translationUtils";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
 import { getLocalizedRoute } from "@/js/translationUtils";
 
 interface pricingItem {
-  name: string; // plan name
-  description: string; // plan description
-  featured?: boolean; // if true, will be highlighted or otherwise featured
+  name: string;
+  subtitle: string;
+  description: string;
+  featured?: boolean;
   price: {
-    custom?: boolean; // if true, will show "contact us" instead of price
-    monthly?: number; // monthly price if paid by month
-    yearly?: number; // monthly price if paid by year
+    free?: boolean;
+    monthly: string;
+    yearly: string;
   };
-  features: string[]; // list of features
-  href: string; // button link to sign up or other page
-  linkText: string; // text for the button
+  periodLabel?: {
+    monthly: string;
+    yearly: string;
+  };
+  features: string[];
+  href: string;
+  linkText: string;
 }
 
-// This is designed for 3 pricing items, but can be modified to support more
 const pricingData: pricingItem[] = [
   {
-    name: "Basic",
-    description: "Essential features for beginners. Get started with ease",
+    name: "Free",
+    subtitle: "Single-Trip Stacker",
+    description: "Casual weekend errand runner testing the core loop.",
     price: {
-      monthly: 29,
-      yearly: 19,
+      free: true,
+      monthly: "0",
+      yearly: "0",
     },
-    features: ["Basic Features", "1 user", "2 GB Free Access", "Limited Support"],
+    periodLabel: {
+      monthly: "free forever",
+      yearly: "free forever",
+    },
+    features: [
+      "Unlimited Places To-Do List",
+      "Single-day trip optimization (up to 4 stops)",
+      "Basic stop dwell time",
+      "Export to Apple Maps & Google Maps",
+    ],
     href: "/signup",
-    linkText: "Try 14 Days Free Trial",
+    linkText: "Start Stacking Free",
   },
   {
-    name: "Professional",
-    description: "Perfect for solo professionals. Unlock advanced features",
+    name: "Local Pro",
+    subtitle: "Full Week Stacker",
+    description: "Solo Apple user who wants their week automated on-device.",
+    price: {
+      monthly: "2.99",
+      yearly: "19.99",
+    },
+    periodLabel: {
+      monthly: "per month",
+      yearly: "per year",
+    },
+    features: [
+      "Multi-day week splitting across calendar windows",
+      "Up to 20 stops/week",
+      'Precedence rules ("Bank before Hardware", "Groceries last")',
+      "Holistic Calendar Sync (1 consolidated block/trip)",
+      "Native CarPlay Dashboard + personal iCloud sync",
+    ],
+    href: "/signup",
+    linkText: "Subscribe to Local Pro",
+  },
+  {
+    name: "Cloud Sync",
+    subtitle: "Anywhere + Low-Stress Pro",
+    description: "Desktop planners, cross-platform users, and low-stress drivers.",
     featured: true,
     price: {
-      monthly: 49,
-      yearly: 39,
+      monthly: "3.99",
+      yearly: "29.99",
     },
-    features: ["Pro features", "Up to 10 users", "50 GB Free Access", "Priority support"],
+    periodLabel: {
+      monthly: "per month",
+      yearly: "per year",
+    },
+    features: [
+      "Everything in Local Pro",
+      "Laptop Web Companion App",
+      "Cross-ecosystem sync (iOS, Android, PC)",
+      "Cloud Low-Stress Routing (left-turn penalties)",
+      "Auto-Import Store Hours & Busyness",
+    ],
     href: "/signup",
-    linkText: "Try 14 Days Free Trial",
+    linkText: "Subscribe to Cloud Sync",
   },
   {
-    name: "Enterprise",
-    description: "Scale your business faster. Comprehensive plan",
+    name: "Family & Household",
+    subtitle: "Multi-Car VRP (Up to 5)",
+    description: "Couples, busy parents, and caregivers dividing household logistics.",
     price: {
-      monthly: 99,
-      yearly: 79,
+      monthly: "6.99",
+      yearly: "49.99",
     },
-    features: ["Pro features", "Unlimited Users", "200 GB Free Access", "Premium Support"],
+    periodLabel: {
+      monthly: "per household, per month",
+      yearly: "per household, per year",
+    },
+    features: [
+      "Everything in Cloud Sync for up to 5 members",
+      'Shared Household Errand Pool ("Anyone can pick up")',
+      "Multi-Car / Multi-Person VRP Solver",
+      "Live Claiming & Completion Notifications",
+    ],
     href: "/signup",
-    linkText: "Try 14 Days Free Trial",
-  },
-  {
-    name: "Contact Us",
-    description: "For bespoke solutions tailored to your business needs",
-    price: {
-      custom: true,
-    },
-    features: ["White Glove Onboarding", "All Features", "unlimited Users", "Dedicated support"],
-    href: "/contact",
-    linkText: "Contact Us",
+    linkText: "Subscribe to Family Plan",
   },
 ];
 
 const currLocale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(currLocale);
 ---
 
 <section id="pricing-four-cards" class="bg-base-200/60 dark:bg-base-950 py-16 md:py-24">
   <div class="site-container relative">
-    <div class="flex justify-center">
-      <!-- <Badge>Pricing</Badge> -->
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="mb-3 inline-block rounded-full bg-[#D7F3F4] px-3.5 py-1 text-xs font-bold tracking-wider text-[#1D696E] uppercase dark:bg-[#1A2E35] dark:text-[#44C0C5]">
+        Simple Subscription Pricing
+      </span>
+      <h2 class="h2 text-center">Stack Your Week at Every Scale</h2>
+      <p class="description mx-auto max-w-2xl">
+        Start free on a single day, or subscribe to automate your full week across iCloud, the Web Companion, and shared family calendars.
+      </p>
     </div>
-    <h2 class="h2 text-center">A plan for every business</h2>
 
     <!-- Toggle switch for monthly or yearly pricing -->
     <div class="mt-6 flex justify-center">
@@ -94,19 +143,18 @@ const t = useTranslations(currLocale);
         for="pricing-four-cards__toggle"
         class="relative inline-flex cursor-pointer items-center gap-4 select-none"
       >
-        <span class="description flex items-center">Monthly</span>
+        <span class="description flex items-center font-medium">Monthly</span>
         <Switch id="pricing-four-cards__toggle" variant="primary" padding={4} />
-        <span class="description flex items-center">Yearly</span>
+        <span class="description flex items-center font-medium">Yearly (Save up to 44%)</span>
       </label>
     </div>
 
-    <!-- works for 3 pricing plans, adjust grid cols here to support more or less -->
     <div class="mx-auto mt-24 grid w-full gap-6 sm:grid-cols-2 md:mt-40 lg:grid-cols-4">
       {
         pricingData.map((plan) => (
-          <div class="pricing-plan w-full">
+          <div class="pricing-plan flex w-full">
             <div
-              class="dark:bg-base-900 relative transform bg-white p-10 transition-transform duration-500 hover:-translate-y-2"
+              class="dark:bg-base-900 relative flex w-full transform flex-col justify-between bg-white p-8 transition-transform duration-500 hover:-translate-y-2"
               class:list={[
                 {
                   "mt-10 rounded-b-lg sm:mt-0": plan.featured === true,
@@ -134,55 +182,50 @@ const t = useTranslations(currLocale);
                 </div>
               )}
 
-              <div class="text-center">
-                <h3 class="mb-8 text-xl font-semibold tracking-tight">{plan.name}</h3>
-                {plan.price.custom === true ? (
-                  // if custom price, show "Custom" instead of price
-                  <>
-                    <h4>
-                      <span class="font-sans text-6xl font-bold tracking-tighter md:text-7xl">Custom</span>
-                    </h4>
-                    <span
-                      aria-hidden="true"
-                      class="description invisible mb-7 inline-block tracking-tight"
-                    >
-                      per user, per month
+              <div>
+                <div class="text-center">
+                  <h3 class="mb-1 text-xl font-bold tracking-tight">{plan.name}</h3>
+                  <p class="mb-6 text-xs font-semibold tracking-wider text-[#1F8388] uppercase dark:text-[#44C0C5]">
+                    {plan.subtitle}
+                  </p>
+                  <h4>
+                    <span class="text-xl font-semibold tracking-tight">$</span>
+                    <span class="pricing-monthly font-sans text-5xl font-bold tracking-tighter xl:text-6xl">
+                      {plan.price.monthly}
                     </span>
-                  </>
-                ) : (
-                  <>
-                    <h4>
-                      <span class="text-xl font-semibold tracking-tight">$</span>
-                      <span class="pricing-monthly font-sans text-6xl font-bold tracking-tighter md:text-7xl">
-                        {plan.price.monthly}
-                      </span>
-                      <span class="pricing-yearly font-sans text-6xl font-bold tracking-tighter md:text-7xl">
-                        {plan.price.yearly}
-                      </span>
-                    </h4>
-                    <span class="description mb-7 inline-block tracking-tight">
-                      per user, per month
+                    <span class="pricing-yearly hidden font-sans text-5xl font-bold tracking-tighter xl:text-6xl">
+                      {plan.price.yearly}
                     </span>
-                  </>
-                )}
+                  </h4>
+                  <span class="pricing-monthly description mb-7 inline-block text-sm tracking-tight">
+                    {plan.periodLabel?.monthly ?? "per month"}
+                  </span>
+                  <span class="pricing-yearly description mb-7 hidden text-sm tracking-tight">
+                    {plan.periodLabel?.yearly ?? "per year"}
+                  </span>
 
-                <div class="border-opacity-60 border-t border-b border-gray-300 py-8">
-                  <p class="description mx-auto max-w-xs tracking-tight">{plan.description}</p>
+                  <div class="border-opacity-60 border-t border-b border-gray-300 py-6 dark:border-gray-700">
+                    <p class="description mx-auto max-w-xs text-sm tracking-tight">
+                      {plan.description}
+                    </p>
+                  </div>
                 </div>
-                <ul class="py-8">
+                <ul class="py-6">
                   {plan.features.map((feature) => (
-                    <li class="mb-2.5 flex flex-nowrap items-center justify-start gap-3">
+                    <li class="mb-2.5 flex items-start justify-start gap-2.5">
                       <Icon
                         name="tabler/check"
-                        class="text-primary-600 dark:text-primary-400 size-5"
+                        class="text-primary-600 dark:text-primary-400 mt-0.5 size-5 shrink-0"
                         aria-hidden="true"
                       />
-                      <span class="text-start font-medium">{feature}</span>
+                      <span class="text-start text-sm font-medium">{feature}</span>
                     </li>
                   ))}
                 </ul>
+              </div>
+              <div class="text-center">
                 <Button
-                  class="duration-300"
+                  class="w-full duration-300"
                   variant={plan.featured === true ? "primary" : "secondary"}
                   href={getLocalizedRoute(currLocale, plan.href)}
                 >
