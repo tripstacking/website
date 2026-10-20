@@ -1,0 +1,177 @@
+---
+import Button from "@components/Button/Button.astro";
+import FaqAccordions from "@components/Faq/FaqAccordions.astro";
+import TestimonialsColumns from "@components/Testimonials/TestimonialsColumns.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import HeroMapBackground from "../../../../shared/hero-map/HeroMapBackground.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+  <!-- HERO: Atlas Friendly Consumer Pattern & Rounded Geometry -->
+  <section
+    id="hero-atlas"
+    class="dark relative mt-20 overflow-clip bg-[#0F1D22] text-[#F7FBF9]"
+  >
+    <HeroMapBackground variant="dark" />
+    <div class="site-container relative z-10 mx-auto px-4 pt-12 pb-20 md:py-24">
+      <div class="-mx-4 flex flex-wrap items-center">
+        <div class="mb-14 w-full px-4 md:mb-0 md:w-1/2">
+          <span class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#44C0C5]/40 bg-[#1A2E35]/95 px-3.5 py-1 text-xs font-bold tracking-wider text-[#FFDE59] uppercase shadow-md">
+            <span>ATLAS THEME • APPROACHABLE ERRAND FLOW</span>
+          </span>
+          <h1 class="mb-6 text-4xl leading-tight font-extrabold tracking-tight text-[#F7FBF9] drop-shadow-md lg:text-6xl">
+            STACK YOUR STOPS. OWN YOUR WEEK.
+          </h1>
+          <p class="mb-8 text-lg leading-relaxed text-[#D6E4DF] drop-shadow-xs">
+            Stop juggling store hours, rush-hour traffic, and six separate calendar reminders. Keep a living to-do list of places you need to visit—Trip Stacking combines them into calm, multi-stop loops that fit your week and launch in one tap on iOS and CarPlay.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button variant="primary" href="#pillars">
+              See How Trip Stacking Works
+            </Button>
+            <Button variant="outline" href="#carplay">
+              Explore Calendar & CarPlay
+            </Button>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3 text-xs font-semibold">
+            <span class="rounded-full border border-[#44C0C5] bg-[#EFFAFA] px-3 py-1.5 text-[#1D696E] dark:bg-[#1A2E35] dark:text-[#44C0C5]">
+              ✓ Store-Hour Time Windows
+            </span>
+            <span class="rounded-full border border-[#77C57F] bg-[#F2FAF3] px-3 py-1.5 text-[#316E37] dark:bg-[#1A2E35] dark:text-[#77C57F]">
+              ✓ "Groceries Last" Sequencing
+            </span>
+            <span class="rounded-full border border-[#FFDE59] bg-[#FFFBEB] px-3 py-1.5 text-[#914F0F] dark:bg-[#1A2E35] dark:text-[#FFDE59]">
+              ✓ Low-Stress Right-Turn Routes
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Atlas Rounded Visual Card with Decorative Accents -->
+        <div class="w-full px-4 md:w-1/2">
+          <div class="relative mx-auto max-w-lg">
+            <Icon
+              name="atlas/circle3"
+              class=" absolute -top-10 -left-10 z-10 size-24 text-[#FFDE59]"
+              aria-hidden="true"
+            />
+            <Icon
+              name="atlas/dots3"
+              class="absolute -right-6 -bottom-6 z-10 w-24 text-[#44C0C5]"
+              aria-hidden="true"
+            />
+            <div class="relative z-20 rounded-3xl border-2 border-[#1A2E35] bg-[#1A2E35] p-7 text-[#F7FBF9] shadow-2xl">
+              <div class="mb-5 flex items-center gap-3.5">
+                <img
+                  src="/brand/logo-mark.svg"
+                  alt="Trip Stacking Stacked Route Mark"
+                  width="52"
+                  height="52"
+                  fetchpriority="high"
+                  class="size-13 rounded-2xl"
+                />
+                <div>
+                  <span class="rounded bg-[#FFDE59] px-2 py-0.5 font-mono text-[11px] font-extrabold text-[#1A2E35]">
+                    SATURDAY MORNING LOOP
+                  </span>
+                  <h2 class="mt-1 text-xl font-bold">1 Calendar Event • 3 Ordered Stops</h2>
+                </div>
+              </div>
+
+              <div class="space-y-3 rounded-2xl bg-[#0F1D22] p-4">
+                <div class="flex items-center justify-between rounded-xl bg-[#1A2E35] px-4 py-3">
+                  <span class="text-sm font-bold text-[#FFDE59]">1. Bank Deposit (Before Hardware)</span>
+                  <span class="font-mono text-xs text-[#B5CCC5]">9:15 AM • 15m</span>
+                </div>
+                <div class="ml-4 flex items-center justify-between rounded-xl bg-[#1A2E35] px-4 py-3">
+                  <span class="text-sm font-bold text-[#77C57F]">2. Pacific Hardware (Low Crowd)</span>
+                  <span class="font-mono text-xs text-[#B5CCC5]">9:40 AM • 20m</span>
+                </div>
+                <div class="flex items-center justify-between rounded-xl bg-[#1A2E35] px-4 py-3">
+                  <span class="text-sm font-bold text-[#44C0C5]">3. Farmers Market (Groceries Last)</span>
+                  <span class="font-mono text-xs text-[#B5CCC5]">10:10 AM • 30m</span>
+                </div>
+              </div>
+
+              <div class="mt-4 flex items-center justify-between text-xs text-[#B5CCC5]">
+                <span>🛡️ Zero unprotected left turns</span>
+                <span class="font-bold text-[#44C0C5]">1-Tap Apple Maps / CarPlay →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PILLARS: Friendly Rounded Cards -->
+  <section id="pillars" class="bg-white py-20 dark:bg-[#1A2E35]">
+    <div id="how-it-works" class="site-container mx-auto max-w-7xl px-4">
+      <div class="mx-auto mb-14 max-w-3xl text-center">
+        <span class="mb-2 inline-block rounded-full bg-[#D7F3F4] px-3 py-1 text-xs font-bold text-[#1D696E] uppercase dark:bg-[#0F1D22] dark:text-[#44C0C5]">
+          Calm Over Complexity
+        </span>
+        <h2 class="mb-4 text-3xl font-extrabold text-[#1A2E35] md:text-5xl dark:text-[#F7FBF9]">
+          Built Around How Humans Actually Run Errands
+        </h2>
+        <p class="text-[#4D6A64] dark:text-[#B5CCC5]">
+          Our 60-30-10 color palette—Alabaster Mint (#F7FBF9), Harbor Slate (#1A2E35), Horizon Teal (#44C0C5), Flow Green (#77C57F), and Beacon Yellow (#FFDE59)—brings quiet clarity to every trip.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-3xl border border-[#D6E4DF] bg-[#F7FBF9] p-7 dark:border-[#243E47] dark:bg-[#0F1D22]">
+          <span class="mb-4 inline-block rounded-xl bg-[#FFDE59] px-3 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            1. PLACES TO-DO
+          </span>
+          <h3 class="mb-2 text-xl font-bold">Constraint-Aware Place To-Do List</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Set store time windows, dwell durations per stop, and priority rules like visiting the bank before the hardware store or picking up frozen groceries last.
+          </p>
+        </div>
+
+        <div id="routing" class="rounded-3xl border border-[#D6E4DF] bg-[#F7FBF9] p-7 dark:border-[#243E47] dark:bg-[#0F1D22]">
+          <span class="mb-4 inline-block rounded-xl bg-[#77C57F] px-3 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            2. SMART SPLITTING
+          </span>
+          <h3 class="mb-2 text-xl font-bold">Multi-Day & Low-Stress Optimization</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Automatically splits overflow errands across days, avoids crowded hours, minimizes stressful unprotected left turns, and remembers your favorite local roads.
+          </p>
+        </div>
+
+        <div class="rounded-3xl border border-[#D6E4DF] bg-[#F7FBF9] p-7 dark:border-[#243E47] dark:bg-[#0F1D22]">
+          <span class="mb-4 inline-block rounded-xl bg-[#44C0C5] px-3 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            3. CLEAN CALENDAR
+          </span>
+          <h3 class="mb-2 text-xl font-bold">Holistic Calendar Integration</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Protects your calendar by scheduling one single event per stacked trip from departure to return—sized accurately for drive time plus stop durations.
+          </p>
+        </div>
+
+        <div id="carplay" class="rounded-3xl border border-[#D6E4DF] bg-[#F7FBF9] p-7 dark:border-[#243E47] dark:bg-[#0F1D22]">
+          <span class="mb-4 inline-block rounded-xl bg-[#1A2E35] px-3 py-1 font-mono text-xs font-extrabold text-[#FFDE59]">
+            4. 1-TAP DRIVE
+          </span>
+          <h3 class="mb-2 text-xl font-bold">Apple Maps, Google Maps & CarPlay</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Launch multi-stop directions in Apple Maps or Google Maps directly from your calendar notification, or use native iOS & CarPlay guidance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <TestimonialsColumns />
+
+  <div id="faq">
+    <FaqAccordions />
+  </div>
+</BaseLayout>
