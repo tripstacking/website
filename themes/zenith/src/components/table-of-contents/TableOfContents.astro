@@ -1,0 +1,110 @@
+---
+interface Props {
+  headings: import("astro").MarkdownHeading[];
+  levels?: 1 | 2 | 3; // how many levels of headers you want to show in TOC.
+}
+
+const { headings, levels = 2 } = Astro.props as Props;
+
+// filter out all tags above depth level specified
+const filteredHeadings = headings.filter((heading) => heading.depth <= levels + 1);
+
+// console.log(JSON.stringify(headings, null, 4));
+---
+
+<div class="toc-container bg-muted/50 dark:bg-muted/20 rounded-3xl border p-5 leading-tight">
+  <ul class="flex flex-col gap-2">
+    {
+      filteredHeadings.map((heading) => (
+        <li
+          class:list={{
+            "pl-4": heading.depth === 3,
+            "pl-8": heading.depth === 4,
+          }}
+        >
+          <a
+            href={`#${heading.slug}`}
+            class:list={[
+              "toc-link relative block border-l-2 border-transparent py-1.5 pl-2 transition-all",
+              "hover:border-primary-accent/70 hover:text-foreground",
+              heading.depth === 2 ? "" : "text-sm",
+            ]}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<!-- uses intersection observer to highlight which heading is in view -->
+<script>
+  // Wrapper for Blog post content
+  let wrappingElement: Element | null;
+  let observeHeaderTags: IntersectionObserver;
+  let allHeaderTags: NodeListOf<Element>;
+
+  // Function that runs when the Intersection Observer fires
+  function setCurrent(e: IntersectionObserverEntry[]) {
+    const allSectionLinks = document.querySelectorAll(".toc-link");
+    e.map((i) => {
+      if (i.isIntersecting === true) {
+        allSectionLinks.forEach((link) => link.classList.remove("toc-current"));
+
+        // require the href matching, and ".toc-link" class
+        // this is in case you have other header links elsewhere in the post
+        const targetLink = document.querySelector(`a[href="#${i.target.id}"].toc-link`);
+
+        if (targetLink) targetLink.classList.add("toc-current");
+      }
+    });
+  }
+
+  function initTOC() {
+    wrappingElement = document.querySelector(".markdown-content");
+    if (wrappingElement !== null) {
+      // Get all H2/H3 tags from the post
+      allHeaderTags = wrappingElement.querySelectorAll(":scope > h2, :scope > h3, :scope > h4");
+    }
+
+    // Intersection Observer Options
+    const options: IntersectionObserverInit = {
+      root: null,
+      rootMargin: "-20% 0px -40% 0px",
+      threshold: [1],
+    };
+
+    // Each Intersection Observer runs setCurrent
+    observeHeaderTags = new IntersectionObserver(setCurrent, options);
+    if (wrappingElement === null) {
+      return;
+    }
+    allHeaderTags.forEach((tag) => {
+      // add scroll margin top to account for navbar
+      tag.classList.add("scroll-mt-24");
+      observeHeaderTags.observe(tag);
+    });
+  }
+
+  // runs on initial page load
+  initTOC();
+
+  // runs on view transitions navigation. Not needed if item has "transition:persist"
+  document.addEventListener("astro:after-swap", initTOC);
+</script>
+
+<style>
+  .toc-link.toc-current {
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+    .font-medium {
+      --tw-font-weight: var(--font-weight-medium) /* 500 */;
+      font-weight: var(--font-weight-medium) /* 500 */;
+    }
+  }
+
+  .scroll-mt-24 {
+    scroll-margin-top: calc(var(--spacing) * 24) /* 6rem = 96px */;
+  }
+</style>

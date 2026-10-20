@@ -1,0 +1,88 @@
+---
+import { Image } from "astro:assets";
+
+import Star from "@images/headers/star.svg";
+import Star2 from "@images/headers/star2.svg";
+import StarList from "@images/headers/star-list.svg";
+import Lines3 from "@images/headers/lines3.svg";
+import CardHalf from "@images/headers/card-half.png";
+
+// components
+import Button from "@/components/button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { useTranslations } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+---
+
+<section id="hero-center-image" class="-mt-23 overflow-hidden pt-23">
+  <div class="relative pt-16">
+    <div class="site-container relative z-10">
+      <div class="relative mx-auto text-center md:max-w-4xl">
+        <div data-mos="fade-up" data-mos-anchor="#hero-center-image">
+          <span class="badge">Zenith Card</span>
+          <h1 class="h1 mb-8">{t("hero_text")}</h1>
+          <p class="mx-auto mb-8 text-lg opacity-80 md:max-w-md">
+            {t("hero_description")}
+          </p>
+        </div>
+        <div data-mos="fade-up" data-mos-anchor="#hero-center-image" data-mos-delay=".15">
+          <div
+            class="border-border focus-within:ring-primary/50 focus-within:border-primary/50 relative mx-auto mb-8 rounded-full border transition duration-300 focus-within:ring-4 md:max-w-lg"
+          >
+            <form class="flex flex-wrap">
+              <div class="flex-1">
+                <input
+                  class="text-foreground placeholder-muted-foreground h-full w-full border-none bg-transparent px-8 tracking-tighter outline-none focus:ring-0"
+                  type="text"
+                  placeholder="Enter your e-mail"
+                  required
+                />
+              </div>
+              <div class="w-auto p-2">
+                <Button type="submit" class="px-6 py-3">Try for free</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          data-mos="fade-in"
+          data-mos-anchor="#hero-center-image"
+          data-mos-delay=".85"
+          data-mos-duration="1.2"
+        >
+          <ul class="relative -m-2 mb-16 flex flex-wrap justify-center">
+            <li class="flex w-auto p-2">
+              <span class="text-muted-foreground mr-2 text-sm tracking-tighter"
+                >Undetectable AI content</span
+              >
+              <StarList class="text-primary my-auto" />
+            </li>
+            <li class="flex w-auto p-2">
+              <span class="text-muted-foreground mr-2 text-sm tracking-tighter"
+                >Industry-leading personalization</span
+              >
+              <StarList class="text-primary my-auto" />
+            </li>
+            <li class="flex w-auto p-2">
+              <span class="text-muted-foreground text-sm tracking-tighter">14 days free trial</span>
+            </li>
+            <Star class="text-primary absolute -right-24 -bottom-6" />
+          </ul>
+          <Image src={CardHalf} alt="Zenith Card" quality={100} loading="eager" class="mx-auto" />
+          <Star class="text-primary absolute top-20 -left-44" />
+          <Star2 class="text-primary absolute top-20 -right-44" />
+        </div>
+      </div>
+    </div>
+    <Lines3 class="absolute right-0 -bottom-8" />
+    <div
+      aria-hidden="true"
+      class="bg-base-400/40 dark:bg-blueGray-400/15 absolute right-20 -bottom-[160px] h-[300px] w-[900px] rotate-20 rounded-[40%] blur-[70px]"
+    >
+    </div>
+  </div>
+</section>

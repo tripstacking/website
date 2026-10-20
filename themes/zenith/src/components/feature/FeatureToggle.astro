@@ -1,0 +1,147 @@
+---
+import { Image } from "astro:assets";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/feature/feature-tabs";
+
+// Define the feature tab interface
+interface FeatureTab {
+  id: string;
+  label: string;
+  image: ImageMetadata;
+  alt: string;
+}
+
+import Dashboard2 from "@images/features/dashboard-min.png";
+import Dashboard3 from "@images/features/dashboard3.png";
+
+// Define the feature tabs data
+const featureTabs: FeatureTab[] = [
+  {
+    id: "introduction",
+    label: "Introduction",
+    image: Dashboard2,
+    alt: "Introduction dashboard",
+  },
+  {
+    id: "aggregation",
+    label: "Aggregation",
+    image: Dashboard3,
+    alt: "Aggregation dashboard",
+  },
+  {
+    id: "pricing",
+    label: "Pricing & Credits",
+    image: Dashboard2,
+    alt: "Pricing dashboard",
+  },
+  {
+    id: "integrations",
+    label: "Integrations",
+    image: Dashboard3,
+    alt: "Integrations dashboard",
+  },
+  {
+    id: "api",
+    label: "API & Webhooks",
+    image: Dashboard2,
+    alt: "API dashboard",
+  },
+];
+
+// Default tab
+const defaultTab = featureTabs[0].id;
+---
+
+<section id="feature-toggle" class="relative overflow-hidden py-24">
+  <div class="site-container">
+    <div class="mx-auto mb-12 text-center md:max-w-4xl">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h2">Billing infrastructure that keeps up with your business</h2>
+    </div>
+
+    <Tabs defaultValue={defaultTab} class="mb-20">
+      <div class="relative mx-auto mb-12 max-w-3xl">
+        <TabsList class="flex flex-wrap justify-center bg-transparent p-0">
+          {
+            featureTabs.map((tab) => (
+              <TabsTrigger
+                value={tab.id}
+                class="data-[state=active]:text-primary-accent data-[state=inactive]:text-muted-foreground relative z-10 rounded-full px-2 py-3 font-medium tracking-tighter transition duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none md:px-4 md:py-5"
+                data-tab-trigger
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))
+          }
+        </TabsList>
+        <div
+          id="tab-indicator"
+          class="border-primary-accent absolute top-0 left-0 z-0 rounded-full border transition-all duration-300 ease-in-out"
+        >
+        </div>
+      </div>
+
+      {
+        featureTabs.map((tab) => (
+          <TabsContent value={tab.id} class="mt-0">
+            <Image class="mx-auto max-w-[1100px]" src={tab.image} alt={tab.alt} quality={100} />
+          </TabsContent>
+        ))
+      }
+    </Tabs>
+  </div>
+</section>
+
+<script>
+  function setupTabAnimation() {
+    const tabTriggers = document.querySelectorAll("[data-tab-trigger]");
+    const indicator = document.getElementById("tab-indicator");
+
+    if (!indicator || tabTriggers.length === 0) return;
+
+    // Function to position the indicator
+    function positionIndicator(activeTab: Element) {
+      if (!activeTab || !indicator) return;
+
+      const rect = activeTab.getBoundingClientRect();
+      const parentRect = activeTab.parentElement?.getBoundingClientRect();
+
+      if (!parentRect) return;
+
+      // Set the indicator position and size
+      indicator.style.width = `${rect.width}px`;
+      indicator.style.height = `${rect.height}px`;
+      indicator.style.left = `${rect.left - parentRect.left}px`;
+      indicator.style.top = `${rect.top - parentRect.top}px`;
+    }
+
+    // Initial positioning
+    const activeTab = document.querySelector('[data-tab-trigger][data-state="active"]');
+    if (activeTab) {
+      // Small delay to ensure the DOM is fully rendered
+      setTimeout(() => positionIndicator(activeTab), 50);
+    }
+
+    // Add click listeners to all tabs
+    tabTriggers.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        // Small delay to allow the active state to be applied
+        setTimeout(() => {
+          const newActiveTab = document.querySelector('[data-tab-trigger][data-state="active"]');
+          if (newActiveTab) positionIndicator(newActiveTab);
+        }, 50);
+      });
+    });
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      const currentActiveTab = document.querySelector('[data-tab-trigger][data-state="active"]');
+      if (currentActiveTab) positionIndicator(currentActiveTab);
+    });
+  }
+
+  // Initialize on page load
+  setupTabAnimation();
+
+  // Re-initialize after Astro view transitions
+  document.addEventListener("astro:after-swap", setupTabAnimation);
+</script>

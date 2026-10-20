@@ -1,0 +1,151 @@
+---
+/**
+ * * pricing sections with toggle for monthly or yearly payments
+ * This is designed for 2 pricing items, but can be modified to support more
+ */
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+// components
+import Button from "@/components/button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+// get the current page locale to use in links to other pages
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<section id="pricing-two-cards-simple" class="overflow-hidden py-24">
+  <div class="site-container">
+    <div class="mx-auto mb-20 text-center md:max-w-3xl">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h1 mb-8">Compare our plans</h2>
+      <p class="text-muted-foreground mx-auto max-w-sm">
+        Choose the perfect plan for your financial needs. All plans include fraud protection, secure
+        transactions, and our award-winning mobile app.
+      </p>
+    </div>
+    <div class="mb-16 grid gap-10 md:grid-cols-2">
+      <div
+        id="annual-plan"
+        class="rounded-5xl border-muted/50 bg-gradient-radial-light h-full overflow-hidden border-2 px-8 pt-10 pb-14"
+      >
+        <div class="-m-2 flex flex-wrap items-center">
+          <div class="w-full p-2 md:w-1/2">
+            <p class="mb-4 text-xl font-medium">Annual</p>
+            <p class="text-muted-foreground mb-7">
+              Save 20% with our annual plan. Perfect for long-term financial planning and consistent
+              budgeting.
+            </p>
+            <p class="min-w-max text-5xl font-medium">
+              <span>$9.99</span>
+              <span class="text-muted-foreground ml-3.5 text-base font-medium">/ month</span>
+            </p>
+          </div>
+          <div class="w-full p-2 md:w-1/2">
+            <div class="max-w-max md:ml-auto">
+              <input
+                type="radio"
+                id="annual"
+                name="billing-cycle"
+                value="annual"
+                checked
+                class="border-border checked:border-primary-accent checked:bg-primary/20 size-4 cursor-pointer appearance-none rounded-full border bg-white checked:border-2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="monthly-plan"
+        class="bg-gradient-radial-dark rounded-5xl border-muted/50 h-full overflow-hidden border-2 px-8 pt-10 pb-14"
+      >
+        <div class="-m-2 flex flex-wrap items-center">
+          <div class="w-full p-2 md:w-1/2">
+            <p class="mb-4 text-xl font-medium">Monthly</p>
+            <p class="text-muted-foreground mb-7">
+              Flexible monthly billing with no long-term commitment. Cancel or change your plan
+              anytime.
+            </p>
+            <p class="min-w-max text-5xl font-medium">
+              <span>$12.99</span>
+              <span class="text-muted-foreground ml-3.5 text-base font-medium">/ month</span>
+            </p>
+          </div>
+          <div class="w-full p-2 md:w-1/2">
+            <div class="max-w-max md:ml-auto">
+              <input
+                type="radio"
+                id="monthly"
+                name="billing-cycle"
+                value="monthly"
+                class="border-border checked:border-primary-accent checked:bg-primary/20 size-4 cursor-pointer appearance-none rounded-full border bg-white checked:border-2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-auto flex max-w-md flex-wrap justify-center text-center">
+      <div class="mb-6 w-full">
+        <Button href={getLocalizedRoute(currLocale, "/sign-up")} class="mx-auto px-14">
+          Start now
+        </Button>
+      </div>
+      <div class="mx-auto max-w-xs">
+        <p class="text-muted-foreground text-sm">
+          Annual plan billed at $119.88 per year. Monthly plan billed at $12.99 per month.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initPricingTwoCards() {
+    const annualPlan = document.getElementById("annual-plan");
+    const monthlyPlan = document.getElementById("monthly-plan");
+    const annualRadio = document.getElementById("annual") as HTMLInputElement;
+    const monthlyRadio = document.getElementById("monthly") as HTMLInputElement;
+
+    // Exit early if any elements are missing
+    if (!annualPlan || !monthlyPlan || !annualRadio || !monthlyRadio) return;
+
+    // Function to update UI based on selected plan
+    function updatePlanSelection() {
+      if (!annualPlan || !monthlyPlan) return;
+
+      if (annualRadio.checked) {
+        annualPlan.classList.add("bg-gradient-radial-light");
+        monthlyPlan.classList.remove("bg-gradient-radial-light");
+      } else {
+        monthlyPlan.classList.add("bg-gradient-radial-light");
+        annualPlan.classList.remove("bg-gradient-radial-light");
+      }
+    }
+
+    // Add event listeners to radio buttons
+    annualRadio.addEventListener("change", updatePlanSelection);
+    monthlyRadio.addEventListener("change", updatePlanSelection);
+
+    // Add click event listeners to the plan containers
+    annualPlan.addEventListener("click", () => {
+      annualRadio.checked = true;
+      updatePlanSelection();
+    });
+
+    monthlyPlan.addEventListener("click", () => {
+      monthlyRadio.checked = true;
+      updatePlanSelection();
+    });
+
+    // Initialize UI
+    updatePlanSelection();
+  }
+
+  // Initialize on page load
+  initPricingTwoCards();
+
+  // Re-initialize after Astro page transitions
+  document.addEventListener("astro:after-swap", initPricingTwoCards);
+</script>

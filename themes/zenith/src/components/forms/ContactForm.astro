@@ -1,0 +1,84 @@
+---
+/**
+ * Contact form with Starwind components and example script to handle form submission
+ */
+// components
+import Button from "@/components/button/Button.astro";
+import { Input } from "@/components/starwind/input";
+import { Textarea } from "@/components/starwind/textarea";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+} from "@/components/starwind/select";
+---
+
+<form id="contact-form" class="space-y-4">
+  <Input name="first_name" type="text" placeholder="First name" class="mb-4" required />
+
+  <Input name="last_name" type="text" placeholder="Last Name" class="mb-4" required />
+
+  <Input name="email" type="email" placeholder="E-mail" class="mb-4" required />
+
+  <Input name="company" type="text" placeholder="Company" class="mb-4" />
+
+  <Select name="service">
+    <SelectTrigger class="mb-4 w-full">
+      <SelectValue placeholder="What can we help you with?" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectItem value="branding">Branding & Identity</SelectItem>
+        <SelectItem value="website">Website Development</SelectItem>
+        <SelectItem value="marketing">Digital Marketing</SelectItem>
+        <SelectItem value="other">Other Services</SelectItem>
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+
+  <Textarea name="message" placeholder="Message" rows={9} class="mb-3 resize-none" required />
+
+  <div class="flex flex-wrap justify-end">
+    <div class="w-auto">
+      <Button type="submit" variant="primary" class="font-medium">Send Message</Button>
+    </div>
+  </div>
+</form>
+
+<script>
+  // Wait for the DOM to be fully loaded
+  function handleFormSubmit() {
+    // Get the form element
+    const form = document.querySelector("#contact-form") as HTMLFormElement;
+
+    // Check if form exists before adding the event listener
+    if (form) {
+      // Add event listener for form submission
+      form.addEventListener("submit", (e) => {
+        // Prevent the default form submission
+        e.preventDefault();
+
+        // Create a FormData object from the form
+        const formData = new FormData(form);
+
+        // Convert FormData to a regular object
+        const formValues = Object.fromEntries(formData.entries());
+
+        // Log the form values to the console
+        console.log("Form submission values:", formValues);
+
+        // You can add additional logic here like:
+        // - Form validation
+        // - API submission
+        // - Success/error handling
+      });
+    }
+  }
+
+  handleFormSubmit();
+
+  document.addEventListener("astro:after-swap", handleFormSubmit);
+</script>

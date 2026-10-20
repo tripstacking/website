@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="240" viewBox="0 0 800 240" role="img" aria-label="Trip Stacking Primary Logo (dark)">
+  <rect x="2" y="2" width="796" height="236" rx="28" fill="#0F1D22" stroke="#243E47" stroke-width="2"/>
+  <g transform="translate(28, 20) scale(0.390625)">
+    <!-- Background Squircle Badge -->
+    <rect x="24" y="24" width="464" height="464" rx="112" fill="#1A2E35" stroke="#243E47" stroke-width="8"/>
+
+    <!-- Subtle Route Grid Lines -->
+    <path d="M96 148 H416 M96 256 H416 M96 364 H416" stroke="#243E47" stroke-width="3" stroke-dasharray="8 8" opacity="0.55"/>
+
+    <!-- Top Stacked Layer: Beacon Yellow (Stop 1 / Time Window) -->
+    <rect x="104" y="112" width="232" height="68" rx="34" fill="#FFDE59"/>
+    <circle cx="138" cy="146" r="14" fill="#1A2E35"/>
+    <circle cx="138" cy="146" r="6" fill="#FFDE59"/>
+    <rect x="172" y="138" width="132" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+
+    <!-- Middle Stacked Layer: Flow Green (Stop 2 / Smooth Route Flow) -->
+    <rect x="140" y="222" width="268" height="68" rx="34" fill="#77C57F"/>
+    <circle cx="256" cy="256" r="14" fill="#1A2E35"/>
+    <circle cx="256" cy="256" r="6" fill="#77C57F"/>
+    <rect x="168" y="248" width="60" height="16" rx="8" fill="#1A2E35" opacity="0.75"/>
+    <rect x="290" y="248" width="90" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+
+    <!-- Bottom Stacked Layer: Horizon Teal (Stop 3 / Consolidated Anchor) -->
+    <rect x="104" y="332" width="304" height="68" rx="34" fill="#44C0C5"/>
+    <circle cx="374" cy="366" r="14" fill="#1A2E35"/>
+    <circle cx="374" cy="366" r="6" fill="#44C0C5"/>
+    <rect x="136" y="358" width="206" height="16" rx="8" fill="#1A2E35" opacity="0.85"/>
+
+    <!-- Connecting Multi-Stop Route Curve -->
+    <path d="M138 146 C 196 146, 198 256, 256 256 C 314 256, 316 366, 374 366"
+          fill="none" stroke="#F7FBF9" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="138" cy="146" r="9" fill="#FFDE59" stroke="#1A2E35" stroke-width="5"/>
+    <circle cx="256" cy="256" r="9" fill="#77C57F" stroke="#1A2E35" stroke-width="5"/>
+    <circle cx="374" cy="366" r="9" fill="#44C0C5" stroke="#1A2E35" stroke-width="5"/>
+  </g>
+  <text x="252" y="124" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="70" font-weight="700" letter-spacing="-1.2" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+    <tspan fill="#F7FBF9" stroke="#F7FBF9">Trip</tspan><tspan fill="#44C0C5" stroke="#44C0C5">Stacking</tspan>
+  </text>
+  <rect x="256" y="148" width="34" height="10" rx="5" fill="#FFDE59"/>
+  <rect x="298" y="148" width="34" height="10" rx="5" fill="#77C57F"/>
+  <rect x="340" y="148" width="34" height="10" rx="5" fill="#44C0C5"/>
+  <text x="388" y="157" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.15" fill="#B5CCC5">
+    STACK YOUR STOPS. OWN YOUR WEEK.
+  </text>
+</svg>

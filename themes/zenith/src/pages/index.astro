@@ -1,0 +1,225 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Button from "@/components/button/Button.astro";
+import TestimonialSwiper from "@/components/testimonials/TestimonialSwiper.astro";
+import FaqAccordions from "@/components/faq/FaqAccordions.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import HeroMapBackground from "../../../../shared/hero-map/HeroMapBackground.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+  <!-- HERO: Zenith Centered Display + Schedule & CarPlay Dashboard -->
+  <section id="hero-zenith" class="dark relative -mt-23 overflow-hidden bg-[#0F1D22] pt-23 text-[#F7FBF9]">
+    <div class="relative overflow-hidden pt-20 pb-20 lg:pb-28">
+      <HeroMapBackground variant="dark" />
+      <div class="site-container relative z-10 mx-auto px-4">
+        <div class="flex flex-col items-center">
+          <div class="relative z-10 mb-12 max-w-4xl text-center md:mb-16">
+            <span class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#44C0C5]/50 bg-[#1A2E35]/95 px-4 py-1.5 text-xs font-semibold tracking-wider text-[#FFDE59] uppercase shadow-md">
+              <span>ZENITH THEME • STRUCTURED SCHEDULE INTELLIGENCE</span>
+            </span>
+            <h1 class="font-heading mx-auto mb-6 text-5xl font-bold tracking-tight text-[#F7FBF9] drop-shadow-md md:text-7xl">
+              STACK YOUR STOPS. OWN YOUR WEEK.
+            </h1>
+            <p class="mx-auto mb-8 max-w-2xl text-lg text-[#D6E4DF] drop-shadow-xs">
+              Remove the cognitive load of planning multi-stop errands. Maintain a living to-do list of places with store hours, dwell times, and priorities—Trip Stacking turns them into calm, consolidated calendar blocks ready for Apple Maps, Google Maps, and CarPlay.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+              <Button href="#pillars">Explore the 4 Pillars</Button>
+              <Button variant="outline" href="#how-it-works">View Schedule Architecture</Button>
+            </div>
+          </div>
+
+          <!-- Zenith Dashboard Showcase Card -->
+          <div class="w-full max-w-6xl rounded-3xl border border-[#D6E4DF] bg-[#1A2E35] p-6 text-[#F7FBF9] shadow-2xl md:p-8">
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#243E47] pb-5">
+              <div class="flex items-center gap-3">
+                <img
+                  src="/brand/logo-mark.svg"
+                  alt="Trip Stacking Stacked Route Mark"
+                  width="44"
+                  height="44"
+                  fetchpriority="high"
+                  class="size-11 rounded-xl"
+                />
+                <div>
+                  <p class="text-xs font-semibold tracking-wider text-[#44C0C5] uppercase">
+                    Multi-Day VRPTW Optimization Engine
+                  </p>
+                  <h2 class="text-xl font-bold">Weekly Errand Stack → 2 Consolidated Calendar Events</h2>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 font-mono text-xs">
+                <span class="rounded-lg bg-[#0F1D22] px-3 py-1.5 text-[#44C0C5]">0 Unprotected Left Turns</span>
+                <span class="rounded-lg bg-[#0F1D22] px-3 py-1.5 text-[#77C57F]">42m Drive Saved</span>
+                <span class="rounded-lg bg-[#FFDE59] px-3 py-1.5 font-bold text-[#1A2E35]">CarPlay Ready</span>
+              </div>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-3">
+              <!-- Column 1: Places To-Do Input -->
+              <div class="rounded-2xl border border-[#243E47] bg-[#0F1D22] p-5">
+                <div class="mb-3 flex items-center justify-between">
+                  <span class="text-xs font-bold tracking-wider text-[#FFDE59] uppercase">1. Places To-Do List</span>
+                  <span class="font-mono text-xs text-[#B5CCC5]">5 Errands</span>
+                </div>
+                <div class="space-y-2.5 text-xs">
+                  <div class="rounded-xl border border-[#243E47] bg-[#1A2E35] p-3">
+                    <p class="font-bold text-[#F7FBF9]">🏦 Credit Union Deposit</p>
+                    <p class="text-[#B5CCC5]">Dwell: 15m • Rule: Before Hardware Store</p>
+                  </div>
+                  <div class="rounded-xl border border-[#243E47] bg-[#1A2E35] p-3">
+                    <p class="font-bold text-[#F7FBF9]">🛠️ Westlake Hardware</p>
+                    <p class="text-[#B5CCC5]">Dwell: 20m • Window: Open until 6 PM</p>
+                  </div>
+                  <div class="rounded-xl border border-[#243E47] bg-[#1A2E35] p-3">
+                    <p class="font-bold text-[#F7FBF9]">🛒 Trader Joe's Groceries</p>
+                    <p class="text-[#B5CCC5]">Dwell: 30m • Rule: Groceries Last (Cold)</p>
+                  </div>
+                  <div class="rounded-xl border border-[#243E47] bg-[#1A2E35] p-3">
+                    <p class="font-bold text-[#F7FBF9]">👔 Neighborhood Dry Cleaners</p>
+                    <p class="text-[#B5CCC5]">Dwell: 10m • Deadline: By Thursday</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 2: Stacked Calendar Blocks -->
+              <div class="rounded-2xl border border-[#44C0C5]/40 bg-[#0F1D22] p-5">
+                <div class="mb-3 flex items-center justify-between">
+                  <span class="text-xs font-bold tracking-wider text-[#77C57F] uppercase">2. Split & Stacked Blocks</span>
+                  <span class="font-mono text-xs text-[#77C57F]">Sacred Calendar</span>
+                </div>
+                <div class="space-y-3">
+                  <div class="rounded-xl border-l-4 border-[#44C0C5] bg-[#1A2E35] p-3.5">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-sm text-[#F7FBF9]">Stacked Trip — Day A (Tue)</span>
+                      <span class="font-mono text-xs text-[#44C0C5]">1h 25m total</span>
+                    </div>
+                    <p class="mt-1 text-xs text-[#B5CCC5]">
+                      Credit Union → Hardware → Groceries (Last)
+                    </p>
+                    <span class="mt-2 inline-block rounded bg-[#0F1D22] px-2 py-0.5 font-mono text-[11px] text-[#77C57F]">
+                      Single Calendar Event • 2:00–3:25 PM
+                    </span>
+                  </div>
+                  <div class="rounded-xl border-l-4 border-[#FFDE59] bg-[#1A2E35] p-3.5">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-sm text-[#F7FBF9]">Stacked Trip — Day B (Thu)</span>
+                      <span class="font-mono text-xs text-[#FFDE59]">35m total</span>
+                    </div>
+                    <p class="mt-1 text-xs text-[#B5CCC5]">
+                      Dry Cleaners + Pharmacy Pickup along commute
+                    </p>
+                    <span class="mt-2 inline-block rounded bg-[#0F1D22] px-2 py-0.5 font-mono text-[11px] text-[#FFDE59]">
+                      Single Calendar Event • 5:15–5:50 PM
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 3: CarPlay & Low-Stress Handoff -->
+              <div class="rounded-2xl border border-[#243E47] bg-[#0F1D22] p-5">
+                <div class="mb-3 flex items-center justify-between">
+                  <span class="text-xs font-bold tracking-wider text-[#44C0C5] uppercase">3. Zero-Friction Handoff</span>
+                  <span class="font-mono text-xs text-[#FFDE59]">iOS + CarPlay</span>
+                </div>
+                <p class="mb-4 text-xs leading-relaxed text-[#B5CCC5]">
+                  Tap the embedded calendar link to export your multi-stop loop to <strong>Apple Maps</strong> or <strong>Google Maps</strong>, or navigate natively on your <strong>CarPlay</strong> dashboard when custom corridor preferences apply.
+                </p>
+                <div class="space-y-2 font-mono text-xs">
+                  <div class="flex items-center justify-between rounded-lg bg-[#1A2E35] px-3 py-2">
+                    <span>Horizon Teal (#44C0C5)</span>
+                    <span class="text-[#44C0C5]">Active Route Spine</span>
+                  </div>
+                  <div class="flex items-center justify-between rounded-lg bg-[#1A2E35] px-3 py-2">
+                    <span>Flow Green (#77C57F)</span>
+                    <span class="text-[#77C57F]">Low-Traffic Corridor</span>
+                  </div>
+                  <div class="flex items-center justify-between rounded-lg bg-[#1A2E35] px-3 py-2">
+                    <span>Beacon Yellow (#FFDE59)</span>
+                    <span class="text-[#FFDE59]">Time-Window Pin</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 CORE PILLARS: Zenith Structured Metric Cards -->
+  <section id="pillars" class="py-20">
+    <div class="site-container mx-auto max-w-7xl px-4">
+      <div class="mx-auto mb-14 max-w-3xl text-center">
+        <span class="badge">MANIFESTO ALIGNMENT • 60-30-10 PALETTE</span>
+        <h2 class="h2 mb-4">Calm Over Complexity, Engineered for Real Schedules</h2>
+        <p class="text-[#4D6A64] dark:text-[#B5CCC5]">
+          Anchored on Alabaster Mint (#F7FBF9) and Harbor Slate (#1A2E35) for WCAG AA/AAA contrast across daylight to-do lists and nighttime CarPlay screens.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-3xl border border-[#D6E4DF] bg-white p-7 shadow-xs dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <div class="mb-4 flex size-11 items-center justify-center rounded-xl bg-[#FFDE59] font-mono text-sm font-extrabold text-[#1A2E35]">
+            01
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Constraint-Aware Place To-Do List</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Temporal windows, per-stop dwell durations, and relative ordering rules (<em>"Bank before Hardware Store"</em>, <em>"Groceries Last"</em>).
+          </p>
+        </div>
+
+        <div class="rounded-3xl border border-[#D6E4DF] bg-white p-7 shadow-xs dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <div class="mb-4 flex size-11 items-center justify-center rounded-xl bg-[#77C57F] font-mono text-sm font-extrabold text-[#1A2E35]">
+            02
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Multi-Day & Low-Stress Routing</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Splits overflow errands across days, avoids venue crowds, minimizes unprotected left turns, and learns your preferred local corridors.
+          </p>
+        </div>
+
+        <div class="rounded-3xl border border-[#D6E4DF] bg-white p-7 shadow-xs dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <div class="mb-4 flex size-11 items-center justify-center rounded-xl bg-[#44C0C5] font-mono text-sm font-extrabold text-[#1A2E35]">
+            03
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Holistic Calendar Integration</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Protects your calendar with one consolidated event per stacked trip—accurately sized for drive time plus stop durations.
+          </p>
+        </div>
+
+        <div id="carplay" class="rounded-3xl border border-[#D6E4DF] bg-white p-7 shadow-xs dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <div class="mb-4 flex size-11 items-center justify-center rounded-xl bg-[#1A2E35] font-mono text-sm font-extrabold text-[#FFDE59] dark:bg-[#0F1D22]">
+            04
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Apple Maps, Google Maps & CarPlay</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            One-tap export to Apple Maps or Google Maps, backed by native iOS and CarPlay turn-by-turn navigation whenever needed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS SECTION -->
+  <section id="how-it-works" class="bg-[#EBF3F0] py-16 dark:bg-[#1A2E35]">
+    <div id="routing" class="site-container mx-auto max-w-6xl px-4 text-center">
+      <h2 class="mb-4 text-3xl font-bold md:text-4xl">Instant Local Re-Slotting & Low-Stress Costing</h2>
+      <p class="mx-auto mb-8 max-w-2xl text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+        Powered by pairwise travel-time matrix caching and custom branch-and-bound / VROOM constraint solving, dragging an errand to another day re-optimizes your week in under 2 milliseconds.
+      </p>
+    </div>
+  </section>
+
+  <TestimonialSwiper />
+
+  <div id="faq">
+    <FaqAccordions />
+  </div>
+</BaseLayout>

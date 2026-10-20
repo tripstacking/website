@@ -1,0 +1,84 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+import { Icon } from "astro-icon/components";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+// Get current locale from URL
+const currLocale = getLocaleFromUrl(Astro.url);
+
+// Define card data as a JSON object
+const cards = [
+  {
+    title: "$2.5M+",
+    description:
+      "Average annual savings for businesses using Zenith Card's integrated expense management system. Our automated reconciliation reduces accounting overhead by up to 60%.",
+    link: "/overview",
+    linkText: "Business solutions",
+  },
+  {
+    title: "24/7",
+    description:
+      "Round-the-clock access to premium customer support and real-time fraud monitoring. Our AI-powered security system analyzes transactions to protect your finances at all times.",
+    link: "/overview",
+    linkText: "Security features",
+  },
+  {
+    title: "0% APR",
+    description:
+      "Introductory rate for qualified customers on balance transfers and purchases for the first 15 months. Enjoy financial flexibility with no annual fees and generous cashback rewards.",
+    link: "/overview",
+    linkText: "View all benefits",
+  },
+];
+---
+
+<section id="feature-large-cards" class="py-24">
+  <div class="site-container">
+    <div class="text-center" data-mos="fade-up" data-mos-anchor="#feature-large-cards">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h1 mx-auto mb-20">Key Advantages</h2>
+    </div>
+    <div class="-m-4 flex flex-wrap" id="feature-large-cards-trigger">
+      {
+        cards.map((card, index) => (
+          <div
+            class="w-full p-4 md:w-1/3"
+            data-mos="fade-up"
+            data-mos-anchor="#feature-large-cards-trigger"
+            data-mos-delay={index * 0.15 + 0.3}
+          >
+            <div class="tilt-card bg-gradient-radial-dark rounded-5xl border-border/30 relative h-full overflow-hidden border p-12 will-change-transform">
+              <div class="relative z-10">
+                <h3 class="tracking-4xl mb-6 text-7xl">{card.title}</h3>
+                <p class="text-muted-foreground mb-20">{card.description}</p>
+                <a
+                  class="group inline-flex items-center"
+                  href={getLocalizedRoute(currLocale, card.link)}
+                >
+                  <span class="mr-3.5 font-medium underline">{card.linkText}</span>
+                  <Icon
+                    class="size-3.5 transform transition duration-300 group-hover:rotate-90"
+                    name="zenith/arrow"
+                  />
+                </a>
+              </div>
+              {/* corner glow */}
+              <div class="to-primary dark:to-blueGray-500 absolute right-0 bottom-0 size-44 bg-gradient-to-br from-transparent via-transparent blur-lg" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- script is run within BaseLayout.astro -->
+<!-- <script>
+	import initTiltCards from "@/js/tiltCard";
+
+	// Initialize on page load
+	initTiltCards();
+
+	// Re-initialize after Astro view transitions
+	document.addEventListener("astro:after-swap", initTiltCards);
+</script> -->

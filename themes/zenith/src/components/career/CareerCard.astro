@@ -1,0 +1,50 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+import { type CollectionEntry } from "astro:content";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+interface Props {
+  post: CollectionEntry<"careers">;
+}
+
+const { post } = Astro.props as Props;
+const { title, category, location, type } = post.data;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<div class="w-full">
+  <div
+    class="border-border/30 bg-gradient-radial-dark rounded-5xl relative flex h-full flex-col justify-between overflow-hidden border px-11 py-14 text-center will-change-transform"
+  >
+    <div>
+      <a
+        class="border-primary-accent text-primary-accent hover:bg-primary hover:text-primary-foreground hover:border-primary mb-4 inline-block rounded-full border-2 px-4 py-3 text-xs font-medium uppercase transition duration-300"
+        href={getLocalizedRoute(currLocale, `/careers/${post.id}/`)}>{category}</a
+      >
+      <a
+        class="group mx-auto mb-40 block max-w-xs"
+        href={getLocalizedRoute(currLocale, `/careers/${post.id}/`)}
+      >
+        <h3 class="tracking-3xl text-3xl group-hover:underline">{title}</h3>
+      </a>
+    </div>
+    <ul class="relative z-10 -m-2 flex flex-wrap justify-center">
+      <li class="flex flex-wrap items-center p-2">
+        <span class="mr-4">{location}</span>
+        &bull;
+      </li>
+      <li class="flex flex-wrap items-center p-2">
+        <span class="">{type}</span>
+      </li>
+    </ul>
+
+    <!-- corner glow -->
+    <div
+      class="to-primary dark:to-blueGray-500 absolute right-0 bottom-0 size-44 bg-gradient-to-br from-transparent via-transparent blur-lg"
+    >
+    </div>
+  </div>
+</div>

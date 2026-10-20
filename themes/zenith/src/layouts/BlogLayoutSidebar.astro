@@ -1,0 +1,149 @@
+---
+import { type CollectionEntry, getEntries } from "astro:content";
+import { Image } from "astro:assets";
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+// main layout
+import BaseLayout from "./BaseLayout.astro";
+
+// components
+import Button from "@/components/button/Button.astro";
+import CategoryBadge from "@/components/category/CategoryBadge.astro";
+import ShareButtons from "@/components/share-buttons/ShareButtons.astro";
+import TableOfContents from "@/components/table-of-contents/TableOfContents.astro";
+
+// utils
+import { formatDate } from "@/js/textUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { useTranslations } from "@/js/translationUtils";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  headings?: import("astro").MarkdownHeading[];
+}
+
+const { post, headings } = Astro.props as Props;
+const { title, description, authors, pubDate, categories, updatedDate, heroImage } = post.data;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+const authorsData = await getEntries(authors);
+---
+
+<BaseLayout
+  type="blog"
+  title={title}
+  description={description}
+  heroImage={heroImage}
+  authorsData={authorsData}
+  postFrontmatter={post.data}
+>
+  <article class="site-container" aria-labelledby="article-title">
+    <!-- Hero Section with Featured Image -->
+    <div class="relative mx-auto max-w-6xl pt-10">
+      <!-- Featured Image (if provided) -->
+      {
+        heroImage && (
+          <div class="mb-10 overflow-hidden rounded-3xl">
+            <Image
+              src={heroImage}
+              alt={`article: ${title}`}
+              loading="eager"
+              class="h-auto w-full object-cover"
+              width={1200}
+              densities={[1.5, 2]}
+            />
+          </div>
+        )
+      }
+
+      <!-- Categories -->
+      <div class="mb-6 flex flex-wrap gap-3">
+        {categories && categories.map((category) => <CategoryBadge category={category} />)}
+      </div>
+
+      <!-- Title and Description -->
+      <h1 id="article-title" class="h2 mb-4 text-pretty">
+        {title}
+      </h1>
+
+      <p class="text-muted-foreground mb-8 max-w-3xl md:text-lg">
+        {description}
+      </p>
+
+      <!-- Article Meta -->
+      <div class="mb-10 flex items-center justify-between border-b pb-6">
+        <div class="flex items-center gap-4">
+          {
+            authorsData.map((author) => (
+              <a
+                href={author.data.authorLink}
+                class="group flex items-center gap-3"
+                aria-label={`Author: ${author.data.name}`}
+              >
+                <div class="size-12 overflow-hidden rounded-full border">
+                  <Image
+                    src={author.data.avatar}
+                    alt={author.data.name}
+                    width={100}
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+                <div>
+                  <span class="group-hover:text-primary-accent block font-medium transition-colors">
+                    {author.data.name}
+                  </span>
+                  <div class="text-muted-foreground flex items-center gap-2 text-sm">
+                    <time datetime={pubDate.toISOString()}>{formatDate(pubDate, currLocale)}</time>
+                    {updatedDate && (
+                      <>
+                        <span>•</span>
+                        <span>
+                          {t("updated")}: {formatDate(updatedDate, currLocale)}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section with Sidebar -->
+    <div
+      class="mx-auto grid max-w-6xl gap-8 pb-16 md:grid-cols-1 lg:grid-cols-[330px_1fr] lg:gap-12"
+    >
+      <!-- Sidebar with Table of Contents -->
+      <aside class="">
+        <div class="sticky top-24">
+          <h2 class="mb-6 text-lg font-medium">{t("table_of_contents")}</h2>
+
+          {headings && <TableOfContents headings={headings} />}
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="">
+        <div class="markdown-content">
+          <slot />
+        </div>
+
+        <!-- After Content Section -->
+        <div class="mt-16 flex flex-wrap items-center justify-between gap-4 border-t pt-8">
+          <!-- Share Links -->
+          <div class="flex items-center gap-3">
+            <span class="text-muted-foreground text-sm">{t("share_this_article")}:</span>
+            <ShareButtons title={title} url={Astro.url} />
+          </div>
+
+          <Button href={getLocalizedRoute(currLocale, "/blog")} variant="secondary" arrow="left">
+            {t("back_to_all_posts")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

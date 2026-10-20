@@ -1,0 +1,24 @@
+---
+import { type CollectionEntry } from "astro:content";
+
+// components
+import CareerCard from "./CareerCard.astro";
+
+interface Props {
+  careers: CollectionEntry<"careers">[];
+}
+
+const { careers } = Astro.props as Props;
+---
+
+<section class="relative overflow-hidden py-20">
+  <div class="site-container">
+    <div class="mx-auto mb-20 text-center md:max-w-xl">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h2">Open positions</h2>
+    </div>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+      {careers.map((career) => <CareerCard post={career} />)}
+    </div>
+  </div>
+</section>

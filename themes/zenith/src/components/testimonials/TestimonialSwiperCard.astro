@@ -1,0 +1,19 @@
+---
+import type { TestimonialItem } from "@/config/types/configDataTypes";
+
+interface Props {
+  testimonial: TestimonialItem;
+}
+
+const { testimonial } = Astro.props;
+---
+
+<div class="swiper-slide">
+  <div class="max-w-2xl">
+    <h3 class="font-heading mb-12 text-xl leading-snug tracking-tighter md:text-2xl lg:text-3xl">
+      "{testimonial.testimonial}"
+    </h3>
+    <h4 class="font-medium tracking-tight">{testimonial.name}</h4>
+    <span class="mb-8 inline-block text-sm lg:mb-0">{testimonial.title}</span>
+  </div>
+</div>

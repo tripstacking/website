@@ -1,0 +1,23 @@
+---
+// layout
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// components
+import LogoCloudStatic from "@/components/logo-cloud/LogoCloudStatic.astro";
+import LogoCloudMarquee from "@/components/logo-cloud/LogoCloudMarquee.astro";
+import TestimonialSwiper from "@/components/testimonials/TestimonialSwiper.astro";
+import TestimonialsExpand from "@/components/testimonials/TestimonialsExpand.astro";
+---
+
+<BaseLayout
+  title="testimonial and logo sections"
+  description="All Testimonial and Logo sections you get with the Zenith theme by Cosmic Themes."
+>
+  <div class="site-container my-28 flex justify-center">
+    <h1 class="h1">All Testimonial and Logo Cloud Sections</h1>
+  </div>
+  <LogoCloudStatic />
+  <TestimonialsExpand />
+  <LogoCloudMarquee />
+  <TestimonialSwiper />
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+/**
+ * * Logo sloud section static
+ *
+ * These are taken from the src/icons folder. You may desire to modify any SVGs you use to have the fill set to "currentColor"
+ * to use the current text color. That is how I have set up these icons for demo purposes
+ */
+
+import { Icon } from "astro-icon/components";
+---
+
+<section id="logo-cloud-static" class="flex items-end justify-center py-16 md:py-20">
+  <div class="site-container">
+    <div class="mx-auto max-w-xl" data-mos="fade-up">
+      <div class="flex justify-center">
+        <h2 class="text-muted-foreground inline">200,000+ teams have found focus with Zenith</h2>
+      </div>
+    </div>
+    <div class="mx-auto mt-10 max-w-5xl" data-mos="fade-up" data-mos-delay="0.15">
+      <div class="text-foreground grid w-full grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+        <div class="flex px-8">
+          <Icon name="logos/astro" class="mx-auto h-10 w-auto py-2" aria-label="logo" />
+        </div>
+
+        <div class="flex px-8">
+          <Icon name="logos/dribbble" class="mx-auto h-10 w-auto" aria-label="logo" />
+        </div>
+
+        <div class="flex px-8">
+          <Icon name="logos/sanity" class="mx-auto h-10 w-auto py-2" aria-label="logo" />
+        </div>
+
+        <div class="flex px-8">
+          <Icon name="logos/contentfull" class="mx-auto h-10 w-auto" aria-label="logo" />
+        </div>
+
+        <div class="flex px-8">
+          <Icon name="logos/github" class="mx-auto h-10 w-auto" aria-label="logo" />
+        </div>
+
+        <div class="flex px-8">
+          <Icon name="logos/notion" class="mx-auto h-10 w-auto" aria-label="logo" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

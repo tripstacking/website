@@ -1,0 +1,21 @@
+---
+// layout
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// components
+import CategoryCloud from "@/components/category-cloud/CategoryCloud.astro";
+---
+
+<BaseLayout title="Blog Categories" description="Explore our blog posts by category">
+  <div class="site-container">
+    <section class="overflow-hidden py-16">
+      <div class="mx-auto mb-10 text-center md:max-w-4xl">
+        <span class="badge">Zenith Card</span>
+        <h2 class="h2">Categories</h2>
+      </div>
+      <div class="mb-10 flex items-center justify-center">
+        <CategoryCloud showCount={true} />
+      </div>
+    </section>
+  </div>
+</BaseLayout>

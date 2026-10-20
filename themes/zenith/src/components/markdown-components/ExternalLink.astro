@@ -1,0 +1,18 @@
+---
+/**
+ * * This component is used to add target="_blank" and rel="noopener noreferrer" to external links
+ * Used in blog posts so you don't have to worry about that when writing markdown / mdx
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { href }: Record<string, any> = Astro.props;
+
+const domain = import.meta.env.SITE; // pulls from astro.config.mjs
+let attr: { target?: string; rel?: string } = {};
+
+if (!href.includes(domain) && !href.startsWith("/") && !href.startsWith("#")) {
+  attr["target"] = "_blank";
+  attr["rel"] = "noopener noreferrer";
+}
+---
+
+<a href={href} {...attr}><slot /></a>

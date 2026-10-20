@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import CircleCheck from "@tabler/icons/filled/circle-check.svg";
+
+import CardImage from "@images/features/card2.png";
+import BgBlurImage from "@images/features/bg-blur.png";
+
+// Define feature items array
+const featureItems = [
+  "Real-time transaction tracking with instant balance updates",
+  "Advanced security features with biometric authentication",
+  "Smart expense categorization with personalized insights",
+];
+---
+
+<section class="relative overflow-hidden py-24">
+  <div class="site-container">
+    <div class="flex flex-wrap items-center">
+      <div class="w-full md:w-1/2">
+        <div class="relative z-10 md:max-w-md" data-mos="fade-right" data-mos-delay="0.3">
+          <span class="badge">Zenith Card</span>
+          <h2 class="h2 mb-6">Making credit history</h2>
+          <p class="text-muted-foreground mb-8">
+            Experience a new era of personal finance with the Zenith Card. Our innovative platform
+            combines cutting-edge technology with user-friendly design to give you unprecedented
+            control over your financial life.
+          </p>
+          <ul class="mb-8 flex flex-col gap-3.5">
+            {
+              featureItems.map((item) => (
+                <li class="inline-flex">
+                  <CircleCheck class="mt-0.5 mr-3.5 size-5" />
+                  <span>{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="w-full md:w-1/2" data-mos="fade-left" data-mos-delay="0.3">
+        <div class="mx-auto max-w-max">
+          <Image class="rounded-3xl" src={CardImage} alt="Zenith Card" quality={100} />
+        </div>
+      </div>
+    </div>
+  </div>
+  <Image
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+    src={BgBlurImage}
+    quality={100}
+    alt=""
+    aria-hidden="true"
+  />
+</section>

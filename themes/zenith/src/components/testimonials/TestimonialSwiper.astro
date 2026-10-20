@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import ArrowLeft from "@tabler/icons/outline/arrow-left.svg";
+import TestimonialSwiperCard from "./TestimonialSwiperCard.astro";
+import Blur from "@images/testimonials/blur.png";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+import testimonialImage from "@images/testimonials/man.png";
+
+// data
+const currLocale = getLocaleFromUrl(Astro.url);
+const testimonials = getTranslatedData("testimonialData", currLocale);
+const testimonialsSlice = testimonials.slice(0, 6);
+---
+
+<section id="testimonial-swiper" class="relative overflow-hidden py-20">
+  <div class="site-container">
+    <div class="mx-auto mb-20 text-center md:max-w-5xl" data-mos="fade-up">
+      <span class="text-primary-accent mb-2.5 inline-block text-sm font-medium tracking-tighter"
+        >Zenith Card</span
+      >
+      <h2 class="h1">What people are saying</h2>
+    </div>
+    <div
+      class="bg-gradient-radial-dark rounded-5xl border-border/30 relative overflow-hidden border p-3"
+      data-mos="fade-up"
+      data-mos-delay="0.3"
+    >
+      <div class="relative z-10 flex h-full flex-col lg:flex-row lg:items-stretch">
+        <div class="flex h-full items-center justify-center p-6 lg:w-1/3">
+          <Image
+            src={testimonialImage}
+            quality={100}
+            alt="Testimonial profile"
+            class="h-auto w-auto max-w-full"
+          />
+        </div>
+        <div class="w-full p-6 lg:w-2/3">
+          <div class="testimonials-slider w-full overflow-hidden">
+            <div class="swiper-wrapper">
+              {
+                testimonialsSlice.map((testimonial) => (
+                  <TestimonialSwiperCard testimonial={testimonial} />
+                ))
+              }
+            </div>
+          </div>
+          <div class="flex justify-end space-x-4">
+            <button class="testimonial-prev group" aria-label="Previous testimonial">
+              <div
+                class="hover:border-muted-foreground border-border flex size-14 items-center justify-center rounded-full border transition duration-200 md:size-18"
+              >
+                <ArrowLeft class="opacity-90" />
+              </div>
+            </button>
+            <button class="testimonial-next group" aria-label="Next testimonial">
+              <div
+                class="hover:border-muted-foreground border-border flex size-14 items-center justify-center rounded-full border transition duration-200 md:size-18"
+              >
+                <ArrowRight class="opacity-90" />
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <Image
+        src={Blur}
+        quality={100}
+        alt=""
+        class="absolute bottom-0 left-1/2 -translate-x-1/2 transform"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from "swiper";
+  import { Navigation, Keyboard, A11y, Autoplay } from "swiper/modules";
+  import "swiper/css";
+
+  const initTestimonialSwiper = () => {
+    const swiperElement = document.querySelector(".testimonials-slider");
+    if (!swiperElement) return;
+
+    // Initialize Swiper
+    const swiper = new Swiper(".testimonials-slider", {
+      modules: [Navigation, Keyboard, A11y, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      grabCursor: true,
+      loop: true,
+      autoplay: {
+        delay: 8000,
+        disableOnInteraction: false,
+      },
+      keyboard: {
+        enabled: true,
+      },
+      navigation: {
+        nextEl: ".testimonial-next",
+        prevEl: ".testimonial-prev",
+      },
+      a11y: {
+        prevSlideMessage: "Previous testimonial",
+        nextSlideMessage: "Next testimonial",
+      },
+    });
+
+    return swiper;
+  };
+
+  // Initialize on page load
+  initTestimonialSwiper();
+
+  // Re-initialize after view transitions
+  document.addEventListener("astro:after-swap", () => {
+    initTestimonialSwiper();
+  });
+</script>
+
+<style>
+  .testimonials-slider {
+    overflow: hidden;
+  }
+
+  .swiper-slide {
+    height: auto;
+  }
+</style>

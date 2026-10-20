@@ -1,0 +1,84 @@
+---
+// layout
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// components
+import CategoryCloud from "@/components/category-cloud/CategoryCloud.astro";
+import Button from "@/components/button/Button.astro";
+import PostCardSmall from "@/components/post-card/PostCardSmall.astro";
+import PostCardLarge from "@/components/post-card/PostCardLarge.astro";
+
+// utils
+import { getAllPosts } from "@/js/blogUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const posts = await getAllPosts(currLocale);
+---
+
+<BaseLayout
+  title="My blog posts"
+  description="Learn from my blog posts about web development, design, and more."
+>
+  <div class="site-container">
+    <section class="overflow-hidden pt-10 pb-20">
+      <div class="mx-auto mb-10 text-center md:max-w-4xl">
+        <span class="badge">Zenith Card</span>
+        <h2 class="h2">Blog</h2>
+      </div>
+      <div class="mb-10 flex items-center justify-center">
+        <CategoryCloud showCount={false} />
+      </div>
+      <div class="-m-10 mb-10 flex flex-wrap">
+        <PostCardLarge post={posts[0]} />
+        <div class="w-full p-10 md:w-1/2">
+          <div class="-m-4 flex flex-wrap">
+            {posts.slice(1, 5).map((post) => <PostCardSmall post={post} />)}
+
+            {
+              posts.length > 5 && (
+                <div id="hidden-posts" class="hidden w-full">
+                  {posts.slice(5).map((post) => (
+                    <PostCardSmall post={post} />
+                  ))}
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+
+      {
+        posts.length > 5 && (
+          <Button id="see-more-button" class="mx-auto">
+            See more articles
+          </Button>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  function initSeeMoreButton() {
+    // Get the button and hidden posts elements
+    const seeMoreButton = document.getElementById("see-more-button");
+    const hiddenPosts = document.getElementById("hidden-posts");
+
+    // Add click event listener to the button
+    if (seeMoreButton && hiddenPosts) {
+      seeMoreButton.addEventListener("click", () => {
+        // Show the hidden posts
+        hiddenPosts.classList.remove("hidden");
+        hiddenPosts.classList.add("block");
+
+        // Hide the button
+        seeMoreButton.classList.add("hidden");
+      });
+    }
+  }
+
+  initSeeMoreButton();
+
+  document.addEventListener("astro:after-swap", initSeeMoreButton);
+</script>

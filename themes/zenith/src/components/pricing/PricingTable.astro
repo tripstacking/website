@@ -1,0 +1,465 @@
+---
+/**
+ * * pricing sections with toggle for monthly or yearly payments
+ * This is designed for 3 pricing items in a table
+ */
+import Check from "@tabler/icons/outline/check.svg";
+import InfoCircle from "@tabler/icons/outline/info-circle.svg";
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+// components
+import Button from "@/components/button/Button.astro";
+import { Switch } from "@/components/starwind/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/starwind/tooltip";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+// get the current page locale to use in links to other pages
+const currLocale = getLocaleFromUrl(Astro.url);
+
+// Define pricing data
+const pricingData = {
+  title: "Compare our plans",
+  subtitle: "Zenith Card",
+  description: "Zenith will launch your finances with a new level of control and security.",
+  yearlyDiscount: "Save 20%",
+
+  featureGroups: [
+    {
+      name: "Core features",
+      features: [
+        {
+          id: "storage",
+          name: "Storage",
+          hasInfo: true,
+          tooltip: "Maximum storage space available for your account",
+        },
+        {
+          id: "users",
+          name: "Users",
+          hasInfo: true,
+          tooltip: "Number of users that can access the account",
+        },
+        {
+          id: "bestInClassSync",
+          name: "Best-in-class sync technology",
+          hasInfo: true,
+          tooltip: "Synchronize your files across all devices",
+        },
+        {
+          id: "anytimeAccess",
+          name: "Anytime, anywhere access",
+          hasInfo: true,
+          tooltip: "Access your files from anywhere, anytime",
+        },
+        {
+          id: "easySharing",
+          name: "Easy and secure sharing",
+          hasInfo: true,
+          tooltip: "Easily share files with others",
+        },
+        {
+          id: "encryption",
+          name: "256-bit AES and SSL/TLS encryption",
+          hasInfo: true,
+          tooltip: "End-to-end encryption for your files",
+        },
+      ],
+    },
+    {
+      name: "Advanced features",
+      features: [
+        {
+          id: "sharedLinkControls",
+          name: "Shared link controls",
+          hasInfo: true,
+          tooltip: "Control who can access shared links",
+        },
+        {
+          id: "externalSharingControls",
+          name: "External sharing controls and reporting",
+          hasInfo: true,
+          tooltip: "Control how files are shared externally",
+        },
+        {
+          id: "alertsNotifications",
+          name: "Alerts and notifications",
+          hasInfo: true,
+          tooltip: "Get alerts for important file activities",
+        },
+        {
+          id: "ransomwareProtection",
+          name: "Ransomware detection and recovery",
+          hasInfo: true,
+          tooltip: "Protection against ransomware attacks",
+        },
+      ],
+    },
+  ],
+
+  plans: [
+    {
+      name: "Basic",
+      monthlyPrice: 10,
+      yearlyPrice: 20,
+      highlighted: false,
+      features: {
+        storage: {
+          value: "3,000 GB",
+        },
+        users: {
+          value: "1 user",
+        },
+        bestInClassSync: {
+          value: true,
+        },
+        anytimeAccess: {
+          value: true,
+        },
+        easySharing: {
+          value: false,
+        },
+        encryption: {
+          value: false,
+        },
+        sharedLinkControls: {
+          value: false,
+        },
+        externalSharingControls: {
+          value: false,
+        },
+        alertsNotifications: {
+          value: false,
+        },
+        ransomwareProtection: {
+          value: false,
+        },
+      },
+    },
+    {
+      name: "Business",
+      monthlyPrice: 20,
+      yearlyPrice: 40,
+      highlighted: true,
+      features: {
+        storage: {
+          value: "3,000 GB",
+        },
+        users: {
+          value: "3+ users",
+        },
+        bestInClassSync: {
+          value: true,
+        },
+        anytimeAccess: {
+          value: true,
+        },
+        easySharing: {
+          value: true,
+        },
+        encryption: {
+          value: true,
+        },
+        sharedLinkControls: {
+          value: true,
+        },
+        externalSharingControls: {
+          value: true,
+        },
+        alertsNotifications: {
+          value: true,
+        },
+        ransomwareProtection: {
+          value: true,
+        },
+      },
+    },
+    {
+      name: "Premium",
+      monthlyPrice: 50,
+      yearlyPrice: 100,
+      highlighted: false,
+      features: {
+        storage: {
+          value: "3,000 GB",
+        },
+        users: {
+          value: "3+ users",
+        },
+        bestInClassSync: {
+          value: true,
+        },
+        anytimeAccess: {
+          value: true,
+        },
+        easySharing: {
+          value: true,
+        },
+        encryption: {
+          value: true,
+        },
+        sharedLinkControls: {
+          value: true,
+        },
+        externalSharingControls: {
+          value: true,
+        },
+        alertsNotifications: {
+          value: true,
+        },
+        ransomwareProtection: {
+          value: true,
+        },
+      },
+    },
+  ],
+};
+---
+
+<section class="overflow-hidden py-24">
+  <div class="site-container">
+    <div class="mx-auto mb-12 text-center md:max-w-4xl">
+      <span class="badge">{pricingData.subtitle}</span>
+      <h2 class="h1 mb-8">
+        {pricingData.title}
+      </h2>
+      <p class="text-muted-foreground mx-auto mb-12 max-w-sm">
+        {pricingData.description}
+      </p>
+      <div class="-m-4 flex flex-wrap justify-center">
+        <div class="flex w-auto flex-wrap items-center p-4">
+          <p class="text-muted-foreground mr-8">Billed monthly</p>
+          <Switch id="billing-toggle" variant="primary" padding={4} />
+        </div>
+        <div class="flex w-auto flex-wrap items-center p-4">
+          <p class="text-muted-foreground mr-3.5">Billed yearly</p>
+          <span
+            class="border-primary-accent text-primary-accent rounded-full border px-3 py-1 text-sm font-medium uppercase"
+            >{pricingData.yearlyDiscount}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-5xl border-border w-full overflow-clip border">
+      <div class="flex overflow-x-auto">
+        <!-- Feature column -->
+        <div class="border-border flex-1 border-r">
+          <div class="flex flex-wrap">
+            <div class="border-border h-[240px] w-full border-b"></div>
+
+            {
+              pricingData.featureGroups.map((group) => (
+                <>
+                  <div class="border-border flex h-24 w-full items-end border-b px-8 py-6">
+                    <p class="min-w-max text-xl font-medium">{group.name}</p>
+                  </div>
+                  {group.features.map((feature) => (
+                    <div class="border-border flex h-16 w-full items-center border-b px-8 py-5 last:border-b-0">
+                      <p class="mr-3.5 min-w-max">{feature.name}</p>
+                      {feature.hasInfo && (
+                        <Tooltip openDelay={0}>
+                          <TooltipTrigger>
+                            <InfoCircle class="text-muted-foreground/50 size-4.5" />
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="right"
+                            align="center"
+                            class="rounded-xl text-sm will-change-transform"
+                          >
+                            {feature.tooltip}
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
+                  ))}
+                </>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Plan columns -->
+        {
+          pricingData.plans.map((plan) => (
+            <div class="border-border flex-1 border-r last:border-r-0">
+              <div class="flex min-w-0 flex-wrap">
+                <div
+                  class:list={[
+                    "border-border h-[240px] w-full border-b pb-6",
+                    { "bg-muted/30": plan.highlighted },
+                  ]}
+                >
+                  <div class="p-12">
+                    <h3 class="mb-3 min-w-max text-xl font-medium">{plan.name}</h3>
+                    <p class="mb-7 min-w-max text-5xl font-medium">
+                      <span class="monthly-price" data-price={plan.monthlyPrice}>
+                        ${plan.monthlyPrice}
+                      </span>
+                      <span class="monthly-label text-muted-foreground text-base font-medium">
+                        / month
+                      </span>
+                      <span class="yearly-price hidden" data-price={plan.yearlyPrice}>
+                        ${plan.yearlyPrice}
+                      </span>
+                      <span class="yearly-label text-muted-foreground hidden text-base font-medium">
+                        / year
+                      </span>
+                    </p>
+                    <Button
+                      href={getLocalizedRoute(currLocale, "/sign-up")}
+                      class="px-12 py-3 whitespace-nowrap"
+                    >
+                      Buy now
+                    </Button>
+                  </div>
+                </div>
+
+                {pricingData.featureGroups.map((group) => (
+                  <>
+                    <div
+                      class:list={[
+                        "border-border h-24 w-full border-b px-8 py-6",
+                        { "bg-muted/30": plan.highlighted },
+                      ]}
+                    />
+
+                    {group.features.map((feature) => {
+                      const featureData = plan.features[feature.id];
+
+                      return (
+                        <div
+                          class:list={[
+                            "border-border flex h-16 w-full items-center border-b px-8 py-5 last:border-b-0",
+                            { "bg-muted/30": plan.highlighted },
+                          ]}
+                        >
+                          {typeof featureData.value === "boolean" ? (
+                            featureData.value ? (
+                              <div
+                                title={feature.tooltip}
+                                class="border-primary-accent mx-auto flex h-5 w-5 items-center justify-center rounded-full border"
+                              >
+                                <Check class="text-primary-accent size-3.5" />
+                                <span class="sr-only">Included</span>
+                              </div>
+                            ) : null
+                          ) : (
+                            <p class="mx-auto min-w-max" title={feature.tooltip}>
+                              {featureData.value}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import type { SwitchChangeEvent } from "@/components/starwind/switch";
+
+  function initPricingToggle() {
+    // Get the switch element
+    const billingToggle = document.getElementById("billing-toggle");
+
+    // Check if the element exists before proceeding
+    if (billingToggle) {
+      // Get all price elements
+      const monthlyPrices = document.querySelectorAll(".monthly-price");
+      const yearlyPrices = document.querySelectorAll(".yearly-price");
+      const monthlyLabels = document.querySelectorAll(".monthly-label");
+      const yearlyLabels = document.querySelectorAll(".yearly-label");
+
+      // Set initial state
+      let isMonthly = true;
+
+      // Function to update pricing display
+      function updatePricingDisplay() {
+        if (isMonthly) {
+          monthlyPrices.forEach((el) => el.classList.remove("hidden"));
+          yearlyPrices.forEach((el) => el.classList.add("hidden"));
+          monthlyLabels.forEach((el) => el.classList.remove("hidden"));
+          yearlyLabels.forEach((el) => el.classList.add("hidden"));
+        } else {
+          monthlyPrices.forEach((el) => el.classList.add("hidden"));
+          yearlyPrices.forEach((el) => el.classList.remove("hidden"));
+          monthlyLabels.forEach((el) => el.classList.add("hidden"));
+          yearlyLabels.forEach((el) => el.classList.remove("hidden"));
+        }
+      }
+
+      // Function to animate the counters
+      function animateCounters() {
+        // Determine which prices to animate based on current state
+        const pricesToAnimate = isMonthly ? monthlyPrices : yearlyPrices;
+
+        pricesToAnimate.forEach((el) => {
+          // Only animate visible elements
+          if (!el.classList.contains("hidden")) {
+            const price = el.getAttribute("data-price") || "0";
+            const priceNum = parseInt(price);
+
+            // Set initial content
+            el.textContent = "$0";
+
+            // Start animation
+            const duration = 700;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime: number) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const currentValue = Math.floor(progress * priceNum);
+
+              el.textContent = "$" + currentValue;
+
+              if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+              } else {
+                el.textContent = "$" + priceNum;
+              }
+            }
+
+            requestAnimationFrame(updateCounter);
+          }
+        });
+      }
+
+      // Listen for the switch component's change event
+      billingToggle.addEventListener("starwind-switch:change", (e) => {
+        const event = e as SwitchChangeEvent;
+        isMonthly = !event.detail.checked;
+        updatePricingDisplay();
+        animateCounters();
+      });
+
+      // Initialize display
+      updatePricingDisplay();
+
+      // Run initial animation after a short delay
+      setTimeout(animateCounters, 100);
+    }
+  }
+
+  initPricingToggle();
+
+  document.addEventListener("astro:after-swap", initPricingToggle);
+</script>
+
+<style>
+  /* Fix for horizontal scrollbar */
+  section {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+// layout
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// components
+import HeroSideImage from "@/components/hero/HeroSideImage.astro";
+import HeroCenterImage from "@/components/hero/HeroCenterImage.astro";
+import HeroCenterDashboard from "@/components/hero/HeroCenterDashboard.astro";
+
+import LogoCloudMarquee from "@/components/logo-cloud/LogoCloudMarquee.astro";
+import LogoCloudStatic from "@/components/logo-cloud/LogoCloudStatic.astro";
+import LogoCloudStaticSimple from "@/components/logo-cloud/LogoCloudStaticSimple.astro";
+
+import FeatureSideImage from "@/components/feature/FeatureSideImage.astro";
+import FeatureSideImageWide from "@/components/feature/FeatureSideImageWide.astro";
+import FeatureNumbers from "@/components/feature/FeatureNumbers.astro";
+import FeatureExpand from "@/components/feature/FeatureExpand.astro";
+import FeatureToggle from "@/components/feature/FeatureToggle.astro";
+import FeatureTiltCards from "@/components/feature/FeatureTiltCards.astro";
+
+import PricingThreeCards from "@/components/pricing/PricingThreeCards.astro";
+import PricingTable from "@/components/pricing/PricingTable.astro";
+import PricingTwoCards from "@/components/pricing/PricingTwoCards.astro";
+import PricingTwoCardsSimple from "@/components/pricing/PricingTwoCardsSimple.astro";
+
+import TestimonialSwiper from "@/components/testimonials/TestimonialSwiper.astro";
+import TestimonialsExpand from "@/components/testimonials/TestimonialsExpand.astro";
+
+import FaqAccordions from "@/components/faq/FaqAccordions.astro";
+import FaqAccordionsPlain from "@/components/faq/FaqAccordionsPlain.astro";
+
+import CtaCentered from "@/components/cta/CtaCentered.astro";
+import CtaNewsletter from "@/components/cta/CtaNewsletter.astro";
+import CtaCenteredNewsletter from "@/components/cta/CtaCenteredNewsletter.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+// data
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+  <!-- <HeroSideImage /> -->
+  <HeroCenterImage />
+  <!-- <HeroCenterDashboard /> -->
+
+  <!-- <LogoCloudStatic /> -->
+  <!-- <LogoCloudStaticSimple /> -->
+  <LogoCloudMarquee />
+
+  <FeatureSideImageWide />
+  <!-- <FeatureNumbers /> -->
+  <!-- <FeatureSideImage /> -->
+  <!-- <FeatureExpand /> -->
+  <FeatureTiltCards />
+  <FeatureToggle />
+
+  <TestimonialSwiper />
+  <!-- <TestimonialsExpand /> -->
+
+  <!-- <PricingThreeCards /> -->
+  <PricingTable />
+  <!-- <PricingTwoCards /> -->
+  <!-- <PricingTwoCardsSimple /> -->
+
+  <FaqAccordionsPlain />
+  <!-- <FaqAccordions /> -->
+  <!-- <FaqCards /> -->
+
+  <CtaCentered />
+  <!-- <CtaNewsletter /> -->
+  <!-- <CtaCenteredNewsletter /> -->
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+// utils
+import { slugify, humanize } from "@/js/textUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+interface Props {
+  category: string | undefined;
+  count?: number;
+  class?: string;
+}
+
+const { category, count, class: className } = Astro.props as Props;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+{
+  category && (
+    <a
+      href={getLocalizedRoute(currLocale, `/categories/${slugify(category)}/`)}
+      class:list={["w-auto", className]}
+    >
+      <div class="bg-muted/50 hover:bg-primary-400 hover:text-primary-foreground/80 rounded-full px-4 py-3 text-sm tracking-tighter transition-colors duration-200 md:px-6 md:py-3.5">
+        {humanize(category)}
+        {count !== undefined && <span class="mt-0.5 ml-1 text-xs opacity-70">({count})</span>}
+      </div>
+    </a>
+  )
+}

@@ -1,0 +1,43 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContactForm from "@/components/forms/ContactForm.astro";
+---
+
+<BaseLayout
+  title="Contact Us"
+  description="Contact us and we will help you find the right plan or answer any questions."
+>
+  <section class="overflow-hidden py-20">
+    <div class="site-container">
+      <div class="-m-8 flex flex-wrap">
+        <div class="w-full p-8 md:w-1/2">
+          <div class="md:max-w-md">
+            <span
+              class="text-primary-600 dark:text-primary-400 mb-4 inline-block text-sm font-medium tracking-tighter"
+              >Zenith Card</span
+            >
+            <h2 class="font-heading tracking-7xl lg:tracking-8xl mb-8 text-7xl lg:text-8xl">
+              Let`s talk
+            </h2>
+            <p class="text-muted-foreground mb-8">
+              Have questions about our financial services? Our team is ready to help you find the
+              perfect solution for your needs. Contact us today for personalized assistance.
+            </p>
+            <a class="mb-6 inline-block text-xl font-medium" href="mailto:someone@example.com"
+              >contact@Zenithstudio.co</a
+            >
+            <p class="text-xl font-medium">(684) 555-0102</p>
+          </div>
+        </div>
+        <div class="w-full p-8 md:w-1/2">
+          <div
+            class="bg-base-100/30 dark:bg-base-900/40 rounded-5xl relative mx-auto max-w-lg px-9 py-10"
+          >
+            <h3 class="mb-6 text-2xl font-medium">Contact us</h3>
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

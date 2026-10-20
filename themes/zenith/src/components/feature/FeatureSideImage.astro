@@ -1,0 +1,67 @@
+---
+import { Image } from "astro:assets";
+import { getLocalizedRoute } from "@/js/translationUtils";
+import CircleCheck from "@tabler/icons/filled/circle-check.svg";
+import Button from "@/components/button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+import AboutImage from "@images/abouts/about.png";
+
+// Define feature items array
+const featureItems = [
+  "Real-time transaction tracking with instant balance updates",
+  "Advanced security features with biometric authentication",
+  "Smart expense categorization with personalized insights",
+];
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<section id="feature-side-image" class="overflow-hidden pt-20 pb-24 md:pb-32">
+  <div class="site-container">
+    <div class="mx-auto max-w-5xl">
+      <div class="flex flex-wrap lg:items-center">
+        <div class="w-full md:w-1/2" data-mos="fade-right" data-mos-delay="0.3">
+          <div class="mx-auto max-w-max">
+            <Image
+              class="tilt-card rounded-3xl"
+              src={AboutImage}
+              alt="Zenith Card in use on mobile device"
+            />
+          </div>
+        </div>
+        <div class="w-full p-8 md:w-1/2 lg:p-12" data-mos="fade-left" data-mos-delay="0.3">
+          <span class="badge">Zenith Card</span>
+          <h2 class="h3 mb-6">Redefining Financial Freedom</h2>
+          <p class="text-muted-foreground mb-8">
+            Experience a new era of personal finance with the Zenith Card. Our innovative platform
+            combines cutting-edge technology with user-friendly design to give you unprecedented
+            control over your financial life.
+          </p>
+          <ul class="mb-8 flex flex-col gap-3.5">
+            {
+              featureItems.map((item) => (
+                <li class="inline-flex">
+                  <CircleCheck class="mt-0.5 mr-3.5 size-5" />
+                  <span class="">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="-m-2 flex flex-wrap">
+            <div class="w-auto p-2">
+              <Button href={getLocalizedRoute(currLocale, "/sign-up")}>Get Your Card Today</Button>
+            </div>
+            <div class="w-auto p-2">
+              <Button variant="outline" href={getLocalizedRoute(currLocale, "/sign-in")}
+                >Access Your Account</Button
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

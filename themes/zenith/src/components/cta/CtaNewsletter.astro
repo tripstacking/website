@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+import { Input } from "@/components/starwind/input";
+import { Label } from "@/components/starwind/label";
+import Button from "@/components/button/Button.astro";
+
+import CtaImage from "@images/newsletter/man2.png";
+---
+
+<section class="overflow-hidden py-20">
+  <div class="site-container">
+    <div class="flex flex-wrap">
+      <div class="w-full md:w-1/2">
+        <div class="flex h-full flex-col justify-center">
+          <div class="mx-auto px-4 py-20 md:max-w-lg" data-mos="fade-right" data-mos-delay="0.5">
+            <span class="badge">Zenith Card</span>
+            <h2 class="h3 mb-6">
+              Industry insights you wan`t delete. Delivered to your inbox weekly
+            </h2>
+            <p class="text-muted-foreground mb-12">
+              Join 10,000 founders, get early access to Zenith features, and learn how to squeeze
+              every drop of revenue
+            </p>
+            <form action="">
+              <Label for="email" class="sr-only">E-mail</Label>
+              <Input
+                type="text"
+                placeholder="E-mail"
+                id="email"
+                required
+                class="mr-auto mb-6 max-w-sm"
+              />
+              <Button type="submit" class="px-14">Subscribe</Button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="w-full md:w-1/2 md:p-8" data-mos="fade-left" data-mos-delay="0.5">
+        <div class="h-full">
+          <Image
+            src={CtaImage}
+            class="rounded-5xl tilt-card mx-auto h-full object-cover md:mr-0"
+            alt=""
+            quality={100}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+import Button from "@/components/button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+
+// data
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<section class="overflow-hidden pt-20 pb-24 md:pb-28">
+  <div class="site-container">
+    <div class="-m-8 flex flex-wrap">
+      <div class="w-full p-8 md:w-1/2" data-mos="fade-right">
+        <div class="md:max-w-md">
+          <span class="badge">Learn about us</span>
+          <h1 class="font-heading tracking-tighter-xl text-6xl md:text-7xl">
+            Making credit history with Zenith
+          </h1>
+        </div>
+      </div>
+      <div class="w-full p-8 md:w-1/2" data-mos="fade-left">
+        <h3 class="mb-8 text-2xl tracking-tighter">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+          been the industry's standard dummy text ever since the 1500s.
+        </h3>
+        <p class="text-muted-foreground mb-10 text-lg">
+          It is a long established fact that a reader will be distracted by the readable content of
+          a page when looking at its layout. The point of using Lorem Ipsum is that it has a
+          more-or-less normal distribution of letters, as opposed to using 'Content here, content
+          here', making it look like readable English. Many desktop publishing packages and web page
+          editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum'
+          will uncover many web sites still in their infancy. Various versions have evolved over the
+          years, sometimes by accident, sometimes on purpose (injected humour and the like).
+        </p>
+        <Button href={getLocalizedRoute(currLocale, "/overview")}>Read more</Button>
+      </div>
+    </div>
+  </div>
+</section>

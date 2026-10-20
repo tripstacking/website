@@ -1,0 +1,116 @@
+---
+import Button from "@/components/button/Button.astro";
+
+// Define the data structure for feature cards
+interface FeatureCard {
+  value: string;
+  description: string;
+  initiallyHidden?: boolean;
+}
+
+// Feature cards data
+const featureCards: FeatureCard[] = [
+  {
+    value: "85M+",
+    description:
+      "Active monthly users worldwide, making Zenith Card one of the fastest growing financial platforms in 2024. Our user base has grown 150% year-over-year.",
+  },
+  {
+    value: "$3.2B",
+    description:
+      "Total transaction volume processed through Zenith Card in the last quarter alone. Our secure payment infrastructure handles over 12,000 transactions per second at peak times.",
+  },
+  {
+    value: "4.8/5",
+    description:
+      "Average user rating across app stores, with over 250,000 reviews. Our commitment to user experience and responsive customer service has earned us industry-leading satisfaction scores.",
+    initiallyHidden: true,
+  },
+  {
+    value: "98.7%",
+    description:
+      "Uptime reliability, with state-of-the-art security protocols that exceed industry standards. Zenith Card has maintained zero security breaches since our launch in 2021.",
+    initiallyHidden: true,
+  },
+];
+---
+
+<section id="feature-expand" class="overflow-hidden py-24">
+  <div class="site-container">
+    <div class="mb-20 text-center" data-mos="fade-up">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h1 mb-6">Why Choose Zenith?</h2>
+      <p class="text-muted-foreground mx-auto md:max-w-md">
+        The next generation financial platform that combines security, speed, and simplicity in one
+        powerful card.
+      </p>
+    </div>
+    <div class="grid gap-12 md:grid-cols-2">
+      <div class="w-full" data-mos="fade-right" data-mos-delay="0.15">
+        <h3 class="xl:text-10xl text-primary-accent tracking-8xl mb-8 text-7xl lg:text-8xl">92%</h3>
+        <p class="tracking-2xl mb-16 text-2xl lg:mb-32">
+          Of Zenith Card users report saving an average of 3 hours per week on financial management
+          compared to traditional banking solutions.
+        </p>
+        <Button variant="primary" class="see-more-btn">See more</Button>
+      </div>
+      <div class="w-full">
+        <div class="flex flex-wrap gap-12" id="feature-expand-trigger">
+          {
+            featureCards.map((card, index) => {
+              // Only the last hidden card should not have a divider
+              const isLastHidden = index === featureCards.length - 1;
+              const showDivider = !isLastHidden || !card.initiallyHidden;
+
+              return (
+                <div
+                  class:list={["w-full", card.initiallyHidden && "additional-content hidden"]}
+                  data-mos="fade-left"
+                  data-mos-delay={0.15 * index + 0.45}
+                  data-mos-anchor="#feature-expand-trigger"
+                >
+                  <div class="md:max-w-md">
+                    <h3 class="text-primary-accent tracking-6xl mb-8 text-6xl">{card.value}</h3>
+                    <p class={showDivider ? "pb-12" : ""}>{card.description}</p>
+                    {showDivider && <div class="bg-muted h-px w-1/3" />}
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Initialize the "See more" functionality for the feature numbers section
+   */
+  function initFeatureExpand() {
+    const section = document.getElementById("feature-expand");
+    const seeMoreBtn = section?.querySelector(".see-more-btn");
+    const additionalContent = section?.querySelectorAll(".additional-content");
+
+    if (seeMoreBtn && additionalContent?.length) {
+      seeMoreBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Show the additional content
+        additionalContent.forEach((element) => {
+          element.classList.remove("hidden");
+        });
+
+        // Hide the "See more" button
+        seeMoreBtn.classList.add("hidden");
+      });
+    }
+  }
+
+  // Initialize on page load
+  initFeatureExpand();
+
+  // Re-initialize after Astro view transitions
+  document.addEventListener("astro:after-swap", initFeatureExpand);
+</script>

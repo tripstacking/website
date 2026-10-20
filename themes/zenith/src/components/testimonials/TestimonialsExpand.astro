@@ -1,0 +1,103 @@
+---
+import TestimonialCard from "./TestimonialCard.astro";
+import Button from "@/components/button/Button.astro";
+import { type ComponentProps } from "astro/types";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+// data
+const currLocale = getLocaleFromUrl(Astro.url);
+const testimonials = getTranslatedData("testimonialData", currLocale);
+
+// split the testimonials up into 4 columns
+const numColumns = 4;
+const numColumnsToShow = 3;
+const columns: ComponentProps<typeof TestimonialCard>[][] = [];
+
+// Create a more balanced distribution
+for (let i = 0; i < numColumns; i++) {
+  columns.push([]);
+}
+
+// Distribute testimonials in a round-robin fashion
+testimonials.forEach((testimonial, index) => {
+  const columnIndex = index % numColumns;
+  columns[columnIndex].push({ testimonial });
+});
+---
+
+<section class="relative overflow-hidden py-24">
+  <div class="site-container">
+    <div class="text-center" data-mos="fade-up" data-mos-delay="0.3">
+      <span class="badge">Zenith Card</span>
+      <h2 class="h1 mx-auto mb-6 md:max-w-3xl">Protecting you and your money</h2>
+      <p class="text-muted-foreground mx-auto mb-20 text-pretty md:max-w-lg">
+        Join thousands of customers who trust Zenith
+      </p>
+    </div>
+    <div class="-m-3 flex flex-wrap" data-mos="fade-up" data-mos-delay="0.45">
+      {
+        columns.map((columnTestimonials) => (
+          <div class="w-full p-3 md:w-1/2 lg:w-1/4">
+            <div class="-m-3 flex flex-wrap">
+              {columnTestimonials.map((testimonial, index) => {
+                const isHidden = index >= numColumnsToShow;
+                return (
+                  <>
+                    {!isHidden && <TestimonialCard testimonial={testimonial.testimonial} />}
+                    {isHidden && (
+                      <div class="hidden-content hidden">
+                        <TestimonialCard testimonial={testimonial.testimonial} />
+                      </div>
+                    )}
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        ))
+      }
+      <div
+        class="show-more-container from-background via-background/95 absolute bottom-0 left-0 z-10 flex w-full items-center justify-center bg-gradient-to-t to-transparent py-32 lg:py-64"
+      >
+        <Button
+          class="show-more-button hover:bg-primary-300 dark:hover:bg-primary-500 font-medium"
+          variant="primary">Show more</Button
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Initialize state
+
+  function setupTestimonialExpand() {
+    const hiddenElements = document.querySelectorAll(".hidden-content");
+    const showMoreContainer = document.querySelector(".show-more-container");
+    const showMoreButton = document.querySelector(".show-more-button");
+
+    if (!showMoreButton || !showMoreContainer) return;
+
+    // Add click event listener to the button
+    showMoreButton.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // Show all hidden content
+      hiddenElements.forEach((el) => {
+        el.classList.remove("hidden");
+      });
+
+      // Hide the "Show more" button container
+      showMoreContainer.classList.add("hidden");
+    });
+  }
+
+  // Initialize on page load
+  setupTestimonialExpand();
+
+  // Re-initialize after Astro view transitions
+  document.addEventListener("astro:after-swap", setupTestimonialExpand);
+</script>

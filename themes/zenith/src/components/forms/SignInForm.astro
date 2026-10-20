@@ -1,0 +1,79 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+import Button from "@/components/button/Button.astro";
+import { Input } from "@/components/starwind/input";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { useTranslations } from "@/js/translationUtils";
+
+import GoogleLogo from "@images/sign-in/google.svg";
+import AppleLogo from "@images/sign-in/apple-logo.svg";
+
+/**
+ * SignInForm component for user authentication
+ *
+ * Provides a form with email input and login button, along with
+ * social login options (Google and Apple)
+ */
+
+// Get current locale from URL
+const currLocale = getLocaleFromUrl(Astro.url);
+
+// Create translation function
+const t = useTranslations(currLocale);
+---
+
+<div class="text-center">
+  <h3 class:list={["tracking-5xl text-foreground mb-4 text-5xl"]}>
+    {t("signin_title")}
+  </h3>
+  <p class="text-muted-foreground mb-10">{t("signin_welcome")}</p>
+  <div class="-1 mb-7 flex flex-wrap">
+    <div class="w-full p-1">
+      <a
+        class:list={[
+          "bg-base-300/30 dark:bg-base-900/40 flex flex-wrap justify-center rounded-full p-5 transition duration-300",
+          "hover:bg-base-300/10 dark:hover:bg-base-900/10",
+        ]}
+        href="#"
+      >
+        <div class="mr-4 inline-block">
+          <GoogleLogo />
+        </div>
+        <span class="text-sm font-medium">{t("signin_with_google")}</span>
+      </a>
+    </div>
+    <div class="w-full p-1">
+      <a
+        class:list={[
+          "bg-base-300/30 dark:bg-base-900/40 flex flex-wrap justify-center rounded-full p-5 transition duration-300",
+          "hover:bg-base-300/10 dark:hover:bg-base-900/10",
+        ]}
+        href="#"
+      >
+        <div class="mr-4 inline-block">
+          <AppleLogo />
+        </div>
+        <span class="text-sm font-medium">{t("signin_with_apple")}</span>
+      </a>
+    </div>
+  </div>
+  <div class="mb-10 flex flex-wrap items-center">
+    <div class="bg-base-300/30 dark:bg-base-900/40 flex-1">
+      <div class="h-px"></div>
+    </div>
+    <div class="text-muted-foreground px-5 text-xs font-medium">{t("signin_with_email")}</div>
+    <div class="bg-base-300/30 dark:bg-base-900/40 flex-1">
+      <div class="h-px"></div>
+    </div>
+  </div>
+  <form>
+    <Input type="text" required placeholder={t("email_placeholder")} class="mb-6" />
+    <Button type="submit" variant="primary" class="mb-6 block w-full font-medium">
+      {t("login_button")}
+    </Button>
+  </form>
+  <p class="text-muted-foreground">
+    <span>{t("no_account")}</span>
+    <a class="underline" href={getLocalizedRoute(currLocale, "/sign-up")}>{t("signup_link")}</a>
+  </p>
+</div>

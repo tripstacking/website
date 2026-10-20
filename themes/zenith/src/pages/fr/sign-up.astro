@@ -1,0 +1,53 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SignUpForm from "@/components/forms/SignUpForm.astro";
+import Netflix from "@images/sign-in/netflix.svg";
+import Allianz from "@images/sign-in/allianz.svg";
+import Spotify from "@images/sign-in/spotify.svg";
+import Uber from "@images/sign-in/uber.svg";
+
+import stats from "@images/sign-in/stats.png";
+---
+
+<BaseLayout title="Sign Up - Zenith" description="Create a new Zenith account">
+  <section class="-mt-23 overflow-hidden">
+    <div class="site-container flex min-h-[100lvh] flex-wrap">
+      <div class="w-full py-8 md:w-1/2">
+        <div class="mx-auto mt-20 max-w-lg pt-10 pr-4 md:mt-30 md:ml-0 md:pb-40">
+          <SignUpForm />
+        </div>
+      </div>
+      <div class="bg-gradient-radial-dark w-full p-8 md:-mr-4 md:ml-4 md:w-1/2">
+        <div class="flex h-full flex-wrap items-center justify-center px-4 py-16">
+          <div class="mb-8 w-full">
+            <Image
+              src={stats}
+              width={344}
+              alt="Statistics graphic"
+              loading="eager"
+              class="mx-auto"
+            />
+          </div>
+          <div class="w-full">
+            <p class="text-muted-foreground mb-8 text-center text-sm">Trusted by</p>
+            <div class="-m-4 flex flex-wrap items-center justify-center">
+              <div class="w-auto p-4">
+                <Netflix />
+              </div>
+              <div class="w-auto p-4">
+                <Allianz />
+              </div>
+              <div class="w-auto p-4">
+                <Spotify />
+              </div>
+              <div class="w-auto p-4">
+                <Uber />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

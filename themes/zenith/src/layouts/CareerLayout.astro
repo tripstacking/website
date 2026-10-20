@@ -1,0 +1,98 @@
+---
+import { type CollectionEntry } from "astro:content";
+import { getLocalizedRoute } from "@/js/translationUtils";
+import { Icon } from "astro-icon/components";
+
+// layouts
+import BaseLayout from "./BaseLayout.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { formatDate } from "@/js/textUtils";
+
+interface Props {
+  career: CollectionEntry<"careers">;
+}
+
+const { career } = Astro.props;
+const { title, location, type, description, requirements, applicationUrl, publishDate } =
+  career.data;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+// Format the date
+const formattedDate = formatDate(publishDate, currLocale);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="site-container max-w-7xl pt-20">
+    <!-- Header Section -->
+    <div class="mr-auto max-w-4xl pb-16">
+      <div class="badge">Join Our Team</div>
+      <h1 class="h2 mb-6">{title}</h1>
+      <p class="text-muted-foreground mb-8 text-xl">{description}</p>
+      <div class="flex flex-wrap items-center gap-6 text-sm">
+        <div class="flex items-center gap-2">
+          <Icon name="tabler/map-pin" class="size-5" />
+          <span>{location}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <Icon name="tabler/briefcase" class="size-5" />
+          <span>{type}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <Icon name="tabler/calendar" class="size-5" />
+          <span>Posted on {formattedDate}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section with Sidebar -->
+    <div class="grid gap-8 pb-16 md:grid-cols-1 lg:grid-cols-[400px_1fr] lg:gap-20 xl:gap-30">
+      <!-- Sidebar with Apply Button and Requirements -->
+      <aside>
+        <div class="sticky top-24 space-y-8">
+          <div class="space-y-4">
+            <a
+              href={applicationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button button--primary flex w-full items-center gap-2 py-3"
+            >
+              Apply Now
+              <Icon name="tabler/external-link" class="size-4" />
+            </a>
+            <a
+              href={getLocalizedRoute(currLocale, `/careers/`)}
+              class="button button--outline flex w-full items-center gap-2 py-3"
+            >
+              View All Positions
+              <Icon name="tabler/arrow-narrow-right" class="size-4" />
+            </a>
+          </div>
+
+          {
+            requirements.length > 0 && (
+              <div>
+                <h3 class="mb-4 text-lg">Requirements</h3>
+                <ul class="space-y-2">
+                  {requirements.map((requirement) => (
+                    <li class="flex items-start gap-2">
+                      <Icon name="tabler/check" class="text-primary mt-1 size-4" />
+                      <span>{requirement}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="markdown-content lg:-mt-5">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,75 @@
+---
+import { type InferGetStaticPropsType, type InferGetStaticParamsType } from "astro";
+
+// main layout
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// components
+import CategoryCloud from "@/components/category-cloud/CategoryCloud.astro";
+import PostCardSmall from "@/components/post-card/PostCardSmall.astro";
+import PostCardLarge from "@/components/post-card/PostCardLarge.astro";
+
+// utils
+import { getAllPosts, countItems, sortByValue } from "@/js/blogUtils";
+import { slugify, humanize } from "@/js/textUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { defaultLocale } from "@/config/siteSettings.json";
+
+// generate pagination for tag pages if there are a bunch of posts for a single tag
+export async function getStaticPaths() {
+  const posts = await getAllPosts(defaultLocale);
+  const allCategories = posts.map((post) => post.data.categories).flat();
+  const filteredCategories = allCategories.filter(
+    (category): category is string => typeof category === "string",
+  );
+  const countedCategories = countItems(filteredCategories);
+  const processedCategories = sortByValue(countedCategories);
+
+  return processedCategories.map(([category]) => ({
+    params: { category: category },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+// const filteredPosts = Astro.props as Props;
+const { category } = Astro.params as Params;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const posts = await getAllPosts(currLocale);
+const filteredPosts = posts.filter((post) => {
+  if (!post.data.categories) return false;
+  // make sure to slugify them for comparison
+  const slugifiedCategory = post.data.categories
+    .filter((category): category is string => typeof category === "string")
+    .map((category) => slugify(category));
+
+  return slugifiedCategory.includes(category);
+});
+---
+
+<BaseLayout
+  title={`Blog posts about ${humanize(category)}`}
+  description={`My blog posts on ${humanize(category)} to help you on your journey`}
+>
+  <div class="site-container">
+    <section class="overflow-hidden pt-10 pb-20">
+      <div class="mx-auto mb-10 text-center md:max-w-4xl">
+        <span class="badge">Zenith Card</span>
+        <h2 class="h2">Posts on {humanize(category)}</h2>
+      </div>
+      <div class="mb-10 flex items-center justify-center">
+        <CategoryCloud showCount={true} />
+      </div>
+      <div class="-m-10 mb-10 flex flex-wrap">
+        <PostCardLarge post={filteredPosts[0]} />
+        <div class="w-full p-10 md:w-1/2">
+          <div class="-m-4 flex flex-wrap">
+            {filteredPosts.slice(1).map((post) => <PostCardSmall post={post} />)}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

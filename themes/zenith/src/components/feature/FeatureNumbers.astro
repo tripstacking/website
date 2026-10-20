@@ -1,0 +1,57 @@
+---
+// Define the data structure for stats
+interface Stat {
+  value: string;
+  description: string;
+}
+
+// Data for stats section
+const stats: Stat[] = [
+  {
+    value: "$1.5B+",
+    description: "Assets Under Management",
+  },
+  {
+    value: "100+",
+    description: "Global Partners",
+  },
+  {
+    value: "150+",
+    description: "Countries Served",
+  },
+  {
+    value: "40+",
+    description: "Years of Experience",
+  },
+];
+---
+
+<section id="feature-numbers" class="overflow-hidden py-16">
+  <div class="site-container">
+    <div class="text-center" id="feature-numbers-trigger">
+      <span
+        class="text-primary-accent mb-8 inline-block text-sm font-medium tracking-tighter"
+        data-mos="fade-up"
+        data-mos-delay="0.15"
+        data-mos-anchor="#feature-numbers-trigger">Check our stats</span
+      >
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {
+          stats.map((stat, idx) => (
+            <div
+              class="w-full"
+              data-mos="fade-up"
+              data-mos-delay={0.4 + idx * 0.15}
+              data-mos-anchor="#feature-numbers-trigger"
+            >
+              <div class="text-center">
+                <h3 class="tracking-4xl mb-1.5 text-7xl">{stat.value}</h3>
+                <p class="text-muted-foreground">{stat.description}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

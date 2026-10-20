@@ -1,0 +1,29 @@
+/* buttons, 4 variants: "primary", "secondary", "outline", "ghost" */
+.button {
+  @apply flex items-center justify-center px-8 py-4 text-center transition duration-300;
+  @apply tracking-2xl text-primary-foreground flex w-fit min-w-[8rem] rounded-full outline-none;
+  @apply disabled:pointer-events-none;
+}
+
+.button--primary {
+  @apply text-primary-foreground bg-primary border-primary hover:bg-primary/80 border-2;
+  @apply focus:ring-primary/40 focus:ring-4;
+}
+
+.button--secondary {
+  @apply text-foreground border-muted-foreground dark:border-foreground border-2 bg-transparent tracking-tighter;
+  @apply hover:bg-primary hover:border-primary/40 hover:text-primary-foreground;
+  @apply focus:ring-primary/40 focus:ring-4;
+}
+
+.button--outline {
+  @apply text-foreground border-muted-foreground dark:border-foreground border-2 bg-transparent tracking-tighter;
+  @apply hover:bg-primary hover:border-primary/40 hover:text-primary-foreground;
+  @apply focus:ring-primary/40 focus:ring-4;
+}
+
+.button--ghost {
+  @apply text-foreground bg-transparent tracking-tighter;
+  @apply hover:bg-primary hover:text-primary-foreground;
+  @apply focus:ring-primary/40 focus:ring-4;
+}

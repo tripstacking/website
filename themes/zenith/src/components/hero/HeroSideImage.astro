@@ -1,0 +1,77 @@
+---
+import { getLocalizedRoute } from "@/js/translationUtils";
+import { Image } from "astro:assets";
+
+import Star from "@images/headers/star.svg";
+import Star2 from "@images/headers/star2.svg";
+import Star3 from "@images/headers/star3.svg";
+import Star5 from "@images/headers/star5.svg";
+import Lines from "@images/headers/lines.svg";
+import Card from "@images/headers/card.png";
+
+// components
+import Button from "@/components/button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { useTranslations } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+---
+
+<section id="hero-side-image" class="-mt-23 items-center overflow-hidden pt-23">
+  <div class="relative pt-20 pb-24 lg:pb-40">
+    <div class="site-container relative mx-auto px-4">
+      <div class="-m-8 flex flex-wrap items-end">
+        <div class="relative z-10 w-full p-8 md:w-1/2 lg:w-7/12">
+          <div class="md:max-w-xl">
+            <div data-mos="fade-right" data-mos-anchor="#hero-side-image" data-mos-delay="0">
+              <span
+                class="text-primary-accent mb-2.5 inline-block text-sm font-medium tracking-tighter"
+                >Zenith Card</span
+              >
+              <h1 class="font-heading xl:text-10xl mb-8 text-7xl tracking-tighter lg:text-8xl">
+                {t("hero_text")}
+              </h1>
+            </div>
+            <p
+              class="mb-10 text-lg opacity-80 md:max-w-xs"
+              data-mos="fade-right"
+              data-mos-anchor="#hero-side-image"
+              data-mos-delay="0.15"
+            >
+              {t("hero_description")}
+            </p>
+            <div data-mos="fade-right" data-mos-anchor="#hero-side-image" data-mos-delay="0.3">
+              <Button href={getLocalizedRoute(currLocale, "/sign-up")}>Start now</Button>
+            </div>
+          </div>
+        </div>
+        <div class="w-full p-8 md:w-1/2 lg:w-5/12">
+          <div class="relative mx-auto max-w-max md:mr-0">
+            <Image
+              src={Card}
+              alt="Zenith Card"
+              width={293}
+              densities={[1.5, 2]}
+              quality={100}
+              loading="eager"
+              class="tilt-card relative z-10"
+            />
+
+            <Star class="text-primary absolute -top-16 -left-16" />
+            <Star2 class="text-primary absolute top-56 -left-44" />
+            <Star3 class="text-primary absolute -right-40 bottom-10" />
+
+            <div class="absolute -right-40 bottom-10">
+              <Star5 class="text-muted/50 relative -bottom-4" />
+              <Star3 class="text-primary" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <Lines class="absolute top-24 right-0" />
+</section>
