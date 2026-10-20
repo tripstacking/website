@@ -32,7 +32,7 @@ const pricingData: pricingItem[] = [
   {
     name: "Free",
     subtitle: "Single-Trip Stacker",
-    description: "Casual weekend errand runner testing the core loop.",
+    description: "For everyday single-trip errands and quick weekend runs.",
     price: {
       free: true,
       monthly: "0",
@@ -41,8 +41,8 @@ const pricingData: pricingItem[] = [
     features: [
       "Unlimited Places To-Do List",
       "Single-day trip optimization (up to 4 stops)",
-      "Basic stop dwell time",
-      "In-app multi-stop route map",
+      "Custom stop durations",
+      "In-app route map & Apple CarPlay",
     ],
     href: "/signup",
     linkText: "Start Stacking Free",
@@ -50,18 +50,18 @@ const pricingData: pricingItem[] = [
   {
     name: "Local Pro",
     subtitle: "Full Week Stacker",
-    description: "Solo Apple user who wants their week automated on-device.",
+    description: "For solo Apple users automating a full week of errands.",
     featured: true,
     price: {
       monthly: "2.99",
       yearly: "19.99",
     },
     features: [
-      "Multi-day week splitting across calendar windows",
-      "Up to 20 stops/week",
-      'Precedence rules ("Bank before Hardware", "Groceries last")',
-      "Holistic Calendar Sync (1 consolidated block/trip)",
-      "Native CarPlay Dashboard + personal iCloud sync",
+      "Everything in Free",
+      "Multi-day week splitting (up to 20 stops/week)",
+      'Stop ordering rules ("Bank first", "Groceries last")',
+      "Single consolidated calendar event per trip",
+      "Personal iCloud sync across Apple devices",
     ],
     href: "/signup",
     linkText: "Subscribe to Local Pro",
@@ -69,8 +69,7 @@ const pricingData: pricingItem[] = [
   {
     name: "Cloud Sync",
     subtitle: "Anywhere + Low-Stress Pro",
-    description:
-      "Coming soon for desktop planners, cross-platform sync, and cloud low-stress routing.",
+    description: "Desktop web planning and sync across all your devices.",
     comingSoon: true,
     price: {
       monthly: "3.99",
@@ -88,8 +87,7 @@ const pricingData: pricingItem[] = [
   {
     name: "Family & Household",
     subtitle: "Shared Family Stacker (Up to 5)",
-    description:
-      "Coming soon for couples, busy parents, and shared household logistics.",
+    description: "Shared errand lists and trip splitting for households.",
     comingSoon: true,
     price: {
       monthly: "6.99",

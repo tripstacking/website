@@ -136,6 +136,9 @@ def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
     assert "per household" not in lowered
     assert "free forever" not in lowered
     assert "vrp" not in lowered
+    assert "testing" not in lowered
+    assert "Everything in Free" in pricing_component
+    assert "In-app route map & Apple CarPlay" in pricing_component
     assert "Shared Family Stacker (Up to 5)" in pricing_component
     assert "Smart Multi-Driver Trip Splitting" in pricing_component
     assert '<span class="pricing-monthly">per month</span>' in pricing_component
