@@ -133,6 +133,9 @@ def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
     assert "phase 1" not in lowered
     assert "per household" not in lowered
     assert "free forever" not in lowered
+    assert "vrp" not in lowered
+    assert "Shared Family Stacker (Up to 5)" in pricing_component
+    assert "Smart Multi-Driver Trip Splitting" in pricing_component
     assert '<span class="pricing-monthly">per month</span>' in pricing_component
     assert '<span class="pricing-yearly hidden">per year</span>' in pricing_component
     assert "pricing-yearly hidden" in pricing_component
