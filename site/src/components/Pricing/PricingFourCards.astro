@@ -24,10 +24,6 @@ interface pricingItem {
     monthly: string;
     yearly: string;
   };
-  periodLabel?: {
-    monthly: string;
-    yearly: string;
-  };
   features: string[];
   href?: string;
   linkText: string;
@@ -42,10 +38,6 @@ const pricingData: pricingItem[] = [
       free: true,
       monthly: "0",
       yearly: "0",
-    },
-    periodLabel: {
-      monthly: "free forever",
-      yearly: "free forever",
     },
     features: [
       "Unlimited Places To-Do List",
@@ -64,10 +56,6 @@ const pricingData: pricingItem[] = [
     price: {
       monthly: "2.99",
       yearly: "19.99",
-    },
-    periodLabel: {
-      monthly: "per month",
-      yearly: "per year",
     },
     features: [
       "Multi-day week splitting across calendar windows",
@@ -90,10 +78,6 @@ const pricingData: pricingItem[] = [
       monthly: "3.99",
       yearly: "29.99",
     },
-    periodLabel: {
-      monthly: "per month",
-      yearly: "per year",
-    },
     features: [
       "Everything in Local Pro",
       "Laptop Web Companion App",
@@ -113,10 +97,6 @@ const pricingData: pricingItem[] = [
     price: {
       monthly: "6.99",
       yearly: "49.99",
-    },
-    periodLabel: {
-      monthly: "per household, per month",
-      yearly: "per household, per year",
     },
     features: [
       "Everything in Cloud Sync for up to 5 members",
@@ -216,12 +196,10 @@ const currLocale = getLocaleFromUrl(Astro.url);
                       {plan.price.yearly}
                     </span>
                   </h4>
-                  <span class="pricing-monthly description mb-7 inline-block text-sm tracking-tight">
-                    {plan.periodLabel?.monthly ?? "per month"}
-                  </span>
-                  <span class="pricing-yearly description mb-7 hidden text-sm tracking-tight">
-                    {plan.periodLabel?.yearly ?? "per year"}
-                  </span>
+                  <p class="description mb-7 text-sm tracking-tight">
+                    <span class="pricing-monthly">per month</span>
+                    <span class="pricing-yearly hidden">per year</span>
+                  </p>
 
                   <div class="border-opacity-60 border-t border-b border-gray-300 py-6 dark:border-gray-700">
                     <p class="description mx-auto max-w-xs text-sm tracking-tight">

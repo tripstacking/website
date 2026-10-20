@@ -131,6 +131,10 @@ def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
     assert "one-time" not in lowered
     assert "24.99" not in lowered
     assert "phase 1" not in lowered
+    assert "per household" not in lowered
+    assert "free forever" not in lowered
+    assert '<span class="pricing-monthly">per month</span>' in pricing_component
+    assert '<span class="pricing-yearly hidden">per year</span>' in pricing_component
     assert "pricing-yearly hidden" in pricing_component
     assert "comingSoon: true" in pricing_component
     assert "Coming Soon" in pricing_component
