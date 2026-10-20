@@ -87,6 +87,21 @@ def test_site_uses_single_sans_web_font_without_sentient_serif() -> None:
     assert "font-serif" not in index_page
 
 
+def test_language_selector_disabled_while_i18n_support_preserved() -> None:
+    site_settings = (SITE_DIR / "src" / "config" / "siteSettings.json.ts").read_text(
+        encoding="utf-8"
+    )
+    assert 'export const locales = ["en", "fr"]' in site_settings
+
+    nav = (SITE_DIR / "src" / "components" / "Nav" / "Nav.astro").read_text(encoding="utf-8")
+    assert "LanguageSelect" not in nav
+
+    mobile_nav = (
+        SITE_DIR / "src" / "components" / "Nav" / "MobileNav" / "MobileNav.astro"
+    ).read_text(encoding="utf-8")
+    assert "MobileLanguageSelect" not in mobile_nav
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"

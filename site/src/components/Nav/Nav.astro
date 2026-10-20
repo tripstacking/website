@@ -1,6 +1,5 @@
 ---
 import Button from "@components/Button/Button.astro";
-import LanguageSelect from "@components/LanguageSelect/LanguageSelect.astro";
 import MobileNav from "@components/Nav/MobileNav/MobileNav.astro";
 import MegaMenuDropdownToggle from "@components/Nav/NavDropdown/MegaMenuDropdownToggle.astro";
 import NavLink from "@components/Nav/NavLink.astro";
@@ -15,7 +14,6 @@ import NavDropdownToggle from "./NavDropdown/NavDropdownToggle.astro";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const navData = getTranslatedData("navData", currLocale);
-import { locales } from "@config/siteSettings.json";
 // console.log(JSON.stringify(navData, null, 2));
 ---
 
@@ -81,8 +79,6 @@ import { locales } from "@config/siteSettings.json";
           >
             Stack Your Stops
           </Button>
-
-          {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
 
           <!-- mobile nav menu, only load on small screens where it is visible -->
           <div class="md:hidden">

@@ -1,6 +1,5 @@
 ---
 import Button from "@components/Button/Button.astro";
-import MobileLanguageSelect from "@components/LanguageSelect/MobileLanguageSelect.astro";
 import MobileNavDropdown from "@components/Nav/MobileNav/MobileNavDropdown.astro";
 //components
 import NavLink from "@components/Nav/NavLink.astro";
@@ -11,7 +10,6 @@ import { Icon } from "astro-icon/components";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const navData = getTranslatedData("navData", currLocale);
-import { locales } from "@config/siteSettings.json";
 ---
 
 <div id="mobile-nav__container">
@@ -79,14 +77,6 @@ import { locales } from "@config/siteSettings.json";
 
       <div class="mt-4 flex items-start justify-between pr-2 pl-4">
         <ThemeToggle />
-
-        {
-          locales.length > 1 && (
-            <div class="flex justify-end">
-              <MobileLanguageSelect />
-            </div>
-          )
-        }
       </div>
     </div>
   </div>
