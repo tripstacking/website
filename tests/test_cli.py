@@ -22,61 +22,50 @@ def test_cli_help(capsys: pytest.CaptureFixture[str]) -> None:
     app(["--help"], result_action="return_value")
     captured = capsys.readouterr()
     assert "ts-website" in captured.out
-    assert "themes" in captured.out
     assert "serve" in captured.out
     assert "build" in captured.out
+    assert "preview" in captured.out
+    assert "themes" not in captured.out
 
 
-def test_themes_list_command(capsys: pytest.CaptureFixture[str]) -> None:
-    result = app(["themes", "list"], result_action="return_value")
-    captured = capsys.readouterr()
-    out = captured.out.lower()
-    for theme_name in ("nova", "zenith", "atlas", "galaxy", "amplify"):
-        assert theme_name in out
-    assert "4321" in out
-    assert "4325" in out
-    assert result == 0
-
-
-def test_themes_serve_single_dry_run(capsys: pytest.CaptureFixture[str]) -> None:
+def test_serve_dry_run(capsys: pytest.CaptureFixture[str]) -> None:
     result = app(
-        ["themes", "serve", "--theme", "nova", "--host", "127.0.0.1", "--port", "4321", "--dry-run"],
+        ["serve", "--host", "127.0.0.1", "--port", "4321", "--dry-run"],
         result_action="return_value",
     )
     captured = capsys.readouterr()
-    assert "nova" in captured.out.lower()
     assert "127.0.0.1:4321" in captured.out
     assert result == 0
 
 
-def test_themes_serve_all_invokes_multi_runner() -> None:
-    from tripstacking_website.commands.themes.serve import default as themes_serve
+def test_serve_invokes_runner_and_browser_opener() -> None:
+    from tripstacking_website.commands.serve import default as serve_cmd
 
-    recorded_specs: list[tuple[str, list[str], Path]] = []
+    recorded: list[tuple[list[str], Path]] = []
     opened_urls: list[str] = []
 
-    def fake_multi_runner(tasks: list[tuple[str, list[str], Path]]) -> int:
-        recorded_specs.extend(tasks)
+    def fake_runner(cmd: list[str], cwd: Path) -> int:
+        recorded.append((cmd, cwd))
         return 0
 
-    exit_code = themes_serve(
-        theme="all",
+    exit_code = serve_cmd(
         host="127.0.0.1",
+        port=4321,
         open_browser=True,
-        multi_runner=fake_multi_runner,
+        runner=fake_runner,
         browser_opener=opened_urls.append,
     )
     assert exit_code == 0
-    assert len(recorded_specs) == 5
-    names = [item[0] for item in recorded_specs]
-    assert names == ["nova", "zenith", "atlas", "galaxy", "amplify"]
-    assert len(opened_urls) == 5
-    assert "http://127.0.0.1:4321" in opened_urls
-    assert "http://127.0.0.1:4325" in opened_urls
+    assert len(recorded) == 1
+    cmd, cwd = recorded[0]
+    assert "astro" in cmd
+    assert "dev" in cmd
+    assert cwd.name == "site"
+    assert opened_urls == ["http://127.0.0.1:4321"]
 
 
-def test_themes_build_invokes_runner() -> None:
-    from tripstacking_website.commands.themes.build import default as themes_build
+def test_build_invokes_runner() -> None:
+    from tripstacking_website.commands.build import default as build_cmd
 
     recorded: list[tuple[list[str], Path]] = []
 
@@ -84,40 +73,49 @@ def test_themes_build_invokes_runner() -> None:
         recorded.append((cmd, cwd))
         return 0
 
-    exit_code = themes_build(theme="nova", runner=fake_runner)
+    exit_code = build_cmd(runner=fake_runner)
     assert exit_code == 0
     assert len(recorded) == 1
     cmd, cwd = recorded[0]
     assert "build" in cmd
-    assert cwd.name == "nova"
+    assert cwd.name == "site"
 
 
-def test_themes_preview_invokes_multi_runner() -> None:
-    from tripstacking_website.commands.themes.preview import default as themes_preview
+def test_preview_invokes_runner_with_wrangler() -> None:
+    from tripstacking_website.commands.preview import default as preview_cmd
 
-    recorded_specs: list[tuple[str, list[str], Path]] = []
+    recorded: list[tuple[list[str], Path]] = []
+    opened_urls: list[str] = []
 
-    def fake_multi_runner(tasks: list[tuple[str, list[str], Path]]) -> int:
-        recorded_specs.extend(tasks)
+    def fake_runner(cmd: list[str], cwd: Path) -> int:
+        recorded.append((cmd, cwd))
         return 0
 
-    exit_code = themes_preview(
-        theme="all",
+    exit_code = preview_cmd(
         host="127.0.0.1",
+        port=4321,
         wrangler=True,
-        multi_runner=fake_multi_runner,
+        open_browser=True,
+        runner=fake_runner,
+        browser_opener=opened_urls.append,
     )
     assert exit_code == 0
-    assert len(recorded_specs) == 5
-    assert any("wrangler" in part for part in recorded_specs[0][1])
+    assert len(recorded) == 1
+    cmd, cwd = recorded[0]
+    assert any("wrangler" in part for part in cmd)
+    assert cwd.name == "site"
+    assert opened_urls == ["http://127.0.0.1:4321"]
 
 
-def test_top_level_serve_and_build_commands(capsys: pytest.CaptureFixture[str]) -> None:
-    assert app(["serve", "--theme", "zenith", "--dry-run"], result_action="return_value") == 0
-    assert "zenith" in capsys.readouterr().out.lower()
+def test_top_level_commands_dry_run(capsys: pytest.CaptureFixture[str]) -> None:
+    assert app(["serve", "--dry-run"], result_action="return_value") == 0
+    assert "127.0.0.1:4321" in capsys.readouterr().out
 
-    assert app(["build", "--theme", "atlas", "--dry-run"], result_action="return_value") == 0
-    assert "atlas" in capsys.readouterr().out.lower()
+    assert app(["build", "--dry-run"], result_action="return_value") == 0
+    assert "site" in capsys.readouterr().out.lower()
+
+    assert app(["preview", "--dry-run"], result_action="return_value") == 0
+    assert "127.0.0.1:4321" in capsys.readouterr().out
 
 
 def test_main_entrypoint_and_module_execution(capsys: pytest.CaptureFixture[str]) -> None:

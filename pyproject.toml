@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "tripstacking-website"
 version = "0.1.0"
-description = "Trip Stacking Astro marketing site themes, Cloudflare Workers deployment, and comparison CLI."
+description = "Trip Stacking Astro marketing site, Cloudflare Workers deployment, and build CLI."
 readme = "README.md"
 requires-python = ">=3.15"
 dependencies = [

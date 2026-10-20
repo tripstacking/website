@@ -6,26 +6,12 @@ on:
   #   branches:
   #     - main
   workflow_dispatch:
-    inputs:
-      theme:
-        description: "Theme directory to build and deploy"
-        required: false
-        default: "nova"
-        type: choice
-        options:
-          - nova
-          - zenith
-          - atlas
-          - galaxy
-          - amplify
 
 jobs:
   deploy:
     name: Build & Deploy Astro Static Site (Wrangler)
     if: false # Disabled until ready to deploy to Cloudflare Workers
     runs-on: ubuntu-latest
-    env:
-      ACTIVE_THEME: ${{ inputs.theme || 'nova' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build selected Astro theme
-        working-directory: themes/${{ env.ACTIVE_THEME }}
+      - name: Build Astro site
+        working-directory: site
         run: pnpm run build
 
       - name: Deploy static assets to Cloudflare Workers
@@ -54,4 +40,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: themes/${{ env.ACTIVE_THEME }}
+          workingDirectory: site

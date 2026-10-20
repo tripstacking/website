@@ -1,4 +1,4 @@
-"""Cyclopts CLI entrypoint for Trip Stacking website theme comparison and builds."""
+"""Cyclopts CLI entrypoint for the Trip Stacking marketing site."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ __all__ = ["app", "main"]
 
 app = App(
     name="ts-website",
-    help="Trip Stacking Astro marketing site theme launcher, comparison, and build CLI.",
+    help="Trip Stacking Astro marketing site server, preview, and build CLI.",
     version=__version__,
 )
 register_commands(app)

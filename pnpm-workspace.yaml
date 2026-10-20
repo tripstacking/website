@@ -1,5 +1,5 @@
 packages:
-  - "themes/*"
+  - "site"
 
 minimumReleaseAgeExclude:
   - astro@7.4.1

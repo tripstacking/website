@@ -1,0 +1,708 @@
+---
+/**
+ * Apple Maps Hero Background with custom Trip Stacking route & markers.
+ */
+import { resolveAppleMapsTileConfig } from "./appleMapsVitePlugin.mjs";
+import {
+  BRAND_COLORS,
+  buildAppleMapsTileUrl,
+  buildFallbackTileUrl,
+  computeViewportTiles,
+  DEFAULT_LOCATION,
+  DEFAULT_ZOOM,
+  generateRandomRouteForBounds,
+} from "./heroMapCore.mjs";
+
+interface Props {
+  variant?: "dark" | "light";
+  returnToHome?: boolean;
+  class?: string;
+}
+
+const {
+  variant = "dark",
+  returnToHome = true,
+  class: className = "",
+} = Astro.props;
+const isDark = variant !== "light";
+
+const initialWidth = 1440;
+const initialHeight = 820;
+
+const tileConfig = await resolveAppleMapsTileConfig();
+const initialTiles = computeViewportTiles(
+  DEFAULT_LOCATION.lat,
+  DEFAULT_LOCATION.lng,
+  DEFAULT_ZOOM,
+  initialWidth,
+  initialHeight,
+);
+const initialRoute = generateRandomRouteForBounds(
+  initialWidth,
+  initialHeight,
+  Math.random,
+  { returnToHome },
+);
+---
+
+<div
+  class:list={["ts-hero-map-root", className]}
+  data-ts-hero-map
+  data-variant={variant}
+  data-return-to-home={String(returnToHome)}
+  data-access-key={tileConfig.accessKey}
+  data-tile-version={tileConfig.version}
+  data-default-lat={String(DEFAULT_LOCATION.lat)}
+  data-default-lng={String(DEFAULT_LOCATION.lng)}
+  data-default-zoom={String(DEFAULT_ZOOM)}
+  aria-hidden="true"
+>
+  <!-- Layer 1: Apple Maps Raster Tile Canvas with optical blur to soften street labels -->
+  <div
+    data-map-tiles
+    class="ts-hero-map-tiles"
+    style="filter: blur(2.2px) brightness(0.74) saturate(0.88) contrast(1.06); transform: scale(1.03);"
+  >
+    {
+      initialTiles.map((tile) => {
+        const primaryUrl = buildAppleMapsTileUrl({
+          x: tile.x,
+          y: tile.y,
+          z: tile.z,
+          accessKey: tileConfig.accessKey,
+          version: tileConfig.version,
+          dark: isDark,
+        });
+        const fallbackUrl = buildFallbackTileUrl({
+          x: tile.x,
+          y: tile.y,
+          z: tile.z,
+          dark: isDark,
+        });
+        return (
+          <img
+            src={primaryUrl}
+            data-tile-key={`${tile.z}:${tile.x}:${tile.y}`}
+            data-fallback-src={fallbackUrl}
+            alt=""
+            width="256"
+            height="256"
+            loading="eager"
+            decoding="async"
+            referrerpolicy="no-referrer"
+            style={`position:absolute;left:${tile.left}px;top:${tile.top}px;width:256px;height:256px;max-width:none;`}
+            onerror="if(this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc){this.src = this.dataset.fallbackSrc;}"
+          />
+        );
+      })
+    }
+  </div>
+
+  <!-- Layer 2: Custom Branded Trip Stacking Route & Numbered Waypoint Markers (No competing text labels) -->
+  <svg
+    data-map-svg
+    viewBox={`0 0 ${initialWidth} ${initialHeight}`}
+    preserveAspectRatio="none"
+    class="ts-hero-map-svg"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="ts-hero-route-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color={BRAND_COLORS.beaconYellow} />
+        <stop offset="50%" stop-color={BRAND_COLORS.flowGreen} />
+        <stop offset="100%" stop-color={BRAND_COLORS.horizonTeal} />
+      </linearGradient>
+      <linearGradient id="ts-hero-return-gradient" x1="100%" y1="0%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color={BRAND_COLORS.horizonTeal} />
+        <stop offset="100%" stop-color={BRAND_COLORS.beaconYellow} />
+      </linearGradient>
+      <filter id="ts-hero-route-glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="4.5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Return-to-Home Leg (Final Stop -> Stop 1) rendered with distinct dashed arc style -->
+    <g
+      data-return-home-paths
+      style={initialRoute.returnToHome ? "" : "display:none;"}
+    >
+      <path
+        d={initialRoute.returnHomeSvgPath}
+        fill="none"
+        stroke={BRAND_COLORS.harborSlate}
+        stroke-width="8.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-opacity="0.78"
+      />
+      <path
+        d={initialRoute.returnHomeSvgPath}
+        fill="none"
+        stroke="url(#ts-hero-return-gradient)"
+        stroke-width="3.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-dasharray="10 9"
+        stroke-opacity="0.92"
+        filter="url(#ts-hero-route-glow)"
+      />
+      <path
+        d={initialRoute.returnHomeSvgPath}
+        fill="none"
+        stroke={BRAND_COLORS.beaconYellow}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-dasharray="2 17"
+        stroke-dashoffset="5"
+        stroke-opacity="0.9"
+      />
+    </g>
+
+    <!-- Primary Stacked Route paths group -->
+    <g data-route-paths>
+      <path
+        d={initialRoute.svgPath}
+        fill="none"
+        stroke={BRAND_COLORS.horizonTeal}
+        stroke-width="18"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-opacity="0.24"
+      />
+      <path
+        d={initialRoute.svgPath}
+        fill="none"
+        stroke={BRAND_COLORS.harborSlate}
+        stroke-width="10.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-opacity="0.92"
+      />
+      <path
+        d={initialRoute.svgPath}
+        fill="none"
+        stroke="url(#ts-hero-route-gradient)"
+        stroke-width="5.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#ts-hero-route-glow)"
+      />
+      <path
+        d={initialRoute.svgPath}
+        fill="none"
+        stroke={BRAND_COLORS.alabasterMint}
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-dasharray="7 11"
+        stroke-opacity="0.82"
+      />
+    </g>
+
+    <!-- Numbered Branded Waypoint Pins (matching the Stacked Route Mark) -->
+    <g data-route-markers>
+      {
+        initialRoute.stops.map((stop) => (
+          <g transform={`translate(${stop.x}, ${stop.y})`}>
+            <circle r="24" fill={stop.color} fill-opacity="0.18" />
+            <circle
+              r="15"
+              fill={BRAND_COLORS.harborSlate}
+              stroke={stop.color}
+              stroke-width="3.25"
+            />
+            <circle r="9.5" fill={stop.color} />
+            <text
+              x="0"
+              y="3.8"
+              text-anchor="middle"
+              fill={BRAND_COLORS.harborSlate}
+              font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+              font-size="11"
+              font-weight="800"
+            >
+              {stop.number}
+            </text>
+          </g>
+        ))
+      }
+    </g>
+  </svg>
+
+  <!-- Layer 3: High-contrast radial & vertical scrim above map + route so page text & cards pop -->
+  <div
+    data-map-scrim
+    class="ts-hero-map-scrim"
+  >
+  </div>
+
+  <!-- Bottom-Right Apple Maps & Live Route Status Pill -->
+  <div class="ts-hero-map-badge">
+    <span class="ts-hero-map-dot"></span>
+    <span data-map-location-label>Apple Maps • Portland, OR</span>
+    <span class="ts-hero-map-sep">•</span>
+    <span data-map-stop-count class="ts-hero-map-stops">
+      {`${initialRoute.stopCount} Stops`}
+    </span>
+    <button
+      type="button"
+      data-map-return-home-btn
+      class="ts-hero-map-btn ts-hero-map-btn-return"
+      aria-pressed={String(returnToHome)}
+      title="Toggle Return-to-Home leg from final stop back to Stop 1"
+    >
+      {returnToHome ? "⌂ Return: On" : "⌂ Return: Off"}
+    </button>
+    <button
+      type="button"
+      data-map-restack-btn
+      class="ts-hero-map-btn"
+      title="Generate a new random multi-stop route within screen bounds"
+    >
+      ↻ Re-Stack
+    </button>
+  </div>
+</div>
+
+<style>
+  .ts-hero-map-root {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background-color: #0f1d22;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .ts-hero-map-tiles {
+    position: absolute;
+    inset: 0;
+    opacity: 0.56;
+    transition: opacity 0.4s ease;
+  }
+
+  .ts-hero-map-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.78;
+    pointer-events: none;
+  }
+
+  .ts-hero-map-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 66% 58% at 50% 44%,
+        rgba(15, 29, 34, 0.86) 0%,
+        rgba(15, 29, 34, 0.58) 56%,
+        rgba(15, 29, 34, 0.28) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(15, 29, 34, 0.62) 0%,
+        rgba(15, 29, 34, 0.18) 26%,
+        rgba(15, 29, 34, 0.24) 74%,
+        rgba(15, 29, 34, 0.92) 100%
+      );
+  }
+
+  .ts-hero-map-badge {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 0.85rem;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(68, 192, 197, 0.35);
+    background-color: rgba(15, 29, 34, 0.88);
+    backdrop-filter: blur(6px);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #b5ccc5;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+  }
+
+  .ts-hero-map-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background-color: #77c57f;
+  }
+
+  .ts-hero-map-sep {
+    color: #44c0c5;
+  }
+
+  .ts-hero-map-stops {
+    font-weight: 700;
+    color: #ffde59;
+  }
+
+  .ts-hero-map-btn {
+    margin-left: 0.2rem;
+    padding: 0.12rem 0.5rem;
+    border-radius: 9999px;
+    border: none;
+    background-color: #1a2e35;
+    color: #44c0c5;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .ts-hero-map-btn:hover {
+    background-color: #44c0c5;
+    color: #0f1d22;
+  }
+
+  .ts-hero-map-btn-return[aria-pressed="true"] {
+    background-color: rgba(255, 222, 89, 0.16);
+    color: #ffde59;
+  }
+</style>
+
+<script>
+  import {
+    BRAND_COLORS,
+    buildAppleMapsTileUrl,
+    buildFallbackTileUrl,
+    buildReturnHomeSvgPath,
+    computeViewportTiles,
+    DEFAULT_LOCATION,
+    DEFAULT_ZOOM,
+    generateRandomRouteForBounds,
+  } from "./heroMapCore.mjs";
+
+  function renderTilesDom(
+    container: HTMLElement,
+    lat: number,
+    lng: number,
+    zoom: number,
+    width: number,
+    height: number,
+    accessKey: string,
+    version: string,
+    dark: boolean,
+  ) {
+    const tiles = computeViewportTiles(lat, lng, zoom, width, height);
+    const existingByKey = new Map<string, HTMLImageElement>();
+    container
+      .querySelectorAll<HTMLImageElement>("img[data-tile-key]")
+      .forEach((img) => {
+        if (img.dataset.tileKey) {
+          existingByKey.set(img.dataset.tileKey, img);
+        }
+      });
+
+    const fragment = document.createDocumentFragment();
+
+    for (const tile of tiles) {
+      const tileKey = `${tile.z}:${tile.x}:${tile.y}`;
+      const existing = existingByKey.get(tileKey);
+      if (existing && existing.complete && existing.naturalWidth > 0) {
+        existing.style.left = `${tile.left}px`;
+        existing.style.top = `${tile.top}px`;
+        fragment.appendChild(existing);
+        existingByKey.delete(tileKey);
+        continue;
+      }
+
+      const img = existing || document.createElement("img");
+      const primaryUrl = buildAppleMapsTileUrl({
+        x: tile.x,
+        y: tile.y,
+        z: tile.z,
+        accessKey,
+        version,
+        dark,
+      });
+      const fallbackUrl = buildFallbackTileUrl({
+        x: tile.x,
+        y: tile.y,
+        z: tile.z,
+        dark,
+      });
+
+      if (img.src !== primaryUrl && img.src !== fallbackUrl) {
+        img.src = primaryUrl;
+      }
+      img.dataset.tileKey = tileKey;
+      img.dataset.fallbackSrc = fallbackUrl;
+      img.alt = "";
+      img.width = 256;
+      img.height = 256;
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+      img.style.cssText = `position:absolute;left:${tile.left}px;top:${tile.top}px;width:256px;height:256px;max-width:none;`;
+      img.onerror = () => {
+        if (img.dataset.fallbackSrc && img.src !== img.dataset.fallbackSrc) {
+          img.src = img.dataset.fallbackSrc;
+        }
+      };
+      fragment.appendChild(img);
+    }
+
+    container.replaceChildren(fragment);
+  }
+
+  function renderRouteSvgDom(
+    svgEl: SVGSVGElement,
+    pathsGroup: SVGGElement,
+    returnHomePathsGroup: SVGGElement | null,
+    markersGroup: SVGGElement,
+    stopCountEl: HTMLElement | null,
+    width: number,
+    height: number,
+    returnToHome: boolean,
+  ) {
+    const safeW = Math.max(360, Math.round(width));
+    const safeH = Math.max(360, Math.round(height));
+    svgEl.setAttribute("viewBox", `0 0 ${safeW} ${safeH}`);
+
+    const route = generateRandomRouteForBounds(safeW, safeH, Math.random, {
+      returnToHome,
+    });
+    const paths = pathsGroup.querySelectorAll("path");
+    paths.forEach((p) => p.setAttribute("d", route.svgPath));
+
+    if (returnHomePathsGroup) {
+      returnHomePathsGroup.style.display = route.returnToHome ? "" : "none";
+      const returnPaths = returnHomePathsGroup.querySelectorAll("path");
+      returnPaths.forEach((p) => p.setAttribute("d", route.returnHomeSvgPath));
+    }
+
+    const ns = "http://www.w3.org/2000/svg";
+    const markerFrag = document.createDocumentFragment();
+
+    for (const stop of route.stops) {
+      const g = document.createElementNS(ns, "g");
+      g.setAttribute("transform", `translate(${stop.x}, ${stop.y})`);
+
+      const halo = document.createElementNS(ns, "circle");
+      halo.setAttribute("r", "24");
+      halo.setAttribute("fill", stop.color);
+      halo.setAttribute("fill-opacity", "0.18");
+      g.appendChild(halo);
+
+      const outer = document.createElementNS(ns, "circle");
+      outer.setAttribute("r", "15");
+      outer.setAttribute("fill", BRAND_COLORS.harborSlate);
+      outer.setAttribute("stroke", stop.color);
+      outer.setAttribute("stroke-width", "3.25");
+      g.appendChild(outer);
+
+      const inner = document.createElementNS(ns, "circle");
+      inner.setAttribute("r", "9.5");
+      inner.setAttribute("fill", stop.color);
+      g.appendChild(inner);
+
+      const numText = document.createElementNS(ns, "text");
+      numText.setAttribute("x", "0");
+      numText.setAttribute("y", "3.8");
+      numText.setAttribute("text-anchor", "middle");
+      numText.setAttribute("fill", BRAND_COLORS.harborSlate);
+      numText.setAttribute(
+        "font-family",
+        "ui-monospace, SFMono-Regular, Menlo, monospace",
+      );
+      numText.setAttribute("font-size", "11");
+      numText.setAttribute("font-weight", "800");
+      numText.textContent = String(stop.number);
+      g.appendChild(numText);
+
+      markerFrag.appendChild(g);
+    }
+
+    markersGroup.replaceChildren(markerFrag);
+    if (stopCountEl) {
+      stopCountEl.textContent = `${route.stopCount} Stops`;
+    }
+    return route;
+  }
+
+  async function initHeroMaps() {
+    const roots = document.querySelectorAll<HTMLElement>("[data-ts-hero-map]");
+    if (roots.length === 0) return;
+
+    let liveAccessKey = "";
+    let liveVersion = "";
+    try {
+      const res = await fetch("/api/apple-maps-config.json", {
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        liveAccessKey = data.accessKey || "";
+        liveVersion = data.version || "";
+      }
+    } catch {
+      // Use SSR attribute accessKey if endpoint is unreachable
+    }
+
+    roots.forEach((root) => {
+      if (root.dataset.initialized === "true") return;
+      root.dataset.initialized = "true";
+
+      const tilesContainer =
+        root.querySelector<HTMLElement>("[data-map-tiles]");
+      const svgEl = root.querySelector<SVGSVGElement>("[data-map-svg]");
+      const pathsGroup =
+        root.querySelector<SVGGElement>("[data-route-paths]");
+      const returnHomePathsGroup = root.querySelector<SVGGElement>(
+        "[data-return-home-paths]",
+      );
+      const markersGroup = root.querySelector<SVGGElement>(
+        "[data-route-markers]",
+      );
+      const locationLabelEl = root.querySelector<HTMLElement>(
+        "[data-map-location-label]",
+      );
+      const stopCountEl = root.querySelector<HTMLElement>(
+        "[data-map-stop-count]",
+      );
+      const returnHomeBtn = root.querySelector<HTMLButtonElement>(
+        "[data-map-return-home-btn]",
+      );
+      const restackBtn = root.querySelector<HTMLButtonElement>(
+        "[data-map-restack-btn]",
+      );
+
+      if (!tilesContainer || !svgEl || !pathsGroup || !markersGroup) return;
+
+      const accessKey = liveAccessKey || root.dataset.accessKey || "";
+      const version = liveVersion || root.dataset.tileVersion || "2610193";
+      const zoom = Number(root.dataset.defaultZoom) || DEFAULT_ZOOM;
+      const isDark = root.dataset.variant !== "light";
+
+      let currentLat = Number(root.dataset.defaultLat) || DEFAULT_LOCATION.lat;
+      let currentLng = Number(root.dataset.defaultLng) || DEFAULT_LOCATION.lng;
+      let returnToHome = root.dataset.returnToHome !== "false";
+      let currentRoute: ReturnType<typeof generateRandomRouteForBounds> | null =
+        null;
+
+      const refreshMapAndRoute = (recalcRoute = true) => {
+        const rect = root.getBoundingClientRect();
+        const width = rect.width || window.innerWidth || 1440;
+        const height = rect.height || 760;
+
+        renderTilesDom(
+          tilesContainer,
+          currentLat,
+          currentLng,
+          zoom,
+          width,
+          height,
+          accessKey,
+          version,
+          isDark,
+        );
+
+        if (recalcRoute) {
+          currentRoute = renderRouteSvgDom(
+            svgEl,
+            pathsGroup,
+            returnHomePathsGroup,
+            markersGroup,
+            stopCountEl,
+            width,
+            height,
+            returnToHome,
+          );
+        }
+      };
+
+      refreshMapAndRoute(true);
+
+      returnHomeBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        returnToHome = !returnToHome;
+        root.dataset.returnToHome = String(returnToHome);
+        returnHomeBtn.setAttribute("aria-pressed", String(returnToHome));
+        returnHomeBtn.textContent = returnToHome
+          ? "⌂ Return: On"
+          : "⌂ Return: Off";
+
+        if (returnHomePathsGroup) {
+          returnHomePathsGroup.style.display = returnToHome ? "" : "none";
+          if (returnToHome && currentRoute && currentRoute.stops.length >= 2) {
+            const rect = root.getBoundingClientRect();
+            const safeW = Math.max(
+              360,
+              Math.round(rect.width || window.innerWidth || 1440),
+            );
+            const safeH = Math.max(360, Math.round(rect.height || 760));
+            const returnPath = buildReturnHomeSvgPath(
+              currentRoute.stops[currentRoute.stops.length - 1],
+              currentRoute.stops[0],
+              currentRoute.stops,
+              safeW,
+              safeH,
+            );
+            returnHomePathsGroup
+              .querySelectorAll("path")
+              .forEach((p) => p.setAttribute("d", returnPath));
+          }
+        }
+      });
+
+      restackBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const rect = root.getBoundingClientRect();
+        currentRoute = renderRouteSvgDom(
+          svgEl,
+          pathsGroup,
+          returnHomePathsGroup,
+          markersGroup,
+          stopCountEl,
+          rect.width || window.innerWidth || 1440,
+          rect.height || 760,
+          returnToHome,
+        );
+      });
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            currentLat = pos.coords.latitude;
+            currentLng = pos.coords.longitude;
+            if (locationLabelEl) {
+              locationLabelEl.textContent = `Apple Maps • ${currentLat.toFixed(2)}°, ${currentLng.toFixed(2)}°`;
+            }
+            refreshMapAndRoute(true);
+          },
+          () => {
+            if (locationLabelEl) {
+              locationLabelEl.textContent = "Apple Maps • Portland, OR";
+            }
+          },
+          {
+            enableHighAccuracy: false,
+            timeout: 3500,
+            maximumAge: 300000,
+          },
+        );
+      }
+    });
+  }
+
+  initHeroMaps();
+  document.addEventListener("astro:page-load", initHeroMaps);
+</script>

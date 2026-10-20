@@ -1,13 +1,30 @@
-"""Top-level build command shortcut to build one or all Cosmic Themes."""
+"""Build static Cloudflare Worker bundle for the Trip Stacking marketing site."""
 
 from __future__ import annotations
 
-from tripstacking_website.commands.themes.build import default as themes_build
+from typing import Annotated
+
+from cyclopts import Parameter
+
+from tripstacking_website.site import (
+    SITE_DIR,
+    CommandRunner,
+    default_runner,
+    resolve_pnpm_executable,
+)
 
 
 def default(
-    theme: str = "all",
     dry_run: bool = False,
+    *,
+    runner: Annotated[CommandRunner | None, Parameter(parse=False)] = None,
 ) -> int:
-    """Build static Astro output for one or all pre-screened Cosmic Themes."""
-    return themes_build(theme=theme, dry_run=dry_run)
+    """Build static Astro output (dist/) for the marketing site."""
+    pnpm = resolve_pnpm_executable()
+    cmd = [pnpm, "run", "build"]
+    print(f"Building Trip Stacking marketing site in {SITE_DIR} (dry_run={dry_run})...")
+    if dry_run:
+        return 0
+
+    active_runner = runner if runner is not None else default_runner
+    return active_runner(cmd, SITE_DIR)
