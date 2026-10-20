@@ -1,9 +1,10 @@
 name: Deploy Marketing Site to Cloudflare Workers
 
 on:
-  push:
-    branches:
-      - main
+  # Disabled automatic push trigger until ready to deploy to Cloudflare Workers
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
     inputs:
       theme:
@@ -21,6 +22,7 @@ on:
 jobs:
   deploy:
     name: Build & Deploy Astro Static Site (Wrangler)
+    if: false # Disabled until ready to deploy to Cloudflare Workers
     runs-on: ubuntu-latest
     env:
       ACTIVE_THEME: ${{ inputs.theme || 'nova' }}
