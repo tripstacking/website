@@ -54,7 +54,7 @@ def test_site_branding_and_manifesto_home_page() -> None:
 
     index_page = (SITE_DIR / "src" / "pages" / "index.astro").read_text(encoding="utf-8")
     for required_copy in (
-        "STACK YOUR STOPS. OWN YOUR WEEK.",
+        "STACK YOUR STOPS.<br />\n            OWN YOUR WEEK.",
         "Constraint-Aware",
         "Multi-Day",
         "Calendar",
