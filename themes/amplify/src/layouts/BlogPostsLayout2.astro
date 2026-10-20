@@ -1,0 +1,34 @@
+---
+/**
+ * * Grid with 3 columns. Most recent blog post is largest and spans full width.
+ */
+
+import PostCard from "@components/PostCard/PostCardAmplify.astro";
+import PostCardLarge from "@components/PostCard/PostCardAmplifyLarge.astro";
+import { type CollectionEntry, getCollection, getEntries } from "astro:content";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props as Props;
+---
+
+<di class="grid gap-6 gap-y-16 md:grid-cols-3">
+  {
+    posts.map((post, idx) => (
+      <>
+        {idx === 0 ? (
+          <PostCardLarge
+            post={post}
+            showDescription={true}
+            class="md:col-span-3"
+            data-mos="fade-up"
+          />
+        ) : (
+          <PostCard post={post} showDescription={false} data-mos="fade-up" />
+        )}
+      </>
+    ))
+  }
+</di>

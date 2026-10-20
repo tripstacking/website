@@ -1,0 +1,27 @@
+---
+// import ChevronDown from "@tabler/icons/outline/chevron-down.svg";
+import ChevronRight from "@tabler/icons/outline/chevron-right.svg";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={[
+    "starwind-accordion-trigger",
+    "flex w-full items-center justify-between gap-4 rounded-md px-5 py-5",
+    "text-left font-medium transition-colors duration-300",
+    "[&[data-state=open]>svg]:rotate-90",
+    "focus-visible:outline-outline focus-visible:outline-2 focus-visible:outline-offset-0",
+    "aria-[expanded=true]:text-foreground",
+    className,
+  ]}
+  aria-expanded="false"
+  {...rest}
+>
+  <slot />
+  <ChevronRight class="size-6 shrink-0 transition-transform duration-300" />
+</button>

@@ -1,0 +1,157 @@
+---
+import Button from "@components/Button/Button.astro";
+import FaqAccordions from "@components/Faq/FaqAccordions.astro";
+import TestimonialsMarquee from "@components/Testimonials/TestimonialsMarquee.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import HeroMapBackground from "../../../../shared/hero-map/HeroMapBackground.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+  <!-- HERO: Amplify Neon Horizon Arc & Interactive Pipeline -->
+  <section id="hero-amplify" class="dark relative overflow-hidden bg-[#0F1D22] pt-24 pb-20 text-[#F7FBF9]">
+    <HeroMapBackground variant="dark" />
+    <div class="pointer-events-none absolute -inset-x-10 top-16 opacity-60">
+      <div class="mx-auto flex h-full w-full max-w-[1600px] items-end justify-center">
+        <Icon
+          is:inline
+          name="amplify/neon-arc"
+          aria-hidden="true"
+          class="h-full w-full text-[#44C0C5]"
+        />
+      </div>
+    </div>
+
+    <div class="site-container relative z-10 mx-auto max-w-6xl px-4 pt-10">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#44C0C5]/40 bg-[#1A2E35] px-4 py-1.5 text-xs font-semibold text-[#FFDE59]">
+          <img
+            src="/brand/logo-mark.svg"
+            alt="Trip Stacking Mark"
+            width="20"
+            height="20"
+            fetchpriority="high"
+            class="size-5 rounded"
+          />
+          <span>AMPLIFY THEME • END-TO-END ERRAND ORCHESTRATION</span>
+        </div>
+
+        <h1 class="mb-6 text-5xl leading-tight font-extrabold tracking-tight text-[#F7FBF9] md:text-6xl">
+          STACK YOUR STOPS. OWN YOUR WEEK.
+        </h1>
+
+        <p class="mx-auto mb-8 max-w-2xl text-lg text-[#B5CCC5]">
+          Turn your Constraint-Aware Place To-Do List into calm, Multi-Day stacked trips. Trip Stacking optimizes store hours, dwell times, and low-stress right-turn corridors into a single Calendar block ready for Apple Maps, Google Maps, and CarPlay.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button variant="primary" href="#pillars">
+            Explore the 4 Pillars
+          </Button>
+          <Button variant="outline" href="#how-it-works">
+            See the Optimization Pipeline
+          </Button>
+        </div>
+      </div>
+
+      <!-- 4-Step End-to-End Pipeline Cards -->
+      <div id="how-it-works" class="mt-16 grid gap-4 md:grid-cols-4">
+        <div class="rounded-2xl border border-[#243E47] bg-[#1A2E35]/95 p-5">
+          <span class="font-mono text-xs font-bold text-[#FFDE59]">01 • INPUT</span>
+          <h2 class="mt-1 text-lg font-bold text-[#F7FBF9]">Places To-Do List</h2>
+          <p class="mt-1 text-xs text-[#B5CCC5]">
+            Time windows, 15m–45m stop durations, and rules like <em>"Groceries Last"</em>.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-[#243E47] bg-[#1A2E35]/95 p-5">
+          <span class="font-mono text-xs font-bold text-[#77C57F]">02 • SOLVER</span>
+          <h2 class="mt-1 text-lg font-bold text-[#F7FBF9]">Multi-Day Engine</h2>
+          <p class="mt-1 text-xs text-[#B5CCC5]">
+            Splits stops across Day A & Day B while minimizing unprotected left turns.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-[#243E47] bg-[#1A2E35]/95 p-5">
+          <span class="font-mono text-xs font-bold text-[#44C0C5]">03 • SCHEDULE</span>
+          <h2 class="mt-1 text-lg font-bold text-[#F7FBF9]">1 Calendar Block</h2>
+          <p class="mt-1 text-xs text-[#B5CCC5]">
+            Consolidates drive + dwell time into one clean calendar event per stacked trip.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-[#243E47] bg-[#1A2E35]/95 p-5">
+          <span class="font-mono text-xs font-bold text-[#F7FBF9]">04 • DRIVE</span>
+          <h2 class="mt-1 text-lg font-bold text-[#F7FBF9]">iOS & CarPlay</h2>
+          <p class="mt-1 text-xs text-[#B5CCC5]">
+            One-tap handoff to Apple Maps, Google Maps, or native CarPlay navigation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PILLARS BENTO SECTION (#F7FBF9 Alabaster Mint) -->
+  <section id="pillars" class="bg-[#F7FBF9] py-20 text-[#1A2E35] dark:bg-[#0F1D22] dark:text-[#F7FBF9]">
+    <div id="routing" class="site-container mx-auto max-w-6xl px-4">
+      <div class="mx-auto mb-14 max-w-3xl text-center">
+        <span class="mb-2 inline-block rounded-full bg-[#D7F3F4] px-3 py-1 font-mono text-xs font-bold text-[#1D696E] uppercase dark:bg-[#1A2E35] dark:text-[#44C0C5]">
+          60-30-10 Brand & Product Architecture
+        </span>
+        <h2 class="mb-4 text-3xl font-bold md:text-5xl">
+          Calm Over Complexity Across Every Mile
+        </h2>
+      </div>
+
+      <div id="carplay" class="grid gap-6 md:grid-cols-2">
+        <div class="hover-border-glow rounded-2xl border border-[#D6E4DF] bg-white p-7 dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <span class="mb-3 inline-block rounded-lg bg-[#FFDE59] px-2.5 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            PILLAR 01 • #FFDE59 BEACON YELLOW
+          </span>
+          <h3 class="mb-2 text-2xl font-bold">Constraint-Aware Place To-Do List</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Capture time-of-day, day-of-week, and week-level deadlines, per-stop dwell durations, and relative ordering rules (<em>"Visit the bank before the hardware store"</em>, <em>"Pick up groceries last"</em>).
+          </p>
+        </div>
+
+        <div class="hover-border-glow rounded-2xl border border-[#D6E4DF] bg-white p-7 dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <span class="mb-3 inline-block rounded-lg bg-[#77C57F] px-2.5 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            PILLAR 02 • #77C57F FLOW GREEN
+          </span>
+          <h3 class="mb-2 text-2xl font-bold">Intelligent Multi-Day & Low-Stress Routing</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Partitions stops across your schedule, avoids crowded hours and heavy traffic, penalizes unprotected left turns, and learns your preferred local corridors.
+          </p>
+        </div>
+
+        <div class="hover-border-glow rounded-2xl border border-[#D6E4DF] bg-white p-7 dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <span class="mb-3 inline-block rounded-lg bg-[#44C0C5] px-2.5 py-1 font-mono text-xs font-extrabold text-[#1A2E35]">
+            PILLAR 03 • #44C0C5 HORIZON TEAL
+          </span>
+          <h3 class="mb-2 text-2xl font-bold">Holistic Calendar Integration</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Protects your calendar as sacred space: one consolidated event per stacked trip with accurate travel + dwell block sizing and a direct launch link.
+          </p>
+        </div>
+
+        <div class="hover-border-glow rounded-2xl border border-[#D6E4DF] bg-white p-7 dark:border-[#243E47] dark:bg-[#1A2E35]">
+          <span class="mb-3 inline-block rounded-lg bg-[#1A2E35] px-2.5 py-1 font-mono text-xs font-extrabold text-[#FFDE59] dark:bg-[#0F1D22]">
+            PILLAR 04 • #1A2E35 HARBOR SLATE
+          </span>
+          <h3 class="mb-2 text-2xl font-bold">Seamless Navigation, iOS & CarPlay</h3>
+          <p class="text-sm text-[#4D6A64] dark:text-[#B5CCC5]">
+            Export your complete multi-stop route directly to Apple Maps or Google Maps, with native iOS and CarPlay turn-by-turn fallback whenever needed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <TestimonialsMarquee />
+
+  <div id="faq">
+    <FaqAccordions />
+  </div>
+</BaseLayout>

@@ -1,0 +1,95 @@
+---
+/**
+ * * A section to show the steps to using your product. They are numbers with an image to the side
+ */
+
+import Button from "@components/Button/Button.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { useTranslations } from "@js/translationUtils";
+import { Image } from "astro:assets";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+
+interface FeatureData {
+  title: string; // the number to showcase
+  description: string; // description below the number
+}
+
+import sideImage from "@images/storm-1.webp";
+
+const featureData: FeatureData[] = [
+  {
+    title: "Secured Payments",
+    description: `Use a re-use tons of responsive section to create the perfect layout.`,
+  },
+  {
+    title: "Download the Code",
+    description: `Use a re-use tons of responsive section to create the perfect layout.`,
+  },
+  {
+    title: "Start using Amplify",
+    description: `Use a re-use tons of responsive section to create the perfect layout.`,
+  },
+];
+---
+
+<section id="feature-steps" class="site-container overflow-hidden py-16 md:py-20">
+  <div class="grid gap-10 md:grid-cols-2">
+    <div class="w-full">
+      <div class="md:max-w-lg">
+        <div class="flex">
+          <h2 class="h2 mb-10">Three easy steps</h2>
+        </div>
+        <div class="mb-8 flex flex-col gap-8" id="feature-steps-trigger">
+          {
+            featureData.map((feature, idx) => (
+              <div
+                class="w-full"
+                data-mos="fade-right"
+                data-mos-anchor="#feature-steps-trigger"
+                data-mos-delay={0.25 * idx}
+              >
+                <div class="flex flex-wrap gap-8">
+                  <div class="w-auto">
+                    <div class="border-base-200 bg-base-50 text-primary-600 dark:border-base-800 dark:bg-base-950 dark:text-primary-400 mb-3 flex size-12 items-center justify-center rounded-full border text-lg font-bold">
+                      <span class="">{idx + 1}</span>
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="md:max-w-xs">
+                      <h3 class="mb-3 text-xl font-medium tracking-tight">{feature.title}</h3>
+                      <p class="description font-medium">{feature.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div
+          class="mx-auto flex justify-start"
+          data-mos="fade-right"
+          data-mos-anchor="#feature-steps-trigger"
+          data-mos-delay={0.75}
+        >
+          <Button variant="primary" arrow="right" href={getLocalizedRoute(currLocale, "signup")}>
+            Get Started
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div class="overflow-hidden">
+      <Image
+        src={sideImage}
+        class="border-base-200 dark:border-base-800 h-full w-auto rounded-2xl border object-cover"
+        alt="best value"
+        loading="lazy"
+        width={550}
+        densities={[1.5, 2]}
+      />
+    </div>
+  </div>
+</section>

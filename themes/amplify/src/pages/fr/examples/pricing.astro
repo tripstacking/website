@@ -1,0 +1,18 @@
+---
+import PricingFourCards from "@components/Pricing/PricingFourCards.astro";
+import PricingOnePrice from "@components/Pricing/PricingOnePrice.astro";
+import PricingTable from "@components/Pricing/PricingTable.astro";
+import PricingThreeCards from "@components/Pricing/PricingThreeCards.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Pricing sections"
+  description="All of the pricing sections included with the Amplify theme"
+>
+  <hr class="pt-20" />
+  <PricingThreeCards />
+  <PricingTable />
+  <PricingOnePrice />
+  <PricingFourCards />
+</BaseLayout>

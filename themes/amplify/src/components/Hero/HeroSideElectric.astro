@@ -1,0 +1,80 @@
+---
+/**
+ * * Hero with lightning animation on the side
+ */
+
+import Button from "@components/Button/Button.astro";
+import LightningAnimation from "@components/Canvas/LightningAnimation.astro";
+import heroImage from "@images/storm-2.webp";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { useTranslations } from "@js/translationUtils";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+---
+
+<!-- "dark" class forces dark mode for this section -->
+<section id="hero-electric" class="dark bg-dark-bg mt-14 overflow-x-clip">
+  <div class="site-container mx-auto px-4 pb-10 md:pt-10">
+    <div
+      class="mx-auto grid max-w-md text-center md:max-w-5xl md:grid-cols-2 md:text-left xl:items-center"
+    >
+      <div
+        class="h-full w-full flex-grow md:order-2"
+        data-mos="fade-in"
+        data-mos-anchor="#hero-electric"
+        data-mos-delay="1"
+        data-mos-duration="1"
+      >
+        <div class="mx-auto -my-10 max-w-[250px] md:my-0 md:ml-0 md:max-w-[520px]">
+          <LightningAnimation />
+        </div>
+      </div>
+
+      <div class="mx-auto my-auto w-full pt-4 pb-10 md:ml-0 md:max-w-[560px] md:pt-10 lg:pr-10">
+        <div
+          class="mx-auto max-w-[400px] md:ml-0"
+          data-mos="fade-up"
+          data-mos-anchor="#hero-electric"
+        >
+          <h1
+            class="main-text-gradient mb-6 text-5xl leading-tight font-medium tracking-tight text-pretty md:text-6xl md:leading-tight"
+          >
+            {t("hero_text")}
+          </h1>
+        </div>
+        <p
+          class="description mb-8 text-pretty lg:text-lg"
+          data-mos="fade-up"
+          data-mos-delay=".1"
+          data-mos-anchor="#hero-electric"
+        >
+          {t("hero_description")}
+        </p>
+        <div
+          class="mt-6 flex flex-wrap justify-center gap-4 md:justify-start"
+          data-mos="fade-up"
+          data-mos-delay=".2"
+          data-mos-anchor="#hero-electric"
+        >
+          <Button variant="primary" href={getLocalizedRoute(currLocale, "/signup")}>
+            Get Started
+          </Button>
+          <Button
+            variant="ghost"
+            arrow="right"
+            href="https://cosmicthemes.com/themes/amplify/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Get Amplify
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

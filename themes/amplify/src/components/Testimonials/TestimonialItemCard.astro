@@ -1,0 +1,27 @@
+---
+import { type TestimonialItem } from "@config/types/configDataTypes";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+interface Props extends TestimonialItem {
+  rest?: any;
+  class?: string; // any additional classes
+}
+
+const { class: className, avatar, name, title, testimonial, ...rest } = Astro.props as Props;
+---
+
+<div
+  class="hover-border-glow border-base-200 bg-base-100 dark:border-base-800 dark:bg-base-950 dark:text-base-100 flex flex-col rounded-xl border p-4 before:rounded-xl"
+  class:list={className}
+  {...rest}
+>
+  <p class="mb-6">{testimonial}</p>
+  <div class="flex items-center gap-4">
+    <Image src={avatar} alt={name} height={100} class="size-12 rounded-full object-cover" />
+    <div>
+      <p class="leading-tight font-medium">{name}</p>
+      <p class="description text-sm leading-tight tracking-tight">{title}</p>
+    </div>
+  </div>
+</div>
