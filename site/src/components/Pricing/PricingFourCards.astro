@@ -17,6 +17,8 @@ interface pricingItem {
   subtitle: string;
   description: string;
   featured?: boolean;
+  comingSoon?: boolean;
+  roadmapNote?: string;
   price: {
     free?: boolean;
     monthly: string;
@@ -27,7 +29,7 @@ interface pricingItem {
     yearly: string;
   };
   features: string[];
-  href: string;
+  href?: string;
   linkText: string;
 }
 
@@ -58,6 +60,7 @@ const pricingData: pricingItem[] = [
     name: "Local Pro",
     subtitle: "Full Week Stacker",
     description: "Solo Apple user who wants their week automated on-device.",
+    featured: true,
     price: {
       monthly: "2.99",
       yearly: "19.99",
@@ -79,15 +82,17 @@ const pricingData: pricingItem[] = [
   {
     name: "Cloud Sync",
     subtitle: "Anywhere + Low-Stress Pro",
-    description: "Desktop planners, cross-platform users, and low-stress drivers.",
-    featured: true,
+    description:
+      "Planned post-Phase 1 expansion for desktop planners, cross-platform sync, and cloud Valhalla routing.",
+    comingSoon: true,
+    roadmapNote: "Planned • Coming After Phase 1",
     price: {
       monthly: "3.99",
       yearly: "29.99",
     },
     periodLabel: {
-      monthly: "per month",
-      yearly: "per year",
+      monthly: "per month (planned)",
+      yearly: "per year (planned)",
     },
     features: [
       "Everything in Local Pro",
@@ -96,20 +101,22 @@ const pricingData: pricingItem[] = [
       "Cloud Low-Stress Routing (left-turn penalties)",
       "Auto-Import Store Hours & Busyness",
     ],
-    href: "/signup",
-    linkText: "Subscribe to Cloud Sync",
+    linkText: "Coming After Phase 1",
   },
   {
     name: "Family & Household",
     subtitle: "Multi-Car VRP (Up to 5)",
-    description: "Couples, busy parents, and caregivers dividing household logistics.",
+    description:
+      "Planned post-Phase 1 expansion for couples, busy parents, and shared household logistics.",
+    comingSoon: true,
+    roadmapNote: "Planned • Coming After Phase 1",
     price: {
       monthly: "6.99",
       yearly: "49.99",
     },
     periodLabel: {
-      monthly: "per household, per month",
-      yearly: "per household, per year",
+      monthly: "per household, per month (planned)",
+      yearly: "per household, per year (planned)",
     },
     features: [
       "Everything in Cloud Sync for up to 5 members",
@@ -117,8 +124,7 @@ const pricingData: pricingItem[] = [
       "Multi-Car / Multi-Person VRP Solver",
       "Live Claiming & Completion Notifications",
     ],
-    href: "/signup",
-    linkText: "Subscribe to Family Plan",
+    linkText: "Coming After Phase 1",
   },
 ];
 
@@ -129,11 +135,11 @@ const currLocale = getLocaleFromUrl(Astro.url);
   <div class="site-container relative">
     <div class="mx-auto max-w-3xl text-center">
       <span class="mb-3 inline-block rounded-full bg-[#D7F3F4] px-3.5 py-1 text-xs font-bold tracking-wider text-[#1D696E] uppercase dark:bg-[#1A2E35] dark:text-[#44C0C5]">
-        Simple Subscription Pricing
+        Simple Subscription Pricing & Roadmap
       </span>
       <h2 class="h2 text-center">Stack Your Week at Every Scale</h2>
       <p class="description mx-auto max-w-2xl">
-        Start free on a single day, or subscribe to automate your full week across iCloud, the Web Companion, and shared family calendars.
+        Start free or subscribe to Local Pro in Phase 1. Cloud Sync and Family &amp; Household multi-car plans are on the roadmap and coming once Phase 1 is complete.
       </p>
     </div>
 
@@ -154,13 +160,18 @@ const currLocale = getLocaleFromUrl(Astro.url);
         pricingData.map((plan) => (
           <div class="pricing-plan flex w-full">
             <div
-              class="dark:bg-base-900 relative flex w-full transform flex-col justify-between bg-white p-8 transition-transform duration-500 hover:-translate-y-2"
+              class="dark:bg-base-900 relative flex w-full transform flex-col justify-between bg-white p-8 transition-transform duration-500"
               class:list={[
                 {
-                  "mt-10 rounded-b-lg sm:mt-0": plan.featured === true,
+                  "mt-10 rounded-b-lg hover:-translate-y-2 sm:mt-0": plan.featured === true,
                 },
                 {
-                  "rounded-lg": plan.featured !== true,
+                  "mt-10 rounded-b-lg border border-dashed border-[#B5CCC5] opacity-85 sm:mt-0 dark:border-[#243E47]":
+                    plan.comingSoon === true,
+                },
+                {
+                  "rounded-lg hover:-translate-y-2":
+                    plan.featured !== true && plan.comingSoon !== true,
                 },
               ]}
             >
@@ -179,6 +190,14 @@ const currLocale = getLocaleFromUrl(Astro.url);
                       Recommended
                     </p>
                   </div>
+                </div>
+              )}
+
+              {plan.comingSoon === true && (
+                <div class="bg-base-300/80 dark:bg-base-800 absolute -top-10 left-0 w-full rounded-t-xl border border-b-0 border-dashed border-[#B5CCC5] dark:border-[#243E47]">
+                  <p class="text-base-800 dark:text-base-200 py-2 text-center text-xs font-bold tracking-wider uppercase">
+                    {plan.roadmapNote ?? "Coming Soon"}
+                  </p>
                 </div>
               )}
 
@@ -215,7 +234,12 @@ const currLocale = getLocaleFromUrl(Astro.url);
                     <li class="mb-2.5 flex items-start justify-start gap-2.5">
                       <Icon
                         name="tabler/check"
-                        class="text-primary-600 dark:text-primary-400 mt-0.5 size-5 shrink-0"
+                        class:list={[
+                          "mt-0.5 size-5 shrink-0",
+                          plan.comingSoon
+                            ? "text-base-400 dark:text-base-500"
+                            : "text-primary-600 dark:text-primary-400",
+                        ]}
                         aria-hidden="true"
                       />
                       <span class="text-start text-sm font-medium">{feature}</span>
@@ -224,13 +248,24 @@ const currLocale = getLocaleFromUrl(Astro.url);
                 </ul>
               </div>
               <div class="text-center">
-                <Button
-                  class="w-full duration-300"
-                  variant={plan.featured === true ? "primary" : "secondary"}
-                  href={getLocalizedRoute(currLocale, plan.href)}
-                >
-                  {plan.linkText}
-                </Button>
+                {plan.comingSoon === true ? (
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    class="border-base-300 bg-base-200/70 text-base-600 dark:border-base-700 dark:bg-base-800/70 dark:text-base-400 w-full cursor-not-allowed rounded-full border border-dashed px-6 py-3 text-sm font-semibold select-none"
+                  >
+                    {plan.linkText}
+                  </button>
+                ) : (
+                  <Button
+                    class="w-full duration-300"
+                    variant={plan.featured === true ? "primary" : "secondary"}
+                    href={getLocalizedRoute(currLocale, plan.href ?? "/signup")}
+                  >
+                    {plan.linkText}
+                  </Button>
+                )}
               </div>
             </div>
           </div>
