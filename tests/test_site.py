@@ -136,6 +136,21 @@ def test_index_replaces_reviews_with_four_column_subscription_pricing() -> None:
     assert "disabled" in pricing_component
 
 
+def test_site_uses_in_app_routing_and_carplay_without_external_maps_export() -> None:
+    files_to_check = (
+        SITE_DIR / "src" / "pages" / "index.astro",
+        SITE_DIR / "src" / "components" / "Pricing" / "PricingFourCards.astro",
+        SITE_DIR / "src" / "config" / "en" / "faqData.json.ts",
+        SITE_DIR / "src" / "config" / "en" / "siteData.json.ts",
+    )
+    for file_path in files_to_check:
+        text = file_path.read_text(encoding="utf-8")
+        lowered = text.lower()
+        assert "google maps" not in lowered, f"{file_path.name} must not mention Google Maps export"
+        assert "apple maps" not in lowered, f"{file_path.name} must not mention Apple Maps export"
+        assert "carplay" in lowered, f"{file_path.name} must mention CarPlay"
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"

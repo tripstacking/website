@@ -40,8 +40,8 @@ export const testimonialData: TestimonialItem[] = [
   {
     avatar: TravisB,
     name: "Samir V.",
-    title: "iOS & Apple Maps User",
-    testimonial: `Zero friction from start to finish. It splits overflow errands onto my Friday afternoon window automatically and exports straight to Apple Maps and CarPlay.`,
+    title: "iOS & CarPlay User",
+    testimonial: `Zero friction from start to finish. It splits overflow errands onto my Friday afternoon window automatically and opens the whole route right in the app and on CarPlay.`,
   },
 ];
 

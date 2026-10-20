@@ -4,7 +4,7 @@ const siteData: SiteDataProps = {
   name: "Trip Stacking",
   title: "Trip Stacking — STACK YOUR STOPS. OWN YOUR WEEK.",
   description:
-    "Transform your places to-do list into calm, optimized multi-stop trips that respect store hours, avoid left-turn stress, consolidate your calendar, and launch in Apple Maps, Google Maps, or CarPlay.",
+    "Transform your places to-do list into calm, optimized multi-stop trips that respect store hours, avoid left-turn stress, consolidate your calendar, and guide you directly in the app and on Apple CarPlay.",
   contact: {
     address1: "Harbor Slate Studio",
     address2: "Seattle, WA",

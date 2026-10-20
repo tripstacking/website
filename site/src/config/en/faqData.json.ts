@@ -18,8 +18,8 @@ export const faqData: FaqItem[] = [
     answer: `The fastest route on paper isn't always the best drive if it forces unprotected left turns across four lanes of rush-hour traffic. Trip Stacking penalizes high-stress maneuvers and learns your preferred local corridors over time.`,
   },
   {
-    question: "Does it work with Apple Maps, Google Maps, and Apple CarPlay?",
-    answer: `Yes. Whenever your stacked trip is ready, you can hand off the multi-stop route directly to Apple Maps or Google Maps in one tap—or use Trip Stacking's native iOS and CarPlay dashboard experience when custom road preferences or multi-stop constraints require native guidance.`,
+    question: "How do I view my route and use it with Apple CarPlay?",
+    answer: `You don't need to export stops to external map apps. Trip Stacking displays your complete multi-stop route directly inside the app and connects natively with Apple CarPlay so you can follow every stop and dwell window right from your dashboard.`,
   },
   {
     question: "What happens if all my errands don't fit into one afternoon?",
