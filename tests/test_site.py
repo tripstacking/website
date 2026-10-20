@@ -66,6 +66,26 @@ def test_site_branding_and_manifesto_home_page() -> None:
         assert required_copy in index_page, f"site/src/pages/index.astro missing '{required_copy}'"
 
 
+def test_site_uses_single_sans_web_font_without_sentient_serif() -> None:
+    base_head = (SITE_DIR / "src" / "layouts" / "BaseHead.astro").read_text(encoding="utf-8")
+    assert "InterVariable" in base_head
+    assert "sentient" not in base_head.lower()
+    assert "fontshare" not in base_head.lower()
+
+    tailwind_theme = (SITE_DIR / "src" / "styles" / "tailwind-theme.css").read_text(
+        encoding="utf-8"
+    )
+    assert '"InterVariable"' in tailwind_theme
+    assert "sentient" not in tailwind_theme.lower()
+    assert "--font-serif" not in tailwind_theme
+
+    global_css = (SITE_DIR / "src" / "styles" / "global.css").read_text(encoding="utf-8")
+    assert "font-serif" not in global_css
+
+    index_page = (SITE_DIR / "src" / "pages" / "index.astro").read_text(encoding="utf-8")
+    assert "font-serif" not in index_page
+
+
 def test_hero_map_component_in_site() -> None:
     hero_map_dir = SITE_DIR / "src" / "components" / "hero-map"
     component_path = hero_map_dir / "HeroMapBackground.astro"

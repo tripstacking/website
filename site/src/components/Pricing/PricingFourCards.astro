@@ -140,7 +140,7 @@ const t = useTranslations(currLocale);
                   // if custom price, show "Custom" instead of price
                   <>
                     <h4>
-                      <span class="font-serif text-6xl tracking-tighter md:text-7xl">Custom</span>
+                      <span class="font-sans text-6xl font-bold tracking-tighter md:text-7xl">Custom</span>
                     </h4>
                     <span
                       aria-hidden="true"
@@ -153,10 +153,10 @@ const t = useTranslations(currLocale);
                   <>
                     <h4>
                       <span class="text-xl font-semibold tracking-tight">$</span>
-                      <span class="pricing-monthly font-serif text-6xl tracking-tighter md:text-7xl">
+                      <span class="pricing-monthly font-sans text-6xl font-bold tracking-tighter md:text-7xl">
                         {plan.price.monthly}
                       </span>
-                      <span class="pricing-yearly font-serif text-6xl tracking-tighter md:text-7xl">
+                      <span class="pricing-yearly font-sans text-6xl font-bold tracking-tighter md:text-7xl">
                         {plan.price.yearly}
                       </span>
                     </h4>

@@ -120,11 +120,11 @@
 
 @layer components {
   .h1 {
-    @apply text-base-900 dark:text-base-100 mb-4 font-serif text-5xl tracking-tighter md:text-6xl;
+    @apply text-base-900 dark:text-base-100 mb-4 font-sans text-5xl font-bold tracking-tighter md:text-6xl;
   }
 
   .h2 {
-    @apply text-base-900 dark:text-base-100 mb-4 font-serif text-4xl tracking-tighter md:text-6xl;
+    @apply text-base-900 dark:text-base-100 mb-4 font-sans text-4xl font-bold tracking-tighter md:text-6xl;
   }
 
   .h3 {
