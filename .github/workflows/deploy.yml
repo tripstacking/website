@@ -1,0 +1,55 @@
+name: Deploy Marketing Site to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      theme:
+        description: "Theme directory to build and deploy"
+        required: false
+        default: "nova"
+        type: choice
+        options:
+          - nova
+          - zenith
+          - atlas
+          - galaxy
+          - amplify
+
+jobs:
+  deploy:
+    name: Build & Deploy Astro Static Site (Wrangler)
+    runs-on: ubuntu-latest
+    env:
+      ACTIVE_THEME: ${{ inputs.theme || 'nova' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build selected Astro theme
+        working-directory: themes/${{ env.ACTIVE_THEME }}
+        run: pnpm run build
+
+      - name: Deploy static assets to Cloudflare Workers
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: themes/${{ env.ACTIVE_THEME }}
