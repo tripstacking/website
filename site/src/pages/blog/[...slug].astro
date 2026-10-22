@@ -7,6 +7,8 @@ import BlogLayoutSidebars from "@layouts/BlogLayoutSidebars.astro";
 import { type InferGetStaticPropsType } from "astro";
 import { render } from "astro:content";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const posts = await getAllPosts(defaultLocale);
 

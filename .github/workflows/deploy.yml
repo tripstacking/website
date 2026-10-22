@@ -1,16 +1,14 @@
 name: Deploy Marketing Site to Cloudflare Workers
 
 on:
-  # Disabled automatic push trigger until ready to deploy to Cloudflare Workers
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   deploy:
     name: Build & Deploy Astro Static Site (Wrangler)
-    if: false # Disabled until ready to deploy to Cloudflare Workers
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
