@@ -275,7 +275,6 @@ const initialRoute = generateRandomRouteForBounds(
   .ts-hero-map-root {
     position: absolute;
     inset: 0;
-    z-index: 0;
     overflow: hidden;
     background-color: #0f1d22;
     pointer-events: none;
@@ -285,6 +284,7 @@ const initialRoute = generateRandomRouteForBounds(
   .ts-hero-map-tiles {
     position: absolute;
     inset: 0;
+    z-index: 0;
     opacity: 0.56;
     transition: opacity 0.4s ease;
   }
@@ -292,6 +292,7 @@ const initialRoute = generateRandomRouteForBounds(
   .ts-hero-map-svg {
     position: absolute;
     inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     opacity: 0.78;
@@ -301,6 +302,7 @@ const initialRoute = generateRandomRouteForBounds(
   .ts-hero-map-scrim {
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     background:
       radial-gradient(
@@ -322,7 +324,7 @@ const initialRoute = generateRandomRouteForBounds(
     position: absolute;
     right: 1.25rem;
     bottom: 0.85rem;
-    z-index: 20;
+    z-index: 30;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -452,9 +454,26 @@ const initialRoute = generateRandomRouteForBounds(
     DEFAULT_LOCATION,
     DEFAULT_ZOOM,
     generateRandomRouteForBounds,
+    resizeRouteToBounds,
     resolveTileImageSrc,
     shouldReuseLoadedTile,
   } from "./heroMapCore.mjs";
+
+  function measureHeroViewport(root: HTMLElement) {
+    const rect = root.getBoundingClientRect();
+    const width = Math.max(
+      360,
+      Math.round(
+        Math.max(rect.width || 0, root.clientWidth || 0, window.innerWidth || 0) ||
+          1440,
+      ),
+    );
+    const height = Math.max(
+      360,
+      Math.round(Math.max(rect.height || 0, root.clientHeight || 0) || 760),
+    );
+    return { width, height };
+  }
 
   function renderTilesDom(
     container: HTMLElement,
@@ -546,23 +565,18 @@ const initialRoute = generateRandomRouteForBounds(
     container.replaceChildren(fragment);
   }
 
-  function renderRouteSvgDom(
+  function applyRouteToSvgDom(
     svgEl: SVGSVGElement,
     pathsGroup: SVGGElement,
     returnHomePathsGroup: SVGGElement | null,
     markersGroup: SVGGElement,
     stopCountEl: HTMLElement | null,
-    width: number,
-    height: number,
-    returnToHome: boolean,
+    route: ReturnType<typeof generateRandomRouteForBounds>,
   ) {
-    const safeW = Math.max(360, Math.round(width));
-    const safeH = Math.max(360, Math.round(height));
+    const safeW = Math.max(360, Math.round(route.width || 1440));
+    const safeH = Math.max(360, Math.round(route.height || 760));
     svgEl.setAttribute("viewBox", `0 0 ${safeW} ${safeH}`);
 
-    const route = generateRandomRouteForBounds(safeW, safeH, Math.random, {
-      returnToHome,
-    });
     const paths = pathsGroup.querySelectorAll("path");
     paths.forEach((p) => p.setAttribute("d", route.svgPath));
 
@@ -621,24 +635,36 @@ const initialRoute = generateRandomRouteForBounds(
     return route;
   }
 
+  function renderRouteSvgDom(
+    svgEl: SVGSVGElement,
+    pathsGroup: SVGGElement,
+    returnHomePathsGroup: SVGGElement | null,
+    markersGroup: SVGGElement,
+    stopCountEl: HTMLElement | null,
+    width: number,
+    height: number,
+    returnToHome: boolean,
+  ) {
+    const route = generateRandomRouteForBounds(width, height, Math.random, {
+      returnToHome,
+    });
+    return applyRouteToSvgDom(
+      svgEl,
+      pathsGroup,
+      returnHomePathsGroup,
+      markersGroup,
+      stopCountEl,
+      route,
+    );
+  }
+
   async function initHeroMaps() {
     const roots = document.querySelectorAll<HTMLElement>("[data-ts-hero-map]");
     if (roots.length === 0) return;
 
-    let liveAccessKey = "";
-    let liveVersion = "";
-    try {
-      const res = await fetch("/api/apple-maps-config.json", {
-        cache: "no-store",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        liveAccessKey = data.accessKey || "";
-        liveVersion = data.version || "";
-      }
-    } catch {
-      // Use SSR attribute accessKey if endpoint is unreachable
-    }
+    const upgradeCallbacks: Array<
+      (accessKey: string, version: string) => void
+    > = [];
 
     roots.forEach((root) => {
       if (root.dataset.initialized === "true") return;
@@ -670,8 +696,8 @@ const initialRoute = generateRandomRouteForBounds(
 
       if (!tilesContainer || !svgEl || !pathsGroup || !markersGroup) return;
 
-      const accessKey = liveAccessKey || root.dataset.accessKey || "";
-      const version = liveVersion || root.dataset.tileVersion || "2610193";
+      let accessKey = root.dataset.accessKey || "";
+      let version = root.dataset.tileVersion || "2610193";
       const zoom = Number(root.dataset.defaultZoom) || DEFAULT_ZOOM;
       const isDark = root.dataset.variant !== "light";
 
@@ -680,11 +706,13 @@ const initialRoute = generateRandomRouteForBounds(
       let returnToHome = root.dataset.returnToHome !== "false";
       let currentRoute: ReturnType<typeof generateRandomRouteForBounds> | null =
         null;
+      let lastWidth = 0;
+      let lastHeight = 0;
 
       const refreshMapAndRoute = (recalcRoute = true) => {
-        const rect = root.getBoundingClientRect();
-        const width = rect.width || window.innerWidth || 1440;
-        const height = rect.height || 760;
+        const { width, height } = measureHeroViewport(root);
+        lastWidth = width;
+        lastHeight = height;
 
         renderTilesDom(
           tilesContainer,
@@ -698,7 +726,7 @@ const initialRoute = generateRandomRouteForBounds(
           isDark,
         );
 
-        if (recalcRoute) {
+        if (recalcRoute || !currentRoute) {
           currentRoute = renderRouteSvgDom(
             svgEl,
             pathsGroup,
@@ -709,10 +737,53 @@ const initialRoute = generateRandomRouteForBounds(
             height,
             returnToHome,
           );
+        } else {
+          currentRoute = applyRouteToSvgDom(
+            svgEl,
+            pathsGroup,
+            returnHomePathsGroup,
+            markersGroup,
+            stopCountEl,
+            resizeRouteToBounds(currentRoute, width, height, { returnToHome }),
+          );
         }
       };
 
       refreshMapAndRoute(true);
+
+      upgradeCallbacks.push((liveAccessKey: string, liveVersion: string) => {
+        if (liveAccessKey) {
+          accessKey = liveAccessKey;
+        }
+        if (liveVersion) {
+          version = liveVersion;
+        }
+        refreshMapAndRoute(false);
+      });
+
+      let resizeRafId = 0;
+      const handleViewportResize = () => {
+        if (resizeRafId) return;
+        resizeRafId = window.requestAnimationFrame(() => {
+          resizeRafId = 0;
+          const { width, height } = measureHeroViewport(root);
+          if (
+            Math.abs(width - lastWidth) < 2 &&
+            Math.abs(height - lastHeight) < 2
+          ) {
+            return;
+          }
+          refreshMapAndRoute(false);
+        });
+      };
+
+      if (typeof ResizeObserver !== "undefined") {
+        const resizeObserver = new ResizeObserver(handleViewportResize);
+        resizeObserver.observe(root);
+      }
+      window.addEventListener("resize", handleViewportResize, {
+        passive: true,
+      });
 
       returnHomeBtn?.addEventListener("click", (e) => {
         e.preventDefault();
@@ -727,12 +798,7 @@ const initialRoute = generateRandomRouteForBounds(
         if (returnHomePathsGroup) {
           returnHomePathsGroup.style.display = returnToHome ? "" : "none";
           if (returnToHome && currentRoute && currentRoute.stops.length >= 2) {
-            const rect = root.getBoundingClientRect();
-            const safeW = Math.max(
-              360,
-              Math.round(rect.width || window.innerWidth || 1440),
-            );
-            const safeH = Math.max(360, Math.round(rect.height || 760));
+            const { width: safeW, height: safeH } = measureHeroViewport(root);
             const returnPath = buildReturnHomeSvgPath(
               currentRoute.stops[currentRoute.stops.length - 1],
               currentRoute.stops[0],
@@ -750,15 +816,15 @@ const initialRoute = generateRandomRouteForBounds(
       restackBtn?.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const rect = root.getBoundingClientRect();
+        const { width, height } = measureHeroViewport(root);
         currentRoute = renderRouteSvgDom(
           svgEl,
           pathsGroup,
           returnHomePathsGroup,
           markersGroup,
           stopCountEl,
-          rect.width || window.innerWidth || 1440,
-          rect.height || 760,
+          width,
+          height,
           returnToHome,
         );
       });
@@ -786,6 +852,24 @@ const initialRoute = generateRandomRouteForBounds(
         );
       }
     });
+
+    if (upgradeCallbacks.length === 0) return;
+
+    try {
+      const res = await fetch("/api/apple-maps-config.json", {
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const liveAccessKey = data.accessKey || "";
+        const liveVersion = data.version || "";
+        if (liveAccessKey || liveVersion) {
+          upgradeCallbacks.forEach((cb) => cb(liveAccessKey, liveVersion));
+        }
+      }
+    } catch {
+      // Use SSR attribute accessKey if endpoint is unreachable
+    }
   }
 
   initHeroMaps();

@@ -310,6 +310,17 @@ export function buildReturnHomeSvgPath(
   );
 }
 
+function computeRouteBoundsBox(width = 1440, height = 800) {
+  const safeW = Math.max(360, Math.round(width));
+  const safeH = Math.max(360, Math.round(height));
+  const padX = Math.min(safeW * 0.18, Math.max(64, safeW * 0.08));
+  const padTop = Math.min(safeH * 0.24, Math.max(88, safeH * 0.14));
+  const padBottom = Math.min(safeH * 0.22, Math.max(76, safeH * 0.12));
+  const usableW = Math.max(160, safeW - padX * 2);
+  const usableH = Math.max(140, safeH - padTop - padBottom);
+  return { safeW, safeH, padX, padTop, padBottom, usableW, usableH };
+}
+
 /**
  * Randomly place 3 to 8 stops within the bounds of the screen and build
  * a branded Trip Stacking route, optional return-to-home loop, and marker descriptors.
@@ -321,18 +332,12 @@ export function generateRandomRouteForBounds(
   options = {},
 ) {
   const { returnToHome = true } = options ?? {};
-  const safeW = Math.max(360, width);
-  const safeH = Math.max(360, height);
+  const { safeW, safeH, padX, padTop, usableW, usableH } =
+    computeRouteBoundsBox(width, height);
 
   const stopCount =
     MIN_STOPS + Math.floor(rng() * (MAX_STOPS - MIN_STOPS + 1));
 
-  const padX = Math.min(safeW * 0.18, Math.max(64, safeW * 0.08));
-  const padTop = Math.min(safeH * 0.24, Math.max(88, safeH * 0.14));
-  const padBottom = Math.min(safeH * 0.22, Math.max(76, safeH * 0.12));
-
-  const usableW = Math.max(160, safeW - padX * 2);
-  const usableH = Math.max(140, safeH - padTop - padBottom);
   const minSeparation = Math.min(usableW, usableH) / (stopCount + 1.5);
 
   const rawPoints = [];
@@ -402,5 +407,69 @@ export function generateRandomRouteForBounds(
     svgPath,
     returnToHome: enabledReturnToHome,
     returnHomeSvgPath,
+    width: safeW,
+    height: safeH,
+  };
+}
+
+/**
+ * Proportionally rescale an existing route's stops and SVG paths to fit updated
+ * viewport dimensions (e.g. when expanding window width or zooming out).
+ */
+export function resizeRouteToBounds(
+  route,
+  width = 1440,
+  height = 800,
+  options = {},
+) {
+  if (!route || !Array.isArray(route.stops) || route.stops.length === 0) {
+    return generateRandomRouteForBounds(width, height, Math.random, options);
+  }
+
+  const enabledReturnToHome = Boolean(
+    options.returnToHome ?? route.returnToHome ?? true,
+  );
+  const prevBox = computeRouteBoundsBox(
+    route.width || width,
+    route.height || height,
+  );
+  const nextBox = computeRouteBoundsBox(width, height);
+
+  const stops = route.stops.map((stop) => {
+    const normX = Math.max(
+      0,
+      Math.min(1, (stop.x - prevBox.padX) / prevBox.usableW),
+    );
+    const normY = Math.max(
+      0,
+      Math.min(1, (stop.y - prevBox.padTop) / prevBox.usableH),
+    );
+    return {
+      ...stop,
+      x: Math.round(nextBox.padX + normX * nextBox.usableW),
+      y: Math.round(nextBox.padTop + normY * nextBox.usableH),
+    };
+  });
+
+  const svgPath = buildSmoothRouteSvgPath(stops);
+  const returnHomeSvgPath =
+    enabledReturnToHome && stops.length >= 2
+      ? buildReturnHomeSvgPath(
+          stops[stops.length - 1],
+          stops[0],
+          stops,
+          nextBox.safeW,
+          nextBox.safeH,
+        )
+      : "";
+
+  return {
+    stopCount: stops.length,
+    stops,
+    svgPath,
+    returnToHome: enabledReturnToHome,
+    returnHomeSvgPath,
+    width: nextBox.safeW,
+    height: nextBox.safeH,
   };
 }

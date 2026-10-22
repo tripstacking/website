@@ -20,7 +20,7 @@ const { class: className, animationDuration = 300, ...rest } = Astro.props as Pr
     <Icon
       name="tabler/moon-stars"
       class:list={["theme-toggle__dark-icon absolute inset-0 size-5"]}
-      data-current-theme="false"
+      data-current-theme="true"
       style={{
         "--animation-duration": `${animationDuration}ms`,
       }}
@@ -119,8 +119,8 @@ const { class: className, animationDuration = 300, ...rest } = Astro.props as Pr
     const themeToggleBtns = document.querySelectorAll(".theme-toggle");
 
     const colorTheme = localStorage.getItem("colorTheme");
-    // Set initial state without animations
-    if (colorTheme === "dark") {
+    // Set initial state without animations (default to dark when unset)
+    if (colorTheme !== "light") {
       themeToggleDarkIcons.forEach((themeToggleDarkIcon) => {
         themeToggleDarkIcon.setAttribute("data-current-theme", "true");
       });

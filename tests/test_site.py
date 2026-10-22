@@ -877,3 +877,118 @@ def test_hero_mobile_stats_and_map_badge_responsive_layout() -> None:
         "Expected .ts-hero-map-badge to stay constrained within mobile viewport width"
     )
 
+
+def test_hero_map_resizes_tiles_and_route_when_viewport_expands_or_zooms_out() -> None:
+    core_path = SITE_DIR / "src" / "components" / "hero-map" / "heroMapCore.mjs"
+    component_path = SITE_DIR / "src" / "components" / "hero-map" / "HeroMapBackground.astro"
+
+    component_text = component_path.read_text(encoding="utf-8")
+    assert "ResizeObserver" in component_text, (
+        "Expected HeroMapBackground.astro to observe container resize events via ResizeObserver"
+    )
+    assert "resizeRouteToBounds" in component_text, (
+        "Expected HeroMapBackground.astro to rescale the active route when the viewport expands"
+    )
+
+    script = f"""
+import {{
+  DEFAULT_LOCATION,
+  DEFAULT_ZOOM,
+  TILE_SIZE,
+  computeViewportTiles,
+  generateRandomRouteForBounds,
+  resizeRouteToBounds,
+}} from {json.dumps(core_path.as_uri())};
+
+// 1. Generate route at narrow mobile width (375x820), then expand to wide desktop / zoomed-out width (1600x900)
+const narrowRoute = generateRandomRouteForBounds(375, 820);
+const expandedRoute = resizeRouteToBounds(narrowRoute, 1600, 900);
+
+if (expandedRoute.stopCount !== narrowRoute.stopCount) {{
+  throw new Error("Expected resizeRouteToBounds to preserve stopCount");
+}}
+if (expandedRoute.width !== 1600 || expandedRoute.height !== 900) {{
+  throw new Error("Expected expandedRoute dimensions to be 1600x900, got: " + expandedRoute.width + "x" + expandedRoute.height);
+}}
+
+const maxStopX = Math.max(...expandedRoute.stops.map((s) => s.x));
+const minStopX = Math.min(...expandedRoute.stops.map((s) => s.x));
+if (maxStopX < 900 || minStopX > 600) {{
+  throw new Error(`Expected resized stops to span wide viewport, got minX=${{minStopX}}, maxX=${{maxStopX}}`);
+}}
+if (!expandedRoute.svgPath.startsWith("M ") || !expandedRoute.returnHomeSvgPath.startsWith("M ")) {{
+  throw new Error("Expected updated SVG paths after resize");
+}}
+
+// 2. Verify tile coverage across narrow -> expanded widths
+for (const [w, h] of [[375, 820], [1600, 900], [2560, 1440]]) {{
+  const tiles = computeViewportTiles(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_ZOOM, w, h);
+  const minLeft = Math.min(...tiles.map((t) => t.left));
+  const maxRight = Math.max(...tiles.map((t) => t.left + TILE_SIZE));
+  const minTop = Math.min(...tiles.map((t) => t.top));
+  const maxBottom = Math.max(...tiles.map((t) => t.top + TILE_SIZE));
+  if (minLeft > 0 || maxRight < w || minTop > 0 || maxBottom < h) {{
+    throw new Error(`Tiles did not cover full ${{w}}x${{h}} viewport: [${{minLeft}}..${{maxRight}}] x [${{minTop}}..${{maxBottom}}]`);
+  }}
+}}
+"""
+    proc = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 0, f"Resize Node test failed: {proc.stderr}"
+
+
+def test_hero_map_restack_and_return_buttons_are_not_blocked_by_stacking_context() -> None:
+    import re
+
+    component_path = SITE_DIR / "src" / "components" / "hero-map" / "HeroMapBackground.astro"
+    component_text = component_path.read_text(encoding="utf-8")
+
+    root_rule_match = re.search(r"\.ts-hero-map-root\s*\{([^}]*)\}", component_text)
+    assert root_rule_match is not None, "Missing .ts-hero-map-root CSS rule"
+    root_rule_body = root_rule_match.group(1)
+    assert "z-index" not in root_rule_body, (
+        ".ts-hero-map-root must not set z-index (which creates a stacking context below .site-container.z-10 and blocks clicks on .ts-hero-map-badge)"
+    )
+
+    badge_rule_match = re.search(r"\.ts-hero-map-badge\s*\{([^}]*)\}", component_text)
+    assert badge_rule_match is not None, "Missing .ts-hero-map-badge CSS rule"
+    assert "z-index: 30" in badge_rule_match.group(1) or "z-index: 20" in badge_rule_match.group(1)
+
+    # Click handlers must be registered before awaiting fetch("/api/apple-maps-config.json")
+    restack_listener_pos = component_text.index('restackBtn?.addEventListener("click"')
+    fetch_config_pos = component_text.index('fetch("/api/apple-maps-config.json"')
+    assert restack_listener_pos < fetch_config_pos, (
+        "restackBtn click listener must be attached synchronously before awaiting /api/apple-maps-config.json"
+    )
+
+
+def test_site_defaults_to_dark_mode() -> None:
+    base_layout = (SITE_DIR / "src" / "layouts" / "BaseLayout.astro").read_text(encoding="utf-8")
+    assert 'class="dark"' in base_layout, "Expected <html> in BaseLayout.astro to default to class='dark'"
+
+    base_head = (SITE_DIR / "src" / "layouts" / "BaseHead.astro").read_text(encoding="utf-8")
+    init_theme_branch = base_head.split("if (!colorTheme)")[1].split("} else {")[0]
+    assert 'document.documentElement.classList.add("dark")' in init_theme_branch
+    assert 'localStorage.setItem("colorTheme", "dark")' in init_theme_branch
+    assert 'localStorage.setItem("colorTheme", "light")' not in init_theme_branch
+
+    theme_toggle = (
+        SITE_DIR / "src" / "components" / "ThemeToggle" / "ThemeToggle.astro"
+    ).read_text(encoding="utf-8")
+    assert 'colorTheme !== "light"' in theme_toggle
+
+    for form_name in ("WaitlistForm.astro", "LoginForm.astro", "SignupForm.astro"):
+        form_text = (SITE_DIR / "src" / "components" / "Forms" / form_name).read_text(
+            encoding="utf-8"
+        )
+        assert 'getClerkAppearance("dark"' in form_text, (
+            f"Expected {form_name} to default initialAppearance to dark mode"
+        )
+
+
+
+
