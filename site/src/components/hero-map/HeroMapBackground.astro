@@ -241,29 +241,33 @@ const initialRoute = generateRandomRouteForBounds(
 
   <!-- Bottom-Right Apple Maps & Live Route Status Pill -->
   <div class="ts-hero-map-badge">
-    <span class="ts-hero-map-dot"></span>
-    <span data-map-location-label>Apple Maps • Portland, OR</span>
-    <span class="ts-hero-map-sep">•</span>
-    <span data-map-stop-count class="ts-hero-map-stops">
-      {`${initialRoute.stopCount} Stops`}
-    </span>
-    <button
-      type="button"
-      data-map-return-home-btn
-      class="ts-hero-map-btn ts-hero-map-btn-return"
-      aria-pressed={String(returnToHome)}
-      title="Toggle Return-to-Home leg from final stop back to Stop 1"
-    >
-      {returnToHome ? "⌂ Return: On" : "⌂ Return: Off"}
-    </button>
-    <button
-      type="button"
-      data-map-restack-btn
-      class="ts-hero-map-btn"
-      title="Generate a new random multi-stop route within screen bounds"
-    >
-      ↻ Re-Stack
-    </button>
+    <div class="ts-hero-map-status">
+      <span class="ts-hero-map-dot"></span>
+      <span data-map-location-label class="ts-hero-map-location">Apple Maps • Portland, OR</span>
+      <span class="ts-hero-map-sep">•</span>
+      <span data-map-stop-count class="ts-hero-map-stops">
+        {`${initialRoute.stopCount} Stops`}
+      </span>
+    </div>
+    <div class="ts-hero-map-actions">
+      <button
+        type="button"
+        data-map-return-home-btn
+        class="ts-hero-map-btn ts-hero-map-btn-return"
+        aria-pressed={String(returnToHome)}
+        title="Toggle Return-to-Home leg from final stop back to Stop 1"
+      >
+        {returnToHome ? "⌂ Return: On" : "⌂ Return: Off"}
+      </button>
+      <button
+        type="button"
+        data-map-restack-btn
+        class="ts-hero-map-btn"
+        title="Generate a new random multi-stop route within screen bounds"
+      >
+        ↻ Re-Stack
+      </button>
+    </div>
   </div>
 </div>
 
@@ -322,6 +326,7 @@ const initialRoute = generateRandomRouteForBounds(
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
+    max-width: calc(100% - 2rem);
     padding: 0.28rem 0.75rem;
     border-radius: 9999px;
     border: 1px solid rgba(68, 192, 197, 0.35);
@@ -335,26 +340,52 @@ const initialRoute = generateRandomRouteForBounds(
     pointer-events: auto;
   }
 
+  .ts-hero-map-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .ts-hero-map-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
   .ts-hero-map-dot {
     display: inline-block;
     width: 7px;
     height: 7px;
+    flex-shrink: 0;
     border-radius: 9999px;
     background-color: #77c57f;
   }
 
+  .ts-hero-map-location {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .ts-hero-map-sep {
+    flex-shrink: 0;
     color: #44c0c5;
   }
 
   .ts-hero-map-stops {
+    flex-shrink: 0;
     font-weight: 700;
+    white-space: nowrap;
     color: #ffde59;
   }
 
   .ts-hero-map-btn {
-    margin-left: 0.2rem;
-    padding: 0.12rem 0.5rem;
+    flex-shrink: 0;
+    margin-left: 0.1rem;
+    padding: 0.16rem 0.55rem;
     border-radius: 9999px;
     border: none;
     background-color: #1a2e35;
@@ -362,6 +393,7 @@ const initialRoute = generateRandomRouteForBounds(
     font-family: inherit;
     font-size: 10px;
     font-weight: 700;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
   }
@@ -374,6 +406,39 @@ const initialRoute = generateRandomRouteForBounds(
   .ts-hero-map-btn-return[aria-pressed="true"] {
     background-color: rgba(255, 222, 89, 0.16);
     color: #ffde59;
+  }
+
+  @media (max-width: 639px) {
+    .ts-hero-map-badge {
+      left: 50%;
+      right: auto;
+      bottom: 0.75rem;
+      transform: translateX(-50%);
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      width: max-content;
+      max-width: calc(100% - 2rem);
+      padding: 0.45rem 0.75rem;
+      border-radius: 1rem;
+    }
+
+    .ts-hero-map-status {
+      max-width: 100%;
+      justify-content: center;
+    }
+
+    .ts-hero-map-actions {
+      width: 100%;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+
+    .ts-hero-map-btn {
+      margin-left: 0;
+      padding: 0.24rem 0.65rem;
+      font-size: 10.5px;
+    }
   }
 </style>
 

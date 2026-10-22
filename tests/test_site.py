@@ -841,3 +841,39 @@ if (
         check=False,
     )
     assert proc.returncode == 0, f"Avatar Node test failed: {proc.stderr}"
+
+
+def test_hero_mobile_stats_and_map_badge_responsive_layout() -> None:
+    index_page = (SITE_DIR / "src" / "pages" / "index.astro").read_text(encoding="utf-8")
+    assert "data-hero-stats" in index_page, (
+        "Expected data-hero-stats container on the 1 Block / Low-Stress / 1-Tap section"
+    )
+    assert "grid-cols-1" in index_page and "sm:grid-cols-3" in index_page, (
+        "Expected hero stats to stack in 1 column on mobile and 3 columns on sm+ screens"
+    )
+    for label in ("1 Block", "Low-Stress", "1-Tap"):
+        assert label in index_page
+
+    assert "EFFORTLESS ERRAND PLANNING" not in index_page, (
+        "Top eyebrow bubble should be removed from hero section"
+    )
+    assert "CALM OVER COMPLEXITY" not in index_page, (
+        "Top eyebrow bubble should be removed from hero section"
+    )
+
+    hero_map = (
+        SITE_DIR / "src" / "components" / "hero-map" / "HeroMapBackground.astro"
+    ).read_text(encoding="utf-8")
+    assert "ts-hero-map-status" in hero_map, (
+        "Expected status wrapper inside .ts-hero-map-badge for clean mobile wrapping"
+    )
+    assert "ts-hero-map-actions" in hero_map, (
+        "Expected actions wrapper inside .ts-hero-map-badge for clean mobile button grouping"
+    )
+    assert "@media (max-width: 639px)" in hero_map, (
+        "Expected mobile-specific responsive rules for .ts-hero-map-badge"
+    )
+    assert "max-width: calc(100% - 1.5rem)" in hero_map or "max-width: calc(100% - 2rem)" in hero_map, (
+        "Expected .ts-hero-map-badge to stay constrained within mobile viewport width"
+    )
+

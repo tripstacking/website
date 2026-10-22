@@ -15,72 +15,72 @@ const siteData = getTranslatedData("siteData", currLocale);
   <!-- HERO: Dark Section (#0F1D22 Harbor Night / #1A2E35 Harbor Slate) -->
   <section id="hero-nova" class="dark relative mt-[4.5rem] overflow-clip bg-[#0F1D22] text-[#F7FBF9]">
     <HeroMapBackground variant="dark" />
-    <div class="site-container relative z-10 mx-auto px-4 pt-12 pb-20 md:py-24">
+    <div class="site-container relative z-10 mx-auto px-4 pt-12 pb-28 sm:pb-24 md:py-24">
       <div class="-mx-4 flex max-w-7xl flex-wrap items-center">
         <!-- Left: Stacked Trip Interactive Card Preview -->
         <div class="mb-14 w-full px-4 md:mb-0 md:w-1/2 lg:pr-10">
-          <div class="relative mx-auto max-w-lg rounded-3xl border border-[#243E47] bg-[#1A2E35] p-6 shadow-2xl">
-            <div class="mb-5 flex items-center justify-between border-b border-[#243E47] pb-4">
-              <div class="flex items-center gap-3">
+          <div class="relative mx-auto max-w-lg rounded-3xl border border-[#243E47] bg-[#1A2E35] p-4 shadow-2xl sm:p-6">
+            <div class="mb-5 flex items-center justify-between gap-2 border-b border-[#243E47] pb-4">
+              <div class="flex min-w-0 items-center gap-3">
                 <img
                   src="/brand/logo-mark.svg"
                   alt="Trip Stacking Stacked Route Mark"
                   width="48"
                   height="48"
                   fetchpriority="high"
-                  class="size-12 rounded-xl"
+                  class="size-11 shrink-0 rounded-xl sm:size-12"
                 />
-                <div>
-                  <span class="block text-xs font-semibold tracking-wider text-[#44C0C5] uppercase">
+                <div class="min-w-0">
+                  <span class="block truncate text-[11px] font-semibold tracking-wider text-[#44C0C5] uppercase sm:text-xs">
                     Consolidated Calendar Event
                   </span>
-                  <h2 class="text-lg font-bold text-[#F7FBF9]">Tuesday Afternoon Stack</h2>
+                  <h2 class="truncate text-base font-bold text-[#F7FBF9] sm:text-lg">Tuesday Afternoon Stack</h2>
                 </div>
               </div>
-              <span class="rounded-full bg-[#FFDE59] px-3 py-1 font-mono text-xs font-bold text-[#1A2E35]">
+              <span class="shrink-0 rounded-full bg-[#FFDE59] px-2.5 py-1 font-mono text-[11px] font-bold whitespace-nowrap text-[#1A2E35] sm:px-3 sm:text-xs">
                 2:00 – 3:15 PM
               </span>
             </div>
 
             <!-- 3 Stacked Errand Pills -->
             <div class="space-y-3">
-              <div class="flex items-center justify-between rounded-2xl border border-[#FFDE59]/40 bg-[#0F1D22]/90 p-3.5">
-                <div class="flex items-center gap-3">
-                  <span class="flex size-7 items-center justify-center rounded-full bg-[#FFDE59] font-mono text-xs font-extrabold text-[#1A2E35]">
+              <div class="flex items-center justify-between gap-2 rounded-2xl border border-[#FFDE59]/40 bg-[#0F1D22]/90 p-3 sm:p-3.5">
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#FFDE59] font-mono text-xs font-extrabold text-[#1A2E35]">
                     1
                   </span>
-                  <div>
+                  <div class="min-w-0">
                     <p class="text-sm font-bold text-[#F7FBF9]">First Federal Bank</p>
                     <p class="text-xs text-[#B5CCC5]">Closes 4:00 PM • Before Hardware Store</p>
                   </div>
                 </div>
-                <span class="font-mono text-xs text-[#FFDE59]">15m dwell</span>
+                <span class="shrink-0 font-mono text-xs whitespace-nowrap text-[#FFDE59]">15m dwell</span>
               </div>
 
-              <div class="ml-5 flex items-center justify-between rounded-2xl border border-[#77C57F]/50 bg-[#0F1D22]/90 p-3.5">
-                <div class="flex items-center gap-3">
-                  <span class="flex size-7 items-center justify-center rounded-full bg-[#77C57F] font-mono text-xs font-extrabold text-[#1A2E35]">
+              <div class="ml-3 flex items-center justify-between gap-2 rounded-2xl border border-[#77C57F]/50 bg-[#0F1D22]/90 p-3 sm:ml-5 sm:p-3.5">
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#77C57F] font-mono text-xs font-extrabold text-[#1A2E35]">
                     2
                   </span>
-                  <div>
+                  <div class="min-w-0">
                     <p class="text-sm font-bold text-[#F7FBF9]">Pacific Hardware & Supply</p>
                     <p class="text-xs text-[#B5CCC5]">Low-Crowd Window • 0 Left Turns</p>
                   </div>
                 </div>
-                <span class="font-mono text-xs text-[#77C57F]">20m dwell</span>
+                <span class="shrink-0 font-mono text-xs whitespace-nowrap text-[#77C57F]">20m dwell</span>
               </div>
 
-              <div class="flex items-center justify-between rounded-2xl border border-[#44C0C5]/50 bg-[#0F1D22]/90 p-3.5">
-                <div class="flex items-center gap-3">
-                  <span class="flex size-7 items-center justify-center rounded-full bg-[#44C0C5] font-mono text-xs font-extrabold text-[#1A2E35]">
+              <div class="flex items-center justify-between gap-2 rounded-2xl border border-[#44C0C5]/50 bg-[#0F1D22]/90 p-3 sm:p-3.5">
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#44C0C5] font-mono text-xs font-extrabold text-[#1A2E35]">
                     3
                   </span>
-                  <div>
+                  <div class="min-w-0">
                     <p class="text-sm font-bold text-[#F7FBF9]">Harbor Market Groceries</p>
                     <p class="text-xs text-[#B5CCC5]">Pinned Last • Perishables Cold</p>
                   </div>
                 </div>
-                <span class="font-mono text-xs text-[#44C0C5]">25m dwell</span>
+                <span class="shrink-0 font-mono text-xs whitespace-nowrap text-[#44C0C5]">25m dwell</span>
               </div>
             </div>
 
@@ -93,10 +93,6 @@ const siteData = getTranslatedData("siteData", currLocale);
 
         <!-- Right: Headline & Intro -->
         <div class="w-full px-4 md:w-1/2 lg:pl-8">
-          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#44C0C5]/40 bg-[#1A2E35] px-3.5 py-1 text-xs font-semibold text-[#44C0C5]">
-            <span class="size-2 rounded-full bg-[#FFDE59]"></span>
-            <span>EFFORTLESS ERRAND PLANNING • CALM OVER COMPLEXITY</span>
-          </div>
           <h1 class="mb-6 font-sans text-[clamp(1.75rem,8vw,2.75rem)] leading-tight font-extrabold tracking-tight text-[#F7FBF9] md:text-[clamp(1.75rem,3.4vw,3.25rem)]">
             <span class="block whitespace-nowrap">STACK YOUR STOPS.</span>
             <span class="block whitespace-nowrap">OWN YOUR WEEK.</span>
@@ -112,18 +108,33 @@ const siteData = getTranslatedData("siteData", currLocale);
               Explore Features
             </Button>
           </div>
-          <div class="mt-8 grid grid-cols-3 gap-4 border-t border-[#243E47] pt-6 text-left">
-            <div>
-              <p class="font-mono text-xl font-bold text-[#44C0C5]">1 Block</p>
-              <p class="text-xs text-[#B5CCC5]">Per stacked trip on your calendar</p>
+          <div
+            data-hero-stats
+            class="mt-8 grid grid-cols-1 gap-2.5 border-t border-[#243E47] pt-6 text-left sm:grid-cols-3 sm:gap-3 lg:gap-4"
+          >
+            <div class="flex items-center gap-3 rounded-xl border border-[#243E47]/80 bg-[#1A2E35]/80 px-3.5 py-2.5 backdrop-blur-xs sm:block sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <p class="min-w-[6.75rem] shrink-0 font-mono text-base font-bold whitespace-nowrap text-[#44C0C5] sm:min-w-0 sm:text-base lg:text-xl">
+                1 Block
+              </p>
+              <p class="text-xs leading-snug text-[#B5CCC5] sm:mt-1">
+                Per stacked trip on your calendar
+              </p>
             </div>
-            <div>
-              <p class="font-mono text-xl font-bold text-[#77C57F]">Low-Stress</p>
-              <p class="text-xs text-[#B5CCC5]">Minimizes unprotected left turns</p>
+            <div class="flex items-center gap-3 rounded-xl border border-[#243E47]/80 bg-[#1A2E35]/80 px-3.5 py-2.5 backdrop-blur-xs sm:block sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <p class="min-w-[6.75rem] shrink-0 font-mono text-base font-bold whitespace-nowrap text-[#77C57F] sm:min-w-0 sm:text-base lg:text-xl">
+                Low-Stress
+              </p>
+              <p class="text-xs leading-snug text-[#B5CCC5] sm:mt-1">
+                Minimizes unprotected left turns
+              </p>
             </div>
-            <div>
-              <p class="font-mono text-xl font-bold text-[#FFDE59]">1-Tap</p>
-              <p class="text-xs text-[#B5CCC5]">In-App Route View & CarPlay</p>
+            <div class="flex items-center gap-3 rounded-xl border border-[#243E47]/80 bg-[#1A2E35]/80 px-3.5 py-2.5 backdrop-blur-xs sm:block sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <p class="min-w-[6.75rem] shrink-0 font-mono text-base font-bold whitespace-nowrap text-[#FFDE59] sm:min-w-0 sm:text-base lg:text-xl">
+                1-Tap
+              </p>
+              <p class="text-xs leading-snug text-[#B5CCC5] sm:mt-1">
+                In-App Route View & CarPlay
+              </p>
             </div>
           </div>
         </div>
