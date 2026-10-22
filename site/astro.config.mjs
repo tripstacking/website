@@ -42,6 +42,9 @@ export default defineConfig({
   },
   integrations: [
     clerk({
+      publishableKey:
+        process.env.PUBLIC_CLERK_PUBLISHABLE_KEY ||
+        "pk_test_ZnVubnktdnVsdHVyZS04MDE0LmNsZXJrLmFjY291bnRzLmRldiQ",
       signInUrl: "/login",
       signUpUrl: "/signup",
       waitlistUrl: "/waitlist",

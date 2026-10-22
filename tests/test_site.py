@@ -46,6 +46,7 @@ def test_clerk_and_cloudflare_workers_configuration() -> None:
     wrangler_text = (SITE_DIR / "wrangler.jsonc").read_text(encoding="utf-8")
     assert "nodejs_compat" in wrangler_text
     assert "@astrojs/cloudflare/entrypoints/server" in wrangler_text
+    assert '"keep_vars": true' in wrangler_text
 
     middleware_text = (SITE_DIR / "src" / "middleware.ts").read_text(encoding="utf-8")
     assert "clerkMiddleware" in middleware_text
@@ -62,6 +63,7 @@ def test_clerk_and_cloudflare_workers_configuration() -> None:
     workflow_text = workflow_path.read_text(encoding="utf-8")
     assert "working-directory: site" in workflow_text
     assert "workingDirectory: site" in workflow_text
+    assert "PUBLIC_CLERK_PUBLISHABLE_KEY" in workflow_text
     for removed in ("zenith", "atlas", "galaxy", "amplify"):
         assert removed not in workflow_text.lower()
 
