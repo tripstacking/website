@@ -137,6 +137,43 @@ export function buildFallbackTileUrl({ x, y, z = DEFAULT_ZOOM, dark = true }) {
   return `https://${sub}.basemaps.cartocdn.com/rastertiles/${style}/${z}/${x}/${y}@2x.png`;
 }
 
+/**
+ * Determine whether an existing loaded tile `<img>` can be reused as-is without
+ * updating its `src`. Returns false if the element is currently showing a fallback
+ * tile while a distinct Apple Maps `primaryUrl` is available and has not failed.
+ */
+export function shouldReuseLoadedTile({
+  currentSrc = "",
+  primaryUrl = "",
+  complete = false,
+  naturalWidth = 0,
+  failedPrimarySrc = "",
+} = {}) {
+  if (!complete || naturalWidth <= 0 || !currentSrc) {
+    return false;
+  }
+  if (currentSrc === primaryUrl) {
+    return true;
+  }
+  return Boolean(failedPrimarySrc && failedPrimarySrc === primaryUrl);
+}
+
+/**
+ * Resolve the target `src` for a tile `<img>` element, upgrading fallback tiles
+ * to `primaryUrl` unless `primaryUrl` already failed to load.
+ */
+export function resolveTileImageSrc({
+  currentSrc = "",
+  primaryUrl = "",
+  fallbackUrl = "",
+  failedPrimarySrc = "",
+} = {}) {
+  if (primaryUrl && failedPrimarySrc !== primaryUrl) {
+    return primaryUrl;
+  }
+  return fallbackUrl || currentSrc;
+}
+
 function distanceBetween(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
