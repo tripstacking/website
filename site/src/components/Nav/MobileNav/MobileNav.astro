@@ -1,11 +1,13 @@
 ---
+import { Show, SignOutButton } from "@clerk/astro/components";
 import Button from "@components/Button/Button.astro";
 import MobileNavDropdown from "@components/Nav/MobileNav/MobileNavDropdown.astro";
 //components
 import NavLink from "@components/Nav/NavLink.astro";
+import UserWaitlistAvatar from "@components/Profile/UserWaitlistAvatar.astro";
 import ThemeToggle from "@components/ThemeToggle/ThemeToggle.astro";
 import { getLocaleFromUrl } from "@js/localeUtils";
-import { getTranslatedData } from "@js/translationUtils";
+import { getLocalizedRoute, getTranslatedData } from "@js/translationUtils";
 import { Icon } from "astro-icon/components";
 
 const currLocale = getLocaleFromUrl(Astro.url);
@@ -65,7 +67,18 @@ const navData = getTranslatedData("navData", currLocale);
         </ul>
       </nav>
       <div class="mx-1 mt-3 flex flex-col gap-3 px-4">
-        <Button variant="secondary" class="py-3" href="/login"> Login </Button>
+        <Show when="signed-in" isStatic={true}>
+          <div class="flex flex-col gap-3">
+            <UserWaitlistAvatar label="Waitlist" class="w-full justify-between" />
+            <SignOutButton
+              redirectUrl={getLocalizedRoute(currLocale, "/")}
+              data-clerk-logout-btn
+              class="button button--secondary w-full cursor-pointer py-3"
+            >
+              Logout
+            </SignOutButton>
+          </div>
+        </Show>
         <Button
           variant="primary"
           class="w-full py-3 shadow-none"

@@ -5,6 +5,9 @@ minimumReleaseAgeExclude:
   - astro@7.4.1
   - miniflare@5.20261019.0-beta
   - wrangler@4.151.2
+  - "@clerk/astro@4.1.15"
+  - "@clerk/backend@3.26.0"
+  - "@clerk/shared@4.41.0"
 
 allowBuilds:
   esbuild: true

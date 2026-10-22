@@ -1,8 +1,10 @@
 ---
+import { Show, SignOutButton } from "@clerk/astro/components";
 import Button from "@components/Button/Button.astro";
 import MobileNav from "@components/Nav/MobileNav/MobileNav.astro";
 import MegaMenuDropdownToggle from "@components/Nav/NavDropdown/MegaMenuDropdownToggle.astro";
 import NavLink from "@components/Nav/NavLink.astro";
+import UserWaitlistAvatar from "@components/Profile/UserWaitlistAvatar.astro";
 import SiteLogo from "@components/SiteLogo/SiteLogo.astro";
 import ThemeToggle from "@components/ThemeToggle/ThemeToggle.astro";
 import { getLocaleFromUrl } from "@js/localeUtils";
@@ -58,19 +60,22 @@ const navData = getTranslatedData("navData", currLocale);
             </ul>
           </nav>
 
-          <ThemeToggle class="my-auto -ml-4 hidden md:block" />
+          <ThemeToggle class="my-auto mr-3 -ml-4 hidden md:block" />
 
           <!-- spacer if desired -->
           <!-- <div class="mr-2 ml-4 my-2 border-l border-base-300 dark:border-base-700">
           </div> -->
 
-          <Button
-            variant="ghost"
-            class="nav__link--base relative mr-2 hidden items-center gap-1.5 rounded-sm px-4 py-2 transition duration-200 md:flex"
-            href={getLocalizedRoute(currLocale, "/login")}
-          >
-            Login
-          </Button>
+          <Show when="signed-in" isStatic={true} class="my-auto hidden items-center gap-2 md:flex">
+            <UserWaitlistAvatar label="Waitlist" />
+            <SignOutButton
+              redirectUrl={getLocalizedRoute(currLocale, "/")}
+              data-clerk-logout-btn
+              class="button button--ghost nav__link--base relative mr-2 flex cursor-pointer items-center gap-1.5 rounded-sm px-4 py-2 transition duration-200"
+            >
+              Logout
+            </SignOutButton>
+          </Show>
 
           <Button
             variant="primary"

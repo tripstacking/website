@@ -1,0 +1,131 @@
+---
+import { SignOutButton } from "@clerk/astro/components";
+import { resolveUserAvatar } from "@js/avatarUtils.mjs";
+
+interface Props {
+  showSignOut?: boolean;
+  label?: string;
+  compact?: boolean;
+  class?: string;
+}
+
+const {
+  showSignOut = false,
+  label = "Waitlist",
+  compact = false,
+  class: className = "",
+} = Astro.props as Props;
+
+let initialUser = null;
+try {
+  if (typeof Astro.locals?.currentUser === "function") {
+    initialUser = await Astro.locals.currentUser();
+  }
+} catch {
+  initialUser = null;
+}
+
+const initialAvatar = resolveUserAvatar(initialUser);
+---
+
+<div
+  data-user-waitlist-widget
+  class:list={[
+    "border-primary-300 bg-primary-50/90 text-base-900 dark:border-primary-400/40 dark:bg-base-900/90 dark:text-base-50 inline-flex items-center gap-2.5 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-2xs transition-colors duration-200",
+    className,
+  ]}
+>
+  <img
+    data-user-avatar-img
+    src={initialAvatar.url}
+    alt={initialAvatar.displayName}
+    width="28"
+    height="28"
+    referrerpolicy="no-referrer"
+    class="border-primary-500 dark:border-primary-400 size-7 shrink-0 rounded-full border object-cover"
+  />
+  <div class="flex flex-col text-left leading-tight">
+    {
+      !compact && (
+        <span
+          data-user-avatar-name
+          class="text-base-900 dark:text-base-50 max-w-[9rem] truncate font-bold"
+        >
+          {initialAvatar.displayName}
+        </span>
+      )
+    }
+    <span
+      data-user-avatar-badge
+      data-avatar-source={initialAvatar.source}
+      class="text-primary-700 dark:text-accent-300 inline-flex items-center gap-1 text-[11px] font-semibold"
+    >
+      <span class="bg-secondary-600 dark:bg-secondary-400 size-1.5 rounded-full"></span>
+      <span>{label}</span>
+    </span>
+  </div>
+  {
+    showSignOut && (
+      <SignOutButton
+        redirectUrl="/"
+        data-clerk-logout-btn
+        class="border-base-300 bg-base-50 text-base-700 hover:border-primary-500 hover:text-primary-700 dark:border-base-800 dark:bg-base-950 dark:text-base-300 dark:hover:border-primary-400 dark:hover:text-base-50 ml-1 cursor-pointer rounded-full border px-2.5 py-1 text-[11px] font-medium transition"
+      >
+        Logout
+      </SignOutButton>
+    )
+  }
+</div>
+
+<script>
+  import { $userStore } from "@clerk/astro/client";
+  import { resolveUserAvatar } from "@js/avatarUtils.mjs";
+
+  function syncUserWaitlistAvatars(user: unknown) {
+    if (!user) return;
+    const resolved = resolveUserAvatar(user);
+    document.querySelectorAll("[data-user-waitlist-widget]").forEach((widget) => {
+      const img = widget.querySelector<HTMLImageElement>("[data-user-avatar-img]");
+      const nameEl = widget.querySelector<HTMLElement>("[data-user-avatar-name]");
+      const badgeEl = widget.querySelector<HTMLElement>("[data-user-avatar-badge]");
+      if (img) {
+        img.src = resolved.url;
+        img.alt = resolved.displayName;
+      }
+      if (nameEl) {
+        nameEl.textContent = resolved.displayName;
+      }
+      if (badgeEl) {
+        badgeEl.dataset.avatarSource = resolved.source;
+      }
+    });
+  }
+
+  function bindClerkLogoutButtons() {
+    document.querySelectorAll<HTMLElement>("[data-clerk-logout-btn]").forEach((btn) => {
+      if (btn.dataset.clerkLogoutBound === "true") return;
+      btn.dataset.clerkLogoutBound = "true";
+      btn.addEventListener("click", () => {
+        if (window.Clerk && typeof window.Clerk.signOut === "function") {
+          window.Clerk.signOut({ redirectUrl: "/" });
+        }
+      });
+    });
+  }
+
+  function initUserWaitlistAvatars() {
+    bindClerkLogoutButtons();
+    const current = $userStore.get();
+    if (current) {
+      syncUserWaitlistAvatars(current);
+    }
+    $userStore.subscribe((user) => {
+      if (user) {
+        syncUserWaitlistAvatars(user);
+      }
+    });
+  }
+
+  initUserWaitlistAvatars();
+  document.addEventListener("astro:after-swap", initUserWaitlistAvatars);
+</script>

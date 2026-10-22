@@ -1,17 +1,27 @@
+import cloudflare from "@astrojs/cloudflare";
 import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import clerk from "@clerk/astro";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, sessionDrivers } from "astro/config";
 import icon from "astro-icon";
 
 import { appleMapsVitePlugin } from "./src/components/hero-map/appleMapsVitePlugin.mjs";
+import { getClerkAppearance } from "./src/js/clerkTheme.mjs";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://tripstacking.com",
-  output: "static",
+  output: "server",
+  adapter: cloudflare({
+    imageService: "compile",
+    prerenderEnvironment: "node",
+  }),
+  session: {
+    driver: sessionDrivers.memory(),
+  },
   server: {
     host: "127.0.0.1",
     port: 4321,
@@ -31,6 +41,12 @@ export default defineConfig({
     },
   },
   integrations: [
+    clerk({
+      signInUrl: "/login",
+      signUpUrl: "/signup",
+      waitlistUrl: "/waitlist",
+      appearance: getClerkAppearance("light"),
+    }),
     mdx(),
     react(),
     icon(),
@@ -38,6 +54,34 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss(), appleMapsVitePlugin()],
+    optimizeDeps: {
+      include: [
+        "@clerk/astro/client",
+        "@clerk/astro/internal",
+        "@clerk/astro/server",
+        "astro-icon > @iconify/utils",
+      ],
+      exclude: [
+        "@clerk/astro/components",
+        "astro-icon/components",
+        "astro-seo",
+      ],
+    },
+    ssr: {
+      optimizeDeps: {
+        include: [
+          "@clerk/astro/client",
+          "@clerk/astro/internal",
+          "@clerk/astro/server",
+          "astro-icon > @iconify/utils",
+        ],
+        exclude: [
+          "@clerk/astro/components",
+          "astro-icon/components",
+          "astro-seo",
+        ],
+      },
+    },
     build: {
       target: "es2022",
     },

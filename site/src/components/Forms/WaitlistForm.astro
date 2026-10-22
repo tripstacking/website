@@ -1,0 +1,301 @@
+---
+import { Show, Waitlist } from "@clerk/astro/components";
+import Button from "@components/Button/Button.astro";
+import UserWaitlistAvatar from "@components/Profile/UserWaitlistAvatar.astro";
+import { getClerkAppearance } from "@js/clerkTheme.mjs";
+import { getLocaleFromUrl } from "@js/localeUtils";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const initialAppearance = getClerkAppearance("light", { hideHeader: false });
+const tierParam = Astro.url.searchParams.get("tier") || Astro.url.searchParams.get("waitlist") || "";
+const tierLabel =
+  tierParam === "local-pro"
+    ? "Local Pro Tier • Waitlist"
+    : tierParam === "free"
+      ? "Free Tier • Waitlist"
+      : "Waitlist Access";
+---
+
+<div class="mx-auto w-full max-w-lg pb-16" data-waitlist-root data-waitlist-tier={tierParam}>
+  <div class="mb-8 text-center">
+    <span
+      data-waitlist-tier-badge
+      class="bg-primary-100 text-primary-700 dark:bg-base-900 dark:text-primary-400 mb-3 inline-block rounded-full px-3.5 py-1 text-xs font-bold tracking-wider uppercase"
+    >
+      {tierLabel}
+    </span>
+    <h1 data-waitlist-page-heading class="h2 mb-3 text-4xl md:text-5xl">Join the Waitlist</h1>
+    <p data-waitlist-page-subheading class="description text-base tracking-tight">
+      Enter your email to reserve your spot on the Trip Stacking waitlist. We'll send your invite as
+      soon as your tier opens up.
+    </p>
+  </div>
+
+  <Show when="signed-out" isStatic={true}>
+    <div data-waitlist-container class="flex flex-col items-center gap-6">
+      <!-- Shown when user has already submitted the waitlist in this browser -->
+      <div
+        data-waitlist-already-joined
+        class="border-base-200 dark:border-base-800 dark:bg-base-900 hidden w-full rounded-2xl border bg-white p-8 text-center shadow-sm"
+      >
+        <div class="mb-4 flex justify-center">
+          <div class="border-primary-300 bg-primary-50/90 text-base-900 dark:border-primary-400/40 dark:bg-base-950/90 dark:text-base-50 inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold">
+            <img
+              data-waitlist-saved-avatar
+              src="https://www.gravatar.com/avatar/00000000000000000000000000000000?s=80&d=mp"
+              alt="Waitlist member avatar"
+              width="28"
+              height="28"
+              referrerpolicy="no-referrer"
+              class="border-primary-500 dark:border-primary-400 size-7 shrink-0 rounded-full border object-cover"
+            />
+            <div class="flex flex-col text-left leading-tight">
+              <span
+                data-waitlist-saved-email
+                class="text-base-900 dark:text-base-50 max-w-[13rem] truncate font-bold"
+              >
+                Waitlist Member
+              </span>
+              <span class="text-primary-700 dark:text-accent-300 inline-flex items-center gap-1 text-[11px] font-semibold">
+                <span class="bg-secondary-600 dark:bg-secondary-400 size-1.5 rounded-full"></span>
+                <span data-waitlist-saved-tier>On the Waitlist • Free</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <h2 class="text-base-900 dark:text-base-100 mb-2 text-2xl font-bold">
+          You're Already on the Waitlist
+        </h2>
+        <p data-waitlist-saved-message class="description mb-6 text-sm">
+          Your waitlist spot is reserved. We'll email your invite as soon as your tier opens up.
+        </p>
+        <div class="flex flex-col items-center gap-3">
+          <Button variant="primary" href={getLocalizedRoute(currLocale, "/")}>
+            Back to Home
+          </Button>
+          <button
+            type="button"
+            data-waitlist-reset-btn
+            class="text-base-600 hover:text-primary-700 dark:text-base-400 dark:hover:text-primary-400 cursor-pointer text-xs font-medium underline underline-offset-4"
+          >
+            Join with a different email
+          </button>
+        </div>
+      </div>
+
+      <!-- Clerk Waitlist Form Wrapper -->
+      <div data-waitlist-form-wrapper class="flex w-full flex-col items-center gap-6">
+        <Waitlist
+          signInUrl={getLocalizedRoute(currLocale, "/login")}
+          appearance={initialAppearance}
+        />
+        <div data-waitlist-success-actions class="hidden">
+          <Button variant="primary" href={getLocalizedRoute(currLocale, "/")}>
+            Back to Home
+          </Button>
+        </div>
+        <p class="description text-sm">
+          Already received your invite?{" "}
+          <a
+            href={getLocalizedRoute(currLocale, "/login")}
+            class="text-primary-700 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-semibold underline underline-offset-4"
+          >
+            Sign in here
+          </a>
+        </p>
+      </div>
+    </div>
+  </Show>
+
+  <Show when="signed-in" isStatic={true}>
+    <div class="border-base-200 dark:border-base-800 dark:bg-base-900 rounded-2xl border bg-white p-8 text-center shadow-sm">
+      <div class="mb-4 flex justify-center">
+        <UserWaitlistAvatar showSignOut={true} label="On the Waitlist • Free" />
+      </div>
+      <h2 class="text-base-900 dark:text-base-100 mb-2 text-2xl font-bold">
+        You're Signed In &amp; On the Waitlist
+      </h2>
+      <p class="description mb-6 text-sm">
+        Your waitlist spot is reserved. We'll notify you as soon as your tier opens up.
+      </p>
+      <Button variant="primary" href={getLocalizedRoute(currLocale, "/")}>
+        Back to Home
+      </Button>
+    </div>
+  </Show>
+</div>
+
+<script>
+  import { $isLoadedStore, updateClerkOptions } from "@clerk/astro/client";
+  import { resolveUserAvatar } from "@js/avatarUtils.mjs";
+  import { syncClerkAppearanceWithTheme } from "@js/clerkTheme.mjs";
+  import {
+    clearWaitlistStatus,
+    readWaitlistStatus,
+    saveWaitlistStatus,
+  } from "@js/waitlistStorage.mjs";
+
+  function formatTierDisplay(): string {
+    return "On the Waitlist • Free";
+  }
+
+  function renderAlreadyJoinedView(status: { email: string; tier: string }) {
+    const alreadyJoinedEl = document.querySelector<HTMLElement>("[data-waitlist-already-joined]");
+    const formWrapperEl = document.querySelector<HTMLElement>("[data-waitlist-form-wrapper]");
+    const badgeEl = document.querySelector<HTMLElement>("[data-waitlist-tier-badge]");
+    const headingEl = document.querySelector<HTMLElement>("[data-waitlist-page-heading]");
+    const subheadingEl = document.querySelector<HTMLElement>("[data-waitlist-page-subheading]");
+    const emailEl = document.querySelector<HTMLElement>("[data-waitlist-saved-email]");
+    const tierEl = document.querySelector<HTMLElement>("[data-waitlist-saved-tier]");
+    const avatarEl = document.querySelector<HTMLImageElement>("[data-waitlist-saved-avatar]");
+    const messageEl = document.querySelector<HTMLElement>("[data-waitlist-saved-message]");
+
+    if (!alreadyJoinedEl || !formWrapperEl) return;
+
+    const resolvedAvatar = resolveUserAvatar(
+      status.email ? { primaryEmailAddress: { emailAddress: status.email } } : null,
+    );
+    if (avatarEl) {
+      avatarEl.src = resolvedAvatar.url;
+      avatarEl.alt = resolvedAvatar.displayName;
+    }
+    if (emailEl) {
+      emailEl.textContent = status.email || "Waitlist Member";
+    }
+    if (tierEl) {
+      tierEl.textContent = formatTierDisplay();
+    }
+    if (badgeEl) {
+      badgeEl.textContent = "Free Tier • Waitlist";
+    }
+    if (messageEl && status.email) {
+      messageEl.textContent = `We have ${status.email} reserved on the Trip Stacking Free tier waitlist. We'll email your invite as soon as your spot opens up.`;
+    }
+    if (headingEl) {
+      headingEl.textContent = "You're on the Waitlist";
+    }
+    if (subheadingEl) {
+      subheadingEl.textContent =
+        "Your spot on the Trip Stacking Free tier waitlist is confirmed.";
+    }
+
+    formWrapperEl.classList.add("hidden");
+    alreadyJoinedEl.classList.remove("hidden");
+  }
+
+  function showWaitlistFormView() {
+    const alreadyJoinedEl = document.querySelector<HTMLElement>("[data-waitlist-already-joined]");
+    const formWrapperEl = document.querySelector<HTMLElement>("[data-waitlist-form-wrapper]");
+    const headingEl = document.querySelector<HTMLElement>("[data-waitlist-page-heading]");
+    const subheadingEl = document.querySelector<HTMLElement>("[data-waitlist-page-subheading]");
+
+    if (alreadyJoinedEl) alreadyJoinedEl.classList.add("hidden");
+    if (formWrapperEl) formWrapperEl.classList.remove("hidden");
+    if (headingEl) headingEl.textContent = "Join the Waitlist";
+    if (subheadingEl) {
+      subheadingEl.textContent =
+        "Enter your email to reserve your spot on the Trip Stacking waitlist. We'll send your invite as soon as your tier opens up.";
+    }
+  }
+
+  function watchWaitlistCompletion() {
+    const root = document.querySelector<HTMLElement>("[data-waitlist-root]");
+    const container = document.querySelector<HTMLElement>("[data-waitlist-container]");
+    const successActions = document.querySelector<HTMLElement>("[data-waitlist-success-actions]");
+    const resetBtn = document.querySelector<HTMLElement>("[data-waitlist-reset-btn]");
+    if (!container) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentTier =
+      urlParams.get("tier") || urlParams.get("waitlist") || root?.dataset.waitlistTier || "";
+
+    if (resetBtn && resetBtn.dataset.boundReset !== "true") {
+      resetBtn.dataset.boundReset = "true";
+      resetBtn.addEventListener("click", () => {
+        clearWaitlistStatus();
+        showWaitlistFormView();
+      });
+    }
+
+    const existingStatus = readWaitlistStatus();
+    if (existingStatus?.joined) {
+      renderAlreadyJoinedView(existingStatus);
+      return;
+    }
+
+    let sawForm = false;
+    let capturedEmail = "";
+
+    const trackEmailInputs = () => {
+      const emailInput = container.querySelector<HTMLInputElement>(
+        'input[type="email"], input[name="emailAddress"]',
+      );
+      if (emailInput) {
+        if (emailInput.value) {
+          capturedEmail = emailInput.value.trim();
+        }
+        if (emailInput.dataset.waitlistTracked !== "true") {
+          emailInput.dataset.waitlistTracked = "true";
+          emailInput.addEventListener("input", () => {
+            capturedEmail = emailInput.value.trim();
+          });
+          emailInput.addEventListener("change", () => {
+            capturedEmail = emailInput.value.trim();
+          });
+        }
+      }
+    };
+
+    const checkState = () => {
+      trackEmailInputs();
+      const card = container.querySelector(".cl-card");
+      if (!card) return;
+      const hasForm = !!card.querySelector("form");
+      if (hasForm) {
+        sawForm = true;
+      } else if (sawForm) {
+        saveWaitlistStatus({ email: capturedEmail, tier: currentTier });
+        if (successActions) {
+          successActions.classList.remove("hidden");
+        }
+      }
+    };
+
+    const cardObserver = new MutationObserver(checkState);
+    cardObserver.observe(container, { childList: true, subtree: true });
+    checkState();
+  }
+
+  function syncNowAndAfterMount() {
+    syncClerkAppearanceWithTheme(updateClerkOptions);
+    watchWaitlistCompletion();
+    requestAnimationFrame(() => {
+      syncClerkAppearanceWithTheme(updateClerkOptions);
+      watchWaitlistCompletion();
+    });
+  }
+
+  function setupClerkThemeObserver() {
+    syncNowAndAfterMount();
+
+    $isLoadedStore.subscribe((loaded) => {
+      if (loaded) {
+        syncNowAndAfterMount();
+      }
+    });
+
+    const observer = new MutationObserver(() => {
+      syncClerkAppearanceWithTheme(updateClerkOptions);
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+
+  setupClerkThemeObserver();
+  document.addEventListener("astro:after-swap", setupClerkThemeObserver);
+  document.addEventListener("astro:page-load", syncNowAndAfterMount);
+</script>
