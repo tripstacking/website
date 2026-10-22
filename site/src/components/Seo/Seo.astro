@@ -1,6 +1,7 @@
 ---
 import jsonLDGenerator from "@js/jsonLD";
 import { getLocaleFromUrl } from "@js/localeUtils";
+import { formatPageTitle } from "@js/titleUtils.mjs";
 import { getTranslatedData } from "@js/translationUtils";
 import { getImage } from "astro:assets";
 import { type CollectionEntry } from "astro:content";
@@ -30,6 +31,7 @@ interface BlogProps extends BaseProps {
 }
 
 const { type, title, description, image, noindex = false } = Astro.props as GenProps | BlogProps;
+const formattedTitle = formatPageTitle(title);
 
 let optimizedImage: Awaited<ReturnType<typeof getImage>> | undefined;
 let jsonLD = "";
@@ -75,12 +77,12 @@ const imageUrl =
 ---
 
 <SEO
-  title={title}
+  title={formattedTitle}
   description={description}
   canonical={canonicalUrl.toString()}
   openGraph={{
     basic: {
-      title: title,
+      title: formattedTitle,
       type: "website",
       image: imageUrl,
       url: canonicalUrl.toString(),
@@ -93,14 +95,14 @@ const imageUrl =
       type: "image/webp",
       width: optimizedImage?.attributes.width || "1200",
       height: optimizedImage?.attributes.height || "800",
-      alt: title,
+      alt: formattedTitle,
     },
   }}
   twitter={{
     site: "@" + siteData.author.twitter,
     creator: "@" + siteData.author.twitter,
     card: "summary_large_image",
-    title: title,
+    title: formattedTitle,
     description: description,
     image: imageUrl,
   }}

@@ -2,9 +2,9 @@ import { type SiteDataProps } from "../types/configDataTypes";
 
 // Update this file with your site specific information
 const siteData: SiteDataProps = {
-  name: "French Nova",
+  name: "Trip Stacking",
   // Your website's title and description (meta fields)
-  title: "French Nova - a SaaS theme and landing page crafted with Astro and Tailwind CSS",
+  title: "Trip Stacking - STACK YOUR STOPS. OWN YOUR WEEK.",
   description:
     "Create an amazing website for your SaaS clients with our beautiful website theme designed using Astro and Tailwind CSS. Perfect for freelancers, developers, startups, and personal use.",
 

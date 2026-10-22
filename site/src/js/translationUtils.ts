@@ -85,16 +85,21 @@ export function getLocalizedRoute(
     routeWithoutFragment = baseRoute.slice(0, fragmentIndex);
   }
 
+  // Extract query string if present so trailing slashes aren't appended after ?query
+  let queryString = "";
+  const queryIndex = routeWithoutFragment.indexOf("?");
+  if (queryIndex !== -1) {
+    queryString = routeWithoutFragment.slice(queryIndex);
+    routeWithoutFragment = routeWithoutFragment.slice(0, queryIndex);
+  }
+
   const assumedBaseLocale = options?.baseLocale ?? defaultLocale;
   const normalized = routeWithoutFragment.replace(/^\/?|\/?$/g, "");
 
   // Special case: root route
   if (normalized === "") {
-    // If there's a fragment, make sure to include it
-    if (fragment) {
-      return locale === defaultLocale ? "/" + fragment : `/${locale}/` + fragment;
-    }
-    return locale === defaultLocale ? "/" : `/${locale}/`;
+    const rootBase = locale === defaultLocale ? "/" : `/${locale}/`;
+    return `${rootBase}${queryString}${fragment}`;
   }
 
   const defaultTranslations = routeTranslations[assumedBaseLocale];
@@ -125,13 +130,8 @@ export function getLocalizedRoute(
     routePath = `${locale}/${routePath}`;
   }
 
-  // Combine the route path with the fragment
-  // If there's a fragment, ensure there's exactly one slash before it
-  if (fragment) {
-    return `/${routePath.replace(/\\/g, "/")}/` + fragment;
-  } else {
-    return `/${routePath.replace(/\\/g, "/")}/`;
-  }
+  // Combine the route path with query string and fragment
+  return `/${routePath.replace(/\\/g, "/")}/${queryString}${fragment}`;
 }
 
 // Module-level cache for dynamic route translations
